@@ -1,0 +1,19 @@
+.academic-notice {
+  align-items: center;
+  background: #fff3cd;
+  border-bottom: 1px solid #ffda6a;
+  color: #664d03;
+  display: flex;
+  font-size: 0.9rem;
+  gap: 0.6rem;
+  justify-content: center;
+  padding: 0.65rem 1rem;
+  position: relative;
+  text-align: center;
+  width: 100%;
+  z-index: 1100;
+}
+
+.academic-notice svg {
+  flex: 0 0 auto;
+}
