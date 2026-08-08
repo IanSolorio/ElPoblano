@@ -1,0 +1,35 @@
+.contact-page { background: #fbf8f2; color: var(--poblano-ink,#251915); min-height: 100vh; }
+.contact-eyebrow { color: #a62b25; font-size: .75rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.contact-hero { background: #251915; color: white; overflow: hidden; padding: 5rem 0 8rem; position: relative; text-align: center; }
+.contact-hero::after { border: 60px solid rgba(241,184,67,.12); border-radius: 50%; content: ""; height: 360px; position: absolute; right: -100px; top: -190px; width: 360px; }
+.contact-hero .contact-eyebrow { color: #f1b843; }
+.contact-hero h1 { color: white; font-family: "Fraunces",serif; font-size: clamp(3rem,6vw,5.2rem); letter-spacing: -.055em; line-height: 1; margin: .9rem auto 1.1rem; max-width: 950px; }
+.contact-hero p { color: rgba(255,255,255,.68); font-size: 1.04rem; margin: auto; max-width: 680px; }
+.contact-layout { align-items: start; display: grid; gap: clamp(2rem,6vw,6rem); grid-template-columns: .9fr 1.1fr; margin-top: -3.5rem; padding-bottom: 7rem; position: relative; z-index: 2; }
+.contact-details { padding: 6rem 0 0; }
+.contact-details h2 { color: #251915; font-family: "Fraunces",serif; font-size: clamp(2.2rem,4vw,3.5rem); letter-spacing: -.04em; margin: .7rem 0 1rem; }
+.contact-details__lead { color: #71635d; line-height: 1.7; max-width: 480px; }
+.contact-detail-list { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; margin-top: 2rem; }
+.contact-detail-list article { align-items: center; display: flex; gap: .8rem; }
+.contact-detail-list article > span { align-items: center; background: #f7e8e2; border-radius: .8rem; color: #a62b25; display: flex; flex: 0 0 auto; height: 44px; justify-content: center; width: 44px; }
+.contact-detail-list small,.contact-detail-list strong { display: block; }
+.contact-detail-list small { color: #91837c; font-size: .65rem; text-transform: uppercase; }
+.contact-detail-list strong { color: #251915; font-size: .8rem; }
+.contact-direct { align-items: center; background: #e5efe8; border-radius: 1rem; color: #285943; display: flex; gap: 1rem; margin-top: 2rem; max-width: 480px; padding: 1rem 1.2rem; }
+.contact-direct > svg { font-size: 1.3rem; }
+.contact-direct span,.contact-direct strong { display: block; }
+.contact-direct span { font-size: .68rem; text-transform: uppercase; }
+.contact-direct strong { font-family: "Fraunces",serif; font-size: 1.1rem; }
+.contact-form { background: white; border: 1px solid rgba(73,48,37,.12); border-radius: 1.4rem; box-shadow: 0 25px 65px rgba(37,25,21,.18); display: flex; flex-direction: column; gap: 1.15rem; padding: clamp(1.5rem,4vw,2.5rem); }
+.contact-form__heading { align-items: center; border-bottom: 1px solid rgba(73,48,37,.1); display: flex; gap: 1rem; margin-bottom: .3rem; padding-bottom: 1.3rem; }
+.contact-form__heading > span { align-items: center; background: #dff1e5; border-radius: 1rem; color: #198754; display: flex; flex: 0 0 auto; font-size: 1.3rem; height: 52px; justify-content: center; width: 52px; }
+.contact-form__heading h2 { color: #251915; font-family: "Fraunces",serif; font-size: 1.45rem; margin: 0 0 .2rem; }
+.contact-form__heading p { color: #71635d; font-size: .75rem; margin: 0; }
+.contact-form label { color: #493c37; display: flex; flex-direction: column; font-size: .78rem; font-weight: 800; gap: .45rem; }
+.contact-form input,.contact-form textarea { background: #fcfaf6; border: 1px solid rgba(73,48,37,.17); border-radius: .8rem; color: #251915; font: inherit; font-weight: 400; outline: 0; padding: .85rem 1rem; resize: vertical; }
+.contact-form input:focus,.contact-form textarea:focus { border-color: #a62b25; box-shadow: 0 0 0 3px rgba(166,43,37,.09); }
+.contact-form button { align-items: center; background: #198754; border: 0; border-radius: 999px; color: white; display: inline-flex; font-size: .85rem; font-weight: 800; gap: .55rem; justify-content: center; padding: .9rem 1.2rem; }
+.contact-form button:hover { background: #146c43; }
+.contact-form > small { color: #91837c; font-size: .67rem; text-align: center; }
+@media (max-width: 991px) { .contact-layout { grid-template-columns: 1fr; } .contact-details { padding-top: 5rem; } }
+@media (max-width: 576px) { .contact-hero { padding: 4rem 0 7rem; } .contact-detail-list { grid-template-columns: 1fr; } }

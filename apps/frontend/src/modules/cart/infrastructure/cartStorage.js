@@ -15,5 +15,14 @@ export const readCart = () => {
   }
 };
 
-export const writeCart = (items) => localStorage.setItem(CART_KEY, JSON.stringify(items));
-export const deleteCart = () => localStorage.removeItem(CART_KEY);
+const notifyCartChange = () => window.dispatchEvent(new CustomEvent("elpoblano:cart-updated"));
+
+export const writeCart = (items) => {
+  localStorage.setItem(CART_KEY, JSON.stringify(items));
+  notifyCartChange();
+  return items;
+};
+export const deleteCart = () => {
+  localStorage.removeItem(CART_KEY);
+  notifyCartChange();
+};

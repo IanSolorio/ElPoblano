@@ -22,12 +22,12 @@ const optimizeImage = async (image) => {
   return new File([blob], `${baseName}.webp`, { type: "image/webp" });
 };
 
-export const uploadFile = async (image, onProgress) => {
+export const uploadFile = async (image, onProgress, resource = "productos") => {
   const optimizedImage = await optimizeImage(image);
   const formData = new FormData();
   formData.append("imagen", optimizedImage);
   try {
-    const { data } = await axios.post(`${API_URL}/archivos/productos`, formData, {
+    const { data } = await axios.post(`${API_URL}/archivos/${resource}`, formData, {
       withCredentials: true,
       timeout: 30000,
       onUploadProgress: ({ loaded, total }) => {
@@ -36,6 +36,7 @@ export const uploadFile = async (image, onProgress) => {
     });
     return data.url;
   } catch (error) {
+    if (error.response?.status === 401) throw new Error("Tu sesión expiró. Inicia sesión nuevamente antes de subir la imagen.");
     throw new Error(error.response?.data?.message || "No se pudo subir la imagen a Firebase Storage.");
   }
 };

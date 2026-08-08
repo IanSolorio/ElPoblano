@@ -28,7 +28,7 @@ export default function CheckoutPage() {
   const continueToPayment = async (event) => {
     event.preventDefault(); setSaving(true); setError("");
     try {
-      const createdOrder = await createOrder({ items: cart.map((item) => ({ productId: item.id, quantity: item.quantity || 1 })), paymentMethod: "CREDIT_CARD", addressId: address.id, phone: user.phone, notes }, idempotencyKey.current);
+      const createdOrder = await createOrder({ items: cart.map((item) => item.promotionKind === "BUNDLE" ? { promotionId: item.promotionId, quantity: item.quantity || 1 } : { productId: item.id, quantity: item.quantity || 1 }), paymentMethod: "CREDIT_CARD", addressId: address.id, phone: user.phone, notes }, idempotencyKey.current);
       setOrder(createdOrder);
     } catch (checkoutError) { setError(checkoutError.message); setSaving(false); }
   };

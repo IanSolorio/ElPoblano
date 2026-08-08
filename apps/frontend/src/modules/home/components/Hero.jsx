@@ -1,52 +1,55 @@
-import React from "react";
-import Fondo from "../../../assets/image/fondo-papel-tapiz-vintage_53876-25249.jpg";
-import T1 from "../../../assets/image/tacos-8184634_1280.jpg";
+import { Link } from "react-router-dom";
+import { FaArrowRight, FaClock, FaLocationDot, FaStar } from "react-icons/fa6";
+import tacoHero from "../../../assets/image/tacos-8184634_1280.jpg";
 import "../../../css/Principal.css";
 
-const Presentacion = () => {
+export default function Hero() {
   return (
-    <div
-      className="container-fluid py-5"
-      style={{
-        backgroundImage: `url(${Fondo})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
-      <div className="container">
-        <div className="row align-items-center">
-          <div className="col-md-6 text-center text-md-start">
-            <h2 className="fw-bold">
-              EL POBLANO<span className="text-danger"> RESTAURANT</span>
-            </h2>
-            <p className="text-muted">
-              "En El Poblano, celebramos la auténtica cocina mexicana con
-              sabores que conquistan. Cada plato es una fusión de tradición,
-              ingredientes frescos y pasión. ¡Descubre México en cada bocado!"
-            </p>
-            <a
-              href="#"
-              className="btn btn-danger fw-bold px-4 py-2"
-              style={{ borderRadius: "0px" }}
-            >
-              ORDER NOW
-            </a>
+    <section className="home-hero">
+      <div className="home-hero__texture" aria-hidden="true" />
+      <div className="container home-hero__container">
+        <div className="home-hero__content">
+          <span className="home-eyebrow">
+            <FaStar aria-hidden="true" /> Sabor mexicano en Puerto Maldonado
+          </span>
+          <h1>
+            Tacos hechos con <em>tradición</em>, listos para ti.
+          </h1>
+          <p className="home-hero__lead">
+            Ingredientes frescos, recetas con carácter y ese sabor que convierte
+            cualquier comida en un buen momento.
+          </p>
+          <div className="home-hero__actions">
+            <Link className="home-button home-button--primary" to="/productos">
+              Ver nuestro menú <FaArrowRight aria-hidden="true" />
+            </Link>
+            <Link className="home-button home-button--ghost" to="/ubicanos">
+              <FaLocationDot aria-hidden="true" /> Visítanos
+            </Link>
           </div>
+          <div className="home-hero__meta" aria-label="Información del servicio">
+            <div>
+              <FaClock aria-hidden="true" />
+              <span><strong>Atención rápida</strong>Pedidos preparados al momento</span>
+            </div>
+            <div>
+              <FaStar aria-hidden="true" />
+              <span><strong>Recetas auténticas</strong>Sabor poblano en cada bocado</span>
+            </div>
+          </div>
+        </div>
 
-          {/* Columna Derecha */}
-          <div className="col-md-6 d-flex justify-content-center position-relative">
-            <img
-              src={T1}
-              alt="Promo"
-              className="img-fluid"
-              style={{ maxWidth: "350px", zIndex: "1" }}
-            />
+        <div className="home-hero__visual">
+          <div className="home-hero__sun" aria-hidden="true" />
+          <div className="home-hero__image-frame">
+            <img src={tacoHero} alt="Tacos mexicanos preparados por El Poblano" />
+          </div>
+          <div className="home-hero__floating-card">
+            <span>Preparado con</span>
+            <strong>ingredientes frescos</strong>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
-};
-
-export default Presentacion;
+}

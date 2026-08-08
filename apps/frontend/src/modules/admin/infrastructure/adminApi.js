@@ -2,7 +2,10 @@ const API_URL = import.meta.env.VITE_ENDPOINT_BASE || "/api";
 const request = async (path, options = {}) => {
   const response = await fetch(`${API_URL}${path}`, { credentials: "include", headers: { "Content-Type": "application/json", ...options.headers }, ...options });
   const data = response.status === 204 ? null : await response.json();
-  if (!response.ok) throw new Error(data?.message || "No se pudo completar la operación.");
+  if (!response.ok) {
+    if (response.status === 401) throw new Error("Tu sesión expiró. Inicia sesión nuevamente antes de continuar.");
+    throw new Error(data?.message || "No se pudo completar la operación.");
+  }
   return data;
 };
 export const listAdminUsers = () => request("/admin/usuarios");

@@ -1,15 +1,17 @@
-import AdminSidebar from "../components/AdminSidebar";
+import { Link } from "react-router-dom";
+import { FaPlus } from "react-icons/fa6";
+import AdminLayout from "../components/AdminLayout";
 import ProductListPage from "./ProductListPage";
 
-function AdminPanel() {
+export default function AdminPage() {
   return (
-    <div className="d-flex">
-      <AdminSidebar />
-      <div className="flex-grow-1 p-4">
-        <ProductListPage />
-      </div>
-    </div>
+    <AdminLayout
+      eyebrow="Inventario"
+      title="Gestión de productos"
+      description="Controla la disponibilidad, precios y existencias de la carta."
+      actions={<Link className="admin-primary-action" to="/crearproducto"><FaPlus aria-hidden="true" /> Nuevo producto</Link>}
+    >
+      <ProductListPage />
+    </AdminLayout>
   );
 }
-
-export default AdminPanel;

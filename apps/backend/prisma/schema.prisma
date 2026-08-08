@@ -17,6 +17,11 @@ enum DiscountType {
   FIXED_AMOUNT
 }
 
+enum PromotionKind {
+  PRODUCT_DISCOUNT
+  BUNDLE
+}
+
 enum OrderStatus {
   PENDING
   CONFIRMED
@@ -137,8 +142,11 @@ model Promotion {
   id            String             @id @default(uuid()) @db.VarChar(36)
   name          String             @db.VarChar(150)
   description   String?            @db.Text
-  discountType  DiscountType       @map("discount_type")
-  discountValue Decimal            @map("discount_value") @db.Decimal(10, 2)
+  kind          PromotionKind       @default(PRODUCT_DISCOUNT)
+  discountType  DiscountType?       @map("discount_type")
+  discountValue Decimal?            @map("discount_value") @db.Decimal(10, 2)
+  bundlePrice   Decimal?            @map("bundle_price") @db.Decimal(10, 2)
+  imageUrl      String?             @map("image_url") @db.Text
   startsAt      DateTime           @map("starts_at")
   endsAt        DateTime           @map("ends_at")
   active        Boolean            @default(true)
@@ -148,6 +156,7 @@ model Promotion {
   updatedAt     DateTime           @updatedAt @map("updated_at")
   createdBy     User               @relation("PromotionCreator", fields: [createdById], references: [id], onDelete: Restrict)
   products      PromotionProduct[]
+  orderItems    OrderItem[]
 
   @@index([active, startsAt, endsAt])
   @@index([createdById])
@@ -157,6 +166,7 @@ model Promotion {
 model PromotionProduct {
   promotionId String    @map("promotion_id") @db.VarChar(36)
   productId   String    @map("product_id") @db.VarChar(36)
+  quantity    Int       @default(1)
   promotion   Promotion @relation(fields: [promotionId], references: [id], onDelete: Cascade)
   product     Product   @relation(fields: [productId], references: [id], onDelete: Restrict)
 
@@ -196,15 +206,19 @@ model OrderItem {
   id          Int     @id @default(autoincrement())
   orderId     String  @map("order_id") @db.VarChar(36)
   productId   String  @map("product_id") @db.VarChar(36)
+  promotionId String? @map("promotion_id") @db.VarChar(36)
+  promotionName String? @map("promotion_name") @db.VarChar(150)
   productName String  @map("product_name") @db.VarChar(150)
   unitPrice   Decimal @map("unit_price") @db.Decimal(10, 2)
   quantity    Int
   subtotal    Decimal @db.Decimal(10, 2)
   order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product     Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+  promotion   Promotion? @relation(fields: [promotionId], references: [id], onDelete: Restrict)
 
   @@index([orderId])
   @@index([productId])
+  @@index([promotionId])
   @@map("order_items")
 }
 

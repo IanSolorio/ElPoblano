@@ -1,52 +1,54 @@
-import React from 'react';
+import { FaBullseye, FaEye, FaPepperHot } from "react-icons/fa6";
+import coverImage from "../../../assets/image/Portada-Puesto-de-tacos.jpg";
+import Employees from "../components/Employees";
 import "../../../css/Conocenos.css";
-import Fondo from '../../../assets/image/fondo-papel-tapiz-vintage_53876-25249.jpg';
-import Empleados from '../components/Employees';
 
-const MisionVision = () => {
+export default function AboutPage() {
   return (
-    <div>
-      <div
-        className="mision-vision-container"
-        style={{
-          backgroundImage: `url(${Fondo})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          padding: "50px 0", 
-        }}
-      >
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6 mb-4">
-              <div className="card shadow-sm h-100">
-                <div className="card-body text-center">
-                  <h3 className="card-title">Misión</h3>
-                  <p className="card-text">
-                    Ofrecer tacos auténticos y de calidad, resaltando los sabores y tradiciones de la cocina poblana en un ambiente acogedor.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-6 mb-4">
-              <div className="card shadow-sm h-100">
-                <div className="card-body text-center">
-                  <h3 className="card-title">Visión</h3>
-                  <p className="card-text">
-                    Ser el restaurante de tacos favorito, reconocido por su autenticidad y excelencia, llevando el sabor mexicano al mundo.
-                  </p>
-                </div>
-              </div>
-            </div>
+    <main className="about-page">
+      <header className="about-hero">
+        <div className="container about-hero__grid">
+          <div>
+            <span className="about-eyebrow"><FaPepperHot aria-hidden="true" /> Nuestra esencia</span>
+            <h1>Una cocina con raíces y mucho corazón</h1>
+            <p>
+              El Poblano nace del gusto por reunir personas alrededor de recetas
+              mexicanas, ingredientes frescos y una atención que se siente cercana.
+            </p>
+          </div>
+          <div className="about-hero__image">
+            <img src={coverImage} alt="Puesto y ambiente de inspiración mexicana" />
+            <span>Tradición • Sabor • Familia</span>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="empleados-section mt-5">
-        <Empleados /> 
-      </div>
-    </div>
+      <section className="container about-purpose">
+        <div className="about-purpose__intro">
+          <span className="about-eyebrow">Lo que nos mueve</span>
+          <h2>Sabores auténticos, momentos memorables</h2>
+          <p>
+            Trabajamos para que cada visita tenga la calidez de una mesa compartida
+            y el carácter de una receta preparada con dedicación.
+          </p>
+        </div>
+        <div className="about-purpose__cards">
+          <article>
+            <span><FaBullseye aria-hidden="true" /></span>
+            <small>01</small>
+            <h3>Misión</h3>
+            <p>Ofrecer tacos auténticos y de calidad, resaltando los sabores de la cocina poblana en un ambiente acogedor.</p>
+          </article>
+          <article>
+            <span><FaEye aria-hidden="true" /></span>
+            <small>02</small>
+            <h3>Visión</h3>
+            <p>Ser una taquería reconocida por su autenticidad, excelencia y capacidad de llevar el sabor mexicano a más personas.</p>
+          </article>
+        </div>
+      </section>
+
+      <Employees />
+    </main>
   );
-};
-
-export default MisionVision;
+}

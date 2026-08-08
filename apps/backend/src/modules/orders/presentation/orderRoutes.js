@@ -3,7 +3,10 @@ import { z } from "zod";
 import { validate } from "../../../shared/middleware/validate.js";
 
 const createOrderSchema = z.object({
-  items: z.array(z.object({ productId: z.string().uuid(), quantity: z.coerce.number().int().min(1).max(99) })).min(1).max(50),
+  items: z.array(z.union([
+    z.object({ productId: z.string().uuid(), quantity: z.coerce.number().int().min(1).max(99) }).strict(),
+    z.object({ promotionId: z.string().uuid(), quantity: z.coerce.number().int().min(1).max(99) }).strict(),
+  ])).min(1).max(50),
   paymentMethod: z.enum(["YAPE", "CREDIT_CARD", "DEBIT_CARD"]),
   phone: z.string().trim().max(30).optional(),
   addressId: z.string().uuid(),

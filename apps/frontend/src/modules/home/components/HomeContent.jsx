@@ -1,59 +1,86 @@
-import React from "react";
-import img from "../../../assets/image/409395599_320815934213044_2490934735527099993_n.jpg";
+import { Link } from "react-router-dom";
+import { FaArrowRight, FaBowlFood, FaHeart, FaLeaf } from "react-icons/fa6";
+import restaurantImage from "../../../assets/image/409395599_320815934213044_2490934735527099993_n.jpg";
 import "../../../css/Principal.css";
 
-const Content = () => {
+const values = [
+  {
+    icon: FaLeaf,
+    title: "Ingredientes frescos",
+    text: "Seleccionamos cada ingrediente para entregar color, aroma y sabor en cada pedido.",
+  },
+  {
+    icon: FaBowlFood,
+    title: "Preparado al momento",
+    text: "Cocinamos cuando ordenas para que disfrutes la textura y temperatura correctas.",
+  },
+  {
+    icon: FaHeart,
+    title: "Sabor para compartir",
+    text: "Porciones y combinaciones pensadas para disfrutar solo, en familia o con amigos.",
+  },
+];
+
+export default function HomeContent() {
   return (
-    <div className="additional-section">
-      <div className="top-section d-flex align-items-center justify-content-center">
-        <div className="row w-100">
-          <div className="col-12 d-flex justify-content-center align-items-center flex-column">
-            <h2 style={{ color: "#8B0000", marginBottom: "20px" }}>
-              ¡Descubre la Experiencia El Poblano!
-            </h2>
-            <div className="content-box">
-              <h3>Lo Que Nuestros Clientes Dicen</h3>
-              <p>
-                En El Poblano, no solo servimos tacos, servimos momentos
-                inolvidables. Cada cliente que nos visita es parte de nuestra
-                familia, y nos esforzamos por ofrecer no solo comida deliciosa,
-                sino también un ambiente acogedor y auténtico.
-              </p>
+    <>
+      <section className="home-values" aria-labelledby="values-title">
+        <div className="container">
+          <div className="home-section-heading home-section-heading--center">
+            <span className="home-eyebrow">Nuestra manera de cocinar</span>
+            <h2 id="values-title">Sencillo, fresco y lleno de sabor</h2>
+            <p>Una experiencia honesta que empieza en la cocina y termina en tu mesa.</p>
+          </div>
+          <div className="home-values__grid">
+            {values.map(({ icon: Icon, title, text }, index) => (
+              <article className="home-value-card" key={title}>
+                <span className="home-value-card__number">0{index + 1}</span>
+                <span className="home-value-card__icon"><Icon aria-hidden="true" /></span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="home-story">
+        <div className="container home-story__grid">
+          <div className="home-story__image">
+            <img src={restaurantImage} alt="Ambiente y equipo de El Poblano" />
+            <div className="home-story__stamp" aria-hidden="true">
+              <strong>Hecho</strong><span>con pasión</span>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div className="bottom-section row align-items-center">
-        <div className="col-md-6 text-center">
-          <img
-            src={img}
-            alt="Promoción de temporada"
-            className="img-fluid"
-            style={{
-              maxWidth: "350px",
-              maxHeight: "350px",
-              borderRadius: "10px",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-            }}
-          />
-        </div>
-        <div className="col-md-6 text-center text-md-start">
-          <div className="content-box">
-            <h3 style={{ color: "#8B0000" }}>
-              Aprovecha Nuestras Ofertas Por Temporada
-            </h3>
+          <div className="home-story__content">
+            <span className="home-eyebrow">La experiencia El Poblano</span>
+            <h2>Más que una comida, un momento para recordar</h2>
             <p>
-              En El Poblano, queremos que disfrutes de nuestros auténticos
-              sabores mexicanos al mejor precio. Descubre promociones especiales
-              en tacos al pastor, combos irresistibles y más. ¡No dejes pasar la
-              oportunidad de disfrutar lo mejor de México mientras ahorras!
+              Creemos en las mesas que reúnen personas. Por eso combinamos recetas
+              mexicanas, atención cercana y un ambiente cálido para que siempre
+              encuentres una buena razón para volver.
             </p>
+            <p>
+              Explora nuestra carta, elige tus favoritos y prepara tu próximo antojo.
+            </p>
+            <Link className="home-text-link" to="/nosotros">
+              Conoce nuestra historia <FaArrowRight aria-hidden="true" />
+            </Link>
           </div>
         </div>
-      </div>
-    </div>
-  );
-};
+      </section>
 
-export default Content;
+      <section className="home-cta">
+        <div className="container home-cta__content">
+          <div>
+            <span className="home-eyebrow">¿Se te antojó?</span>
+            <h2>Tu próximo taco está a unos clics.</h2>
+          </div>
+          <Link className="home-button home-button--light" to="/productos">
+            Explorar productos <FaArrowRight aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
+    </>
+  );
+}

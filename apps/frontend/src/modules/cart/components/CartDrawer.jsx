@@ -1,154 +1,68 @@
-import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Typography,
-  CardMedia,
-  Button,
-  Drawer,
-  Grid,
-} from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
+import { Drawer } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { getCart, getCartTotal, removeCartItem } from "../application/cartService";
+import { FaArrowRight, FaBagShopping, FaMinus, FaPlus, FaShieldHalved, FaTag, FaTrash, FaXmark } from "react-icons/fa6";
+import { getCart, getCartTotal, removeCartItem, updateCartItemQuantity } from "../application/cartService";
 import { useAuth } from "../../auth/application/AuthContext";
+import "../../../css/Carrito.css";
 
-const Carrito = ({ open, toggleCart }) => {
-  const [cartItems, setCartItems] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0); // Estado para el precio total
+export default function CartDrawer({ open, toggleCart }) {
+  const [items, setItems] = useState([]);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const refresh = () => setItems(getCart());
 
   useEffect(() => {
-    const cart = getCart();
-    setCartItems(cart);
-
-    const calculatedTotal = getCartTotal(cart);
-    setTotalPrice(calculatedTotal); 
+    if (open) refresh();
+    window.addEventListener("elpoblano:cart-updated", refresh);
+    return () => window.removeEventListener("elpoblano:cart-updated", refresh);
   }, [open]);
 
-  const removeFromCart = (id) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCart);
-    removeCartItem(id);
+  const total = useMemo(() => getCartTotal(items), [items]);
+  const units = useMemo(() => items.reduce((sum, item) => sum + (item.quantity || 1), 0), [items]);
+
+  const updateQuantity = (item, amount) => {
+    const next = (item.quantity || 1) + amount;
+    if (next <= 0) removeCartItem(item.id);
+    else updateCartItemQuantity(item.id, next);
   };
 
-  const handleFinalizarCompra = () => {
+  const checkout = () => {
     toggleCart(false);
     navigate(user ? "/checkout" : "/registro");
   };
 
   return (
-    <>
-      <Drawer
-        anchor="right"
-        open={open}
-        onClose={() => toggleCart(false)}
-        sx={{
-          "& .MuiDrawer-paper": {
-            width: "400px",
-            padding: "20px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-          },
-        }}
-      >
-        <Box>
-          <Typography
-            variant="h5"
-            sx={{ marginBottom: "20px", textAlign: "center" }}
-          >
-            Carrito de Compras
-          </Typography>
+    <Drawer anchor="right" open={open} onClose={() => toggleCart(false)} classes={{ paper: "cart-drawer" }}>
+      <div className="cart-drawer__header">
+        <div><span><FaBagShopping aria-hidden="true" /></span><div><h2>Tu pedido</h2><p>{units} {units === 1 ? "producto" : "productos"}</p></div></div>
+        <button onClick={() => toggleCart(false)} aria-label="Cerrar carrito"><FaXmark /></button>
+      </div>
 
-          {cartItems.length > 0 ? (
-            <Grid container spacing={2}>
-              {cartItems.map((product) => (
-                <Grid item xs={12} key={product.id}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: "10px",
-                      border: "1px solid #ddd",
-                      borderRadius: "8px",
-                    }}
-                  >
-                    <CardMedia
-                      component="img"
-                      image={product.imagen}
-                      alt={product.nombre}
-                      sx={{
-                        width: 60,
-                        height: 60,
-                        borderRadius: "8px",
-                        objectFit: "cover",
-                      }}
-                    />
-                    <Box sx={{ flex: 1, marginLeft: "10px" }}>
-                      <Typography
-                        variant="body1"
-                        sx={{ fontWeight: "bold", fontSize: "0.9rem" }}
-                      >
-                        {product.nombre}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "#a52a2a", fontSize: "0.8rem" }}
-                      >
-                        {product.quantity || 1} × S/.{Number(product.precio).toFixed(2)}
-                      </Typography>
-                    </Box>
-                    <Button
-                      variant="text"
-                      color="error"
-                      onClick={() => removeFromCart(product.id)}
-                      sx={{
-                        fontWeight: "bold",
-                        fontSize: "1rem",
-                        minWidth: "30px",
-                      }}
-                    >
-                      X
-                    </Button>
-                  </Box>
-                </Grid>
-              ))}
-            </Grid>
-          ) : (
-            <Typography
-              variant="body1"
-              sx={{ textAlign: "center", marginTop: "20px" }}
-            >
-              No hay productos en el carrito.
-            </Typography>
-          )}
-        </Box>
+      <div className="cart-drawer__body">
+        {items.length === 0 ? (
+          <div className="cart-empty"><span><FaBagShopping /></span><h3>Tu carrito está esperando</h3><p>Explora nuestra carta y agrega tus sabores favoritos.</p><button onClick={() => { toggleCart(false); navigate("/productos"); }}>Ver productos <FaArrowRight /></button></div>
+        ) : items.map((item) => (
+          <article className="cart-item" key={item.id}>
+            <div className="cart-item__image">{item.imagen ? <img src={item.imagen} alt={item.nombre} /> : <FaBagShopping />}{item.esPromocion && <span><FaTag /> Promo</span>}</div>
+            <div className="cart-item__content">
+              <div className="cart-item__top"><div>{item.esPromocion && <small>{item.promocionNombre}</small>}<h3>{item.nombre}</h3></div><button onClick={() => removeCartItem(item.id)} aria-label={`Eliminar ${item.nombre}`}><FaTrash /></button></div>
+              {item.promotionKind === "BUNDLE" && <p className="cart-item__components">{item.componentes?.map((component) => `${component.quantity}× ${component.nombre}`).join(" + ")}</p>}
+              <div className="cart-item__bottom">
+                <div className="cart-quantity"><button onClick={() => updateQuantity(item, -1)} aria-label="Reducir cantidad"><FaMinus /></button><span>{item.quantity || 1}</span><button disabled={Number(item.stock) > 0 && item.quantity >= item.stock} onClick={() => updateQuantity(item, 1)} aria-label="Aumentar cantidad"><FaPlus /></button></div>
+                <div className="cart-item__price">{item.precioOriginal && Number(item.precioOriginal) > Number(item.precio) && <del>S/ {Number(item.precioOriginal).toFixed(2)}</del>}<strong>S/ {(Number(item.precio) * (item.quantity || 1)).toFixed(2)}</strong></div>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
 
-        {cartItems.length > 0 && (
-          <Box sx={{ textAlign: "center", padding: "10px 0" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              fullWidth
-              sx={{
-                backgroundColor: "#5c2727",
-                "&:hover": { backgroundColor: "#a52a2a" },
-                borderRadius: "8px",
-                fontSize: "1rem",
-                fontWeight: "bold",
-              }}
-              onClick={handleFinalizarCompra}
-            >
-              Finalizar Compra — S/.{totalPrice.toFixed(2)}
-            </Button>
-          </Box>
-        )}
-      </Drawer>
-
-    </>
+      {items.length > 0 && <footer className="cart-drawer__footer">
+        <div className="cart-summary"><span>Subtotal</span><strong>S/ {total.toFixed(2)}</strong><span>Envío</span><b>Por confirmar</b></div>
+        <div className="cart-total"><span>Total estimado</span><strong>S/ {total.toFixed(2)}</strong></div>
+        <button className="cart-checkout" onClick={checkout}>{user ? "Continuar al pago" : "Regístrate para comprar"}<FaArrowRight /></button>
+        <p><FaShieldHalved /> Pago procesado de forma segura</p>
+      </footer>}
+    </Drawer>
   );
-};
-
-export default Carrito;
+}

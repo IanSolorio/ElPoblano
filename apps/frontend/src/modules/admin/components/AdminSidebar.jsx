@@ -1,62 +1,52 @@
-import React from "react";
-import { FaSignOutAlt } from "react-icons/fa";
-import "../../../css/SidebarAdmin.css";
-import { Link} from "react-router-dom";
-import { MdFastfood, MdRestaurant } from "react-icons/md";
-import adminAvatar from "../../../assets/image/omen.jpg";
+import { NavLink } from "react-router-dom";
+import { FaArrowRightFromBracket, FaBoxesStacked, FaLayerGroup, FaTag, FaUserGroup, FaUserShield, FaUtensils } from "react-icons/fa6";
+import logo from "../../../assets/image/LogoSinFondo.png";
 import { useAuth } from "../../auth/application/AuthContext";
+import "../../../css/SidebarAdmin.css";
 
-const SidebarAdmin = () => {
+export default function AdminSidebar() {
   const { user, logout } = useAuth();
+  const displayName = user?.firstName || user?.nombre || "Administrador";
+  const roleLabel = user?.role === "SUPER_ADMIN" ? "Administrador principal" : "Administrador";
+
+  const links = [
+    { to: "/admin", label: "Productos", icon: FaBoxesStacked, end: true },
+    { to: "/crearproducto", label: "Nuevo producto", icon: FaUtensils },
+    { to: "/admin/promociones", label: "Promociones", icon: FaTag },
+    { to: "/admin/usuarios", label: "Usuarios", icon: FaUserGroup },
+    ...(user?.role === "SUPER_ADMIN" ? [{ to: "/admin/categorias", label: "Categorías", icon: FaLayerGroup }] : []),
+  ];
+
   return (
-    <div
-      className="sidebar text-white d-flex flex-column"
-      style={{ width: "250px", height: "100vh" }}
-    >
-      {/* Perfil del usuario */}
-      <div className="text-center py-4">
-        <img
-          src={adminAvatar}
-          alt="Admin"
-          className="rounded-circle mb-2"
-          style={{ width: "80px", height: "80px" }}
-        />
-        <h5 className="mb-0">{user?.nombre || "Administrador"}</h5>
-        <p className="text-muted mb-0" style={{ fontSize: "0.9rem" }}>
-          {user?.role === "SUPER_ADMIN" ? "Administrador principal" : "Administrador"}
-        </p>
+    <aside className="admin-sidebar">
+      <NavLink className="admin-sidebar__brand" to="/">
+        <img src={logo} alt="" />
+        <span><strong>El Poblano</strong><small>Panel administrativo</small></span>
+      </NavLink>
+
+      <div className="admin-sidebar__profile">
+        <div className="admin-sidebar__avatar">
+          <FaUserShield aria-label="Perfil administrativo" />
+          <i aria-hidden="true" />
+        </div>
+        <div><strong>{displayName}</strong><span>{roleLabel}</span></div>
       </div>
 
-      {/* Menú */}
-      <nav className="nav flex-column py-3">
-        <Link
-          to="/admin"
-          className="nav-link text-white d-flex align-items-center mb-2"
-        >
-          <MdRestaurant className="me-2" />
-          <span>Producto</span>
-        </Link>
-        <Link to="/admin/promociones" className="nav-link text-white d-flex align-items-center mb-2"><span>Promociones</span></Link>
-        <Link to="/admin/usuarios" className="nav-link text-white d-flex align-items-center mb-2"><span>Usuarios</span></Link>
-        {user?.role === "SUPER_ADMIN" && <Link to="/admin/categorias" className="nav-link text-white d-flex align-items-center mb-2"><span>Categorías</span></Link>}
-        <Link
-          to="/crearproducto"
-          className="nav-link text-white d-flex align-items-center mb-2"
-        >
-          <MdFastfood className="me-2" />
-          <span>Crear Producto</span>
-        </Link>
+      <nav className="admin-sidebar__nav" aria-label="Navegación administrativa">
+        <span className="admin-sidebar__section-label">Gestión</span>
+        {links.map(({ to, label, icon: Icon, end }) => (
+          <NavLink className={({ isActive }) => `admin-sidebar__link${isActive ? " active" : ""}`} to={to} end={end} key={to}>
+            <Icon aria-hidden="true" /><span>{label}</span>
+          </NavLink>
+        ))}
       </nav>
 
-      {/* Logout */}
-      <div className="mt-auto text-center py-3 d-flex justify-content-center">
-        <Link className="btn btn-outline-light logout-btn" to="/" onClick={() => logout().catch(() => undefined)}>
-          <FaSignOutAlt className="me-2" />
-          Logout
-        </Link>
+      <div className="admin-sidebar__footer">
+        <span>Sistema en línea <i aria-hidden="true" /></span>
+        <NavLink to="/" onClick={() => logout().catch(() => undefined)}>
+          <FaArrowRightFromBracket aria-hidden="true" /> Cerrar sesión
+        </NavLink>
       </div>
-    </div>
+    </aside>
   );
-};
-
-export default SidebarAdmin;
+}

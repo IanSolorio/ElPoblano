@@ -1,95 +1,31 @@
 import { useEffect, useState } from "react";
-import AdminSidebar from "../components/AdminSidebar";
+import { FaLayerGroup, FaPlus } from "react-icons/fa6";
+import AdminLayout from "../components/AdminLayout";
 import { createCategory, listAdminCategories, updateCategory } from "../infrastructure/adminApi";
 
 export default function CategoriesAdminPage() {
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState("");
   const [error, setError] = useState("");
-
-  const loadCategories = async () => {
-    const result = await listAdminCategories();
-    setCategories(result);
-  };
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const loadInitialCategories = async () => {
-      try {
-        const result = await listAdminCategories();
-        if (!cancelled) setCategories(result);
-      } catch (loadError) {
-        if (!cancelled) setError(loadError.message);
-      }
-    };
-
-    loadInitialCategories();
-    return () => { cancelled = true; };
-  }, []);
-
-  const submit = async (event) => {
-    event.preventDefault();
-    setError("");
-    try {
-      await createCategory(name);
-      setName("");
-      await loadCategories();
-    } catch (submitError) {
-      setError(submitError.message);
-    }
-  };
-
-  const toggle = async (category) => {
-    setError("");
-    try {
-      await updateCategory(category.id, { activo: !category.activo });
-      await loadCategories();
-    } catch (toggleError) {
-      setError(toggleError.message);
-    }
-  };
+  const load = async () => setCategories(await listAdminCategories());
+  useEffect(() => { load().catch((loadError) => setError(loadError.message)); }, []);
+  const submit = async (event) => { event.preventDefault(); setError(""); try { await createCategory(name); setName(""); await load(); } catch (submitError) { setError(submitError.message); } };
+  const toggle = async (category) => { setError(""); try { await updateCategory(category.id, { activo: !category.activo }); await load(); } catch (toggleError) { setError(toggleError.message); } };
 
   return (
-    <div className="d-flex">
-      <AdminSidebar />
-      <main className="container py-4">
-        <h1>Categorías</h1>
-        <p>Solo el administrador principal puede crear o habilitar categorías.</p>
-        {error && <div className="alert alert-danger">{error}</div>}
-        <form onSubmit={submit} className="d-flex gap-2 mb-4">
-          <input
-            required
-            minLength="2"
-            maxLength="100"
-            className="form-control"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            placeholder="Nueva categoría"
-          />
-          <button className="btn btn-primary">Agregar</button>
+    <AdminLayout eyebrow="Configuración" title="Categorías" description="Organiza la carta y controla qué grupos están disponibles.">
+      {error && <div className="admin-alert">{error}</div>}
+      <section className="admin-split-layout">
+        <form className="admin-compact-form" onSubmit={submit}>
+          <span className="admin-compact-form__icon"><FaLayerGroup /></span><h2>Nueva categoría</h2><p>Crea una clasificación para los productos.</p>
+          <label className="admin-field">Nombre<input required minLength="2" maxLength="100" value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej. Postres" /></label>
+          <button className="admin-primary-action"><FaPlus /> Agregar categoría</button>
         </form>
-        <table className="table">
-          <thead><tr><th>Nombre</th><th>Estado</th><th>Acción</th></tr></thead>
-          <tbody>
-            {categories.map((category) => (
-              <tr key={category.id}>
-                <td>{category.nombre}</td>
-                <td>{category.activo ? "Activa" : "Inactiva"}</td>
-                <td>
-                  <button
-                    type="button"
-                    className={`btn btn-sm ${category.activo ? "btn-outline-danger" : "btn-outline-success"}`}
-                    onClick={() => toggle(category)}
-                  >
-                    {category.activo ? "Desactivar" : "Activar"}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </main>
-    </div>
+        <section className="admin-panel-card">
+          <div className="admin-panel-card__toolbar"><div><h2>Categorías registradas</h2><p>Solo el administrador principal puede modificarlas.</p></div></div>
+          <div className="admin-list">{categories.map((category) => <article key={category.id}><span className="admin-list__letter">{category.nombre.charAt(0)}</span><div><strong>{category.nombre}</strong><small>{category.activo ? "Visible en la carta" : "Categoría oculta"}</small></div><span className={category.activo ? "admin-status" : "admin-status admin-status--off"}><i /> {category.activo ? "Activa" : "Inactiva"}</span><button className="admin-outline-action" onClick={() => toggle(category)}>{category.activo ? "Desactivar" : "Activar"}</button></article>)}</div>
+        </section>
+      </section>
+    </AdminLayout>
   );
 }

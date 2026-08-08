@@ -2,12 +2,19 @@ import { Router } from "express";
 import { z } from "zod";
 import { validate } from "../../../shared/middleware/validate.js";
 
-const schema = z.object({
-  name: z.string().trim().min(1).max(150), description: z.string().trim().max(5000).optional(),
-  discountType: z.enum(["PERCENTAGE", "FIXED_AMOUNT"]), discountValue: z.coerce.number().positive(),
-  startsAt: z.iso.datetime(), endsAt: z.iso.datetime(), active: z.boolean().default(true),
-  productIds: z.array(z.string().uuid()).min(1).max(100),
-});
+const common = {
+  name: z.string().trim().min(1).max(150),
+  description: z.string().trim().max(5000).optional(),
+  imageUrl: z.string().url().optional().or(z.literal("")),
+  startsAt: z.iso.datetime(),
+  endsAt: z.iso.datetime(),
+  active: z.boolean().default(true),
+};
+const product = z.object({ productId: z.string().uuid(), quantity: z.coerce.number().int().min(1).max(99).default(1) });
+const schema = z.discriminatedUnion("kind", [
+  z.object({ ...common, kind: z.literal("PRODUCT_DISCOUNT"), discountType: z.enum(["PERCENTAGE", "FIXED_AMOUNT"]), discountValue: z.coerce.number().positive(), products: z.array(product).min(1).max(100) }),
+  z.object({ ...common, kind: z.literal("BUNDLE"), bundlePrice: z.coerce.number().positive(), products: z.array(product).min(2).max(100) }),
+]);
 
 export const createPromotionRouter = (service, authenticate, requireAdmin) => {
   const router = Router();

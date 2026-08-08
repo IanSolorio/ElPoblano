@@ -1,122 +1,36 @@
- 
-import { useParams } from "react-router-dom"; // Obtener ID desde la URL
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getProduct, updateProduct as saveProduct, uploadProductImage } from "../../catalog/application/productService";
+import AdminLayout from "../components/AdminLayout";
 import ProductForm from "../components/ProductForm";
-import AdminSidebar from "../components/AdminSidebar";
-let imagen; // Variable global para manejar la imagen
+import { getProduct, updateProduct, uploadProductImage } from "../../catalog/application/productService";
 
-const EditProductView = () => {
-  const [values, setValues] = useState({
-    nombre: "",
-    descripcion: "",
-    categoriaId: "",
-    precio: 0,
-    imagen: "https://via.placeholder.com/150",
-  });
-
-  const { id } = useParams(); // ID del producto
+export default function EditProductPage() {
+  const [values, setValues] = useState({ nombre: "", descripcion: "", categoriaId: "", precio: 0, stock: 0, activo: true, imagen: "" });
+  const [newImage, setNewImage] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState("");
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  // Maneja los cambios en los inputs del formulario
-  const handleValues = (e) => {
-    const { name, value, type, checked } = e.target;
-    setValues({
-      ...values,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };
+  useEffect(() => { getProduct(id).then(setValues).catch((error) => { console.error(error); Swal.fire("Error", "No se pudo cargar el producto.", "error"); }); }, [id]);
+  const onChange = (event) => { const { name, value, type, checked } = event.target; setValues((current) => ({ ...current, [name]: type === "checkbox" ? checked : value })); };
 
-  // Maneja la selección de una nueva imagen
-  const handleImage = (e) => {
-    imagen = e.target.files[0]; // Almacena la imagen seleccionada
-  };
-
-  // Maneja el envío del formulario
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const { nombre, descripcion, categoriaId, precio } = values;
-
-    // Validación básica
-    if (!nombre || !descripcion || !categoriaId || !precio) {
-      Swal.fire({
-        title: "Error",
-        text: "Todos los campos son obligatorios.",
-        icon: "error",
-      });
-      return;
-    }
-
-    // Muestra un mensaje de carga
-    const loading = Swal.fire({
-      title: "Cargando...",
-      text: "Actualizando el producto...",
-      icon: "info",
-      showConfirmButton: false,
-      allowOutsideClick: false,
-    });
-
-    let urlImagen = values.imagen;
-
-    // Si hay una nueva imagen seleccionada, súbela al storage
-    if (imagen) {
-      urlImagen = await uploadProductImage(imagen);
-    }
-
-    // Construye el objeto del producto actualizado
-    const updateProduct = {
-      ...values,
-      imagen: urlImagen,
-    };
-
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
     try {
-      await saveProduct(id, updateProduct);
-      loading.close();
-      Swal.fire({
-        title: "Producto Actualizado",
-        text: `El producto "${values.nombre}" fue actualizado correctamente.`,
-        icon: "success",
-      });
+      let imageUrl = values.imagen;
+      if (newImage) { setStatus("Subiendo nueva imagen..."); imageUrl = await uploadProductImage(newImage, (progress) => setStatus(`Subiendo imagen: ${progress}%`)); }
+      setStatus("Actualizando producto...");
+      await updateProduct(id, { ...values, imagen: imageUrl });
+      await Swal.fire("Producto actualizado", "Los cambios se guardaron correctamente.", "success");
       navigate("/admin");
     } catch (error) {
       console.error("Error al actualizar el producto:", error);
-      Swal.fire({
-        title: "Error",
-        text: "No se pudo actualizar el producto.",
-        icon: "error",
-      });
-      loading.close();
-    }
+      Swal.fire("Error", error.message || "No se pudo actualizar el producto.", "error");
+    } finally { setIsSubmitting(false); setStatus(""); }
   };
 
-  // Carga los datos del producto al montar el componente
-  useEffect(() => {
-    const fetchProducto = async () => {
-      try {
-        const producto = await getProduct(id);
-        setValues(producto);
-      } catch (error) {
-        console.error("Error al obtener el producto:", error);
-      }
-    };
-    fetchProducto();
-  }, [id]);
-
-  return (
-    <div className="d-flex">
-      <AdminSidebar />
-      <ProductForm
-            values={values}
-            onChange={handleValues}
-            onImageChange={handleImage}
-            onSubmit={handleSubmit}
-            title="Editar Producto"
-          />
-    </div>
-  );
-};
-
-export default EditProductView;
+  return <AdminLayout eyebrow="Inventario" title="Editar producto" description="Actualiza la información comercial y las existencias."><ProductForm values={values} onChange={onChange} onImageChange={(event) => setNewImage(event.target.files[0])} onSubmit={onSubmit} isSubmitting={isSubmitting} submitStatus={status} /></AdminLayout>;
+}

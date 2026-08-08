@@ -15,7 +15,7 @@ export const productImageUpload = multer({
   },
 });
 
-export const saveProductImage = async (file) => {
+export const saveImage = async (file, folder = "products") => {
   const hasEnvironmentCredentials = Boolean(
     env.firebaseProjectId && env.firebaseClientEmail && env.firebasePrivateKey,
   );
@@ -27,7 +27,7 @@ export const saveProductImage = async (file) => {
       "FIREBASE_CREDENTIALS_MISSING",
     );
   }
-  const objectName = `products/${randomUUID()}${extensions.get(file.mimetype)}`;
+  const objectName = `${folder}/${randomUUID()}${extensions.get(file.mimetype)}`;
   const downloadToken = randomUUID();
   const storageFile = firebaseBucket.file(objectName);
   await storageFile.save(file.buffer, {
@@ -40,3 +40,5 @@ export const saveProductImage = async (file) => {
   });
   return `https://firebasestorage.googleapis.com/v0/b/${firebaseBucket.name}/o/${encodeURIComponent(objectName)}?alt=media&token=${downloadToken}`;
 };
+
+export const saveProductImage = (file) => saveImage(file, "products");

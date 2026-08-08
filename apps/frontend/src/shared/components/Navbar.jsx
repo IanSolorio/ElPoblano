@@ -1,37 +1,32 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebook,
-  faTwitter,
-  faTiktok,
-  faInstagram,
-  faWhatsapp,
-} from "@fortawesome/free-brands-svg-icons";
+import { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { FaUser } from "react-icons/fa6";
 import logo from "../../assets/image/LogoSinFondo.png";
 import LoginModal from "../../modules/admin/components/LoginModal";
 import CartDrawer from "../../modules/cart/components/CartDrawer";
 import CartButton from "../../modules/cart/components/CartButton";
 import { useAuth } from "../../modules/auth/application/AuthContext";
+import "../../css/Principal.css";
 
-const Navbar = () => {
+const links = [
+  ["/", "Inicio"],
+  ["/productos", "Productos"],
+  ["/nosotros", "Nosotros"],
+  ["/ubicanos", "Ubícanos"],
+  ["/contact", "Contacto"],
+];
+
+export default function Navbar() {
   const [openLoginModal, setOpenLoginModal] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false); 
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const { user, logout } = useAuth();
 
-  const toggleCart = (state) => {
-    setIsCartOpen(state);
-  };
-  
   return (
-    <nav className="navbar navbar-expand-lg bg-white border-bottom shadow-sm">
+    <nav className="navbar navbar-expand-lg home-navbar sticky-top">
       <div className="container">
-        <Link className="navbar-brand d-flex align-items-center" to="/">
-          <img
-            src={logo}
-            alt="Logo"
-            style={{ width: "50px", height: "50px", marginRight: "10px" }}
-          />
+        <Link className="home-navbar__brand" to="/" aria-label="El Poblano, inicio">
+          <img src={logo} alt="" />
+          <span><strong>El Poblano</strong><small>Taquería mexicana</small></span>
         </Link>
 
         <button
@@ -41,106 +36,47 @@ const Navbar = () => {
           data-bs-target="#navbarContent"
           aria-controls="navbarContent"
           aria-expanded="false"
-          aria-label="Toggle navigation"
+          aria-label="Abrir navegación"
         >
-          <span className="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon" />
         </button>
 
         <div className="collapse navbar-collapse" id="navbarContent">
-          <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link className="nav-link fw-bold" to="/">
-                HOME
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link fw-bold" to="/productos">
-                PRODUCTOS
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link fw-bold" to="/nosotros">
-                NOSOTROS
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link fw-bold" to="/ubicanos">
-                UBÍCANOS
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link fw-bold" to="/contact">
-                CONTACTANOS
-              </Link>
-            </li>
+          <ul className="navbar-nav mx-auto">
+            {links.map(([to, label]) => (
+              <li className="nav-item" key={to}>
+                <NavLink
+                  className={({ isActive }) => `nav-link${isActive ? " active" : ""}`}
+                  to={to}
+                  end={to === "/"}
+                >
+                  {label}
+                </NavLink>
+              </li>
+            ))}
           </ul>
 
-          <div className="d-flex align-items-center me-3">
-            <a
-              href="https://www.facebook.com"
-              className="text-dark mx-2"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FontAwesomeIcon icon={faFacebook} size="lg" />
-            </a>
-            <a
-              href="https://twitter.com"
-              className="text-dark mx-2"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FontAwesomeIcon icon={faTwitter} size="lg" />
-            </a>
-            <a
-              href="https://www.tiktok.com"
-              className="text-dark mx-2"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FontAwesomeIcon icon={faTiktok} size="lg" />
-            </a>
-            <a
-              href="https://www.instagram.com"
-              className="text-dark mx-2"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FontAwesomeIcon icon={faInstagram} size="lg" />
-            </a>
-            <a
-              href="https://wa.me"
-              className="text-dark mx-2"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FontAwesomeIcon icon={faWhatsapp} size="lg" />
-            </a>
+          <div className="home-navbar__actions">
+            {user ? (
+              <div className="home-user-menu">
+                <span className="home-user-menu__greeting">Hola, <strong>{user.firstName}</strong></span>
+                <Link className="home-navbar__secondary" to={user.role === "CUSTOMER" ? "/historial" : "/admin"}>
+                  {user.role === "CUSTOMER" ? "Mis compras" : "Administrar"}
+                </Link>
+                <button className="home-navbar__login" onClick={logout}>Salir</button>
+              </div>
+            ) : (
+              <button className="home-navbar__login" onClick={() => setOpenLoginModal(true)}>
+                <FaUser aria-hidden="true" /> Iniciar sesión
+              </button>
+            )}
+            <CartButton toggleCart={setIsCartOpen} />
           </div>
-
-          {user ? <div className="d-flex align-items-center gap-2">
-            {user.role === "CUSTOMER" && <Link className="btn btn-outline-dark" to="/historial">Mis compras</Link>}
-            {user.role !== "CUSTOMER" && <Link className="btn btn-outline-dark" to="/admin">Administrar</Link>}
-            <span className="small">Hola, {user.firstName}</span>
-            <button className="btn btn-dark" onClick={logout}>Salir</button>
-          </div> : <button
-            className="btn btn-dark rounded-pill px-4"
-            style={{ fontWeight: "bold" }}
-            onClick={() => setOpenLoginModal(true)}
-          >
-            LOGIN
-          </button>}
-          <CartButton toggleCart={toggleCart} />
-          <CartDrawer open={isCartOpen} toggleCart={toggleCart} />
         </div>
       </div>
 
-      <LoginModal
-        open={openLoginModal}
-        onClose={() => setOpenLoginModal(false)}
-      />
+      <CartDrawer open={isCartOpen} toggleCart={setIsCartOpen} />
+      <LoginModal open={openLoginModal} onClose={() => setOpenLoginModal(false)} />
     </nav>
   );
-};
-
-export default Navbar;
+}

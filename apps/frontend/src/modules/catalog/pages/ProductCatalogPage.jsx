@@ -1,234 +1,171 @@
-import React, { useState, useEffect, useCallback } from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Slider,
-  Grid,
-  Card,
-  CardMedia,
-  CardContent,
-  CardActions,
-  Paper,
-} from "@mui/material";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { FaCartPlus, FaMagnifyingGlass, FaSliders, FaUtensils } from "react-icons/fa6";
+import Swal from "sweetalert2";
 import { listProducts } from "../application/productService";
 import { getCategorias } from "../infrastructure/productApi";
 import { addCartItem } from "../../cart/application/cartService";
-import Swal from "sweetalert2";
+import "../../../css/Producto.css";
 
-const Producto = () => {
-  const MAX_PRICE = 30;
-
-  const [priceRange, setPriceRange] = useState([0, MAX_PRICE]);
+export default function ProductCatalogPage() {
+  const [maxPrice, setMaxPrice] = useState(100);
+  const [selectedPrice, setSelectedPrice] = useState(100);
   const [selectedCategory, setSelectedCategory] = useState("Todas");
   const [searchText, setSearchText] = useState("");
-  const [products, setProducts] = useState([]); // Productos originales
+  const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]); // Productos filtrados
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
-    const fetchProductos = async () => {
+    const fetchProducts = async () => {
       try {
-        const [productos, categorias] = await Promise.all([listProducts(), getCategorias()]);
-        const validatedProducts = productos.map((product) => ({
-          ...product,
-          precio: Number(product.precio),
-        }));
-        setProducts(validatedProducts);
-        setFilteredProducts(validatedProducts);
-        setCategories(categorias);
+        const [productData, categoryData] = await Promise.all([listProducts(), getCategorias()]);
+        const normalized = productData.map((product) => ({ ...product, precio: Number(product.precio) }));
+        const highestPrice = Math.max(10, Math.ceil(Math.max(...normalized.map((item) => item.precio), 0) / 5) * 5);
+        setProducts(normalized);
+        setCategories(categoryData);
+        setMaxPrice(highestPrice);
+        setSelectedPrice(highestPrice);
       } catch (error) {
         console.error("Error al cargar los productos:", error);
+        setLoadError(true);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchProductos();
+    fetchProducts();
   }, []);
 
-  // Filtrar productos por rango de precios, categoría y búsqueda
-  const filterProducts = useCallback(() => {
-    const filtered = products.filter((product) => {
-      const isWithinPrice =
-        product.precio >= priceRange[0] && product.precio <= priceRange[1];
-      const isInCategory =
-        selectedCategory === "Todas" || product.categoria === selectedCategory;
-      const matchesSearch = product.nombre
-        .toLowerCase()
-        .includes(searchText.toLowerCase());
-      return isWithinPrice && isInCategory && matchesSearch;
-    });
-    setFilteredProducts(filtered);
-  }, [priceRange, selectedCategory, searchText, products]);
+  const filteredProducts = useMemo(() => products.filter((product) => {
+    const categoryMatches = selectedCategory === "Todas" || product.categoria === selectedCategory;
+    const searchMatches = product.nombre.toLowerCase().includes(searchText.trim().toLowerCase());
+    return product.precio <= selectedPrice && categoryMatches && searchMatches;
+  }), [products, selectedCategory, searchText, selectedPrice]);
 
-  useEffect(() => {
-    filterProducts();
-  }, [filterProducts]);
-
-  const addToCart = (product) => {
+  const addToCart = useCallback((product) => {
     addCartItem(product);
     Swal.fire({
-      title: "¡Producto añadido!",
-      text: `${product.nombre} se agregó al carrito con éxito.`,
+      title: "¡Agregado al carrito!",
+      text: `${product.nombre} ya está listo en tu selección.`,
       icon: "success",
-      confirmButtonText: "Aceptar",
-      confirmButtonColor: "#a52a2a",
+      confirmButtonText: "Continuar",
+      confirmButtonColor: "#a62b25",
     });
+  }, []);
+
+  const clearFilters = () => {
+    setSelectedCategory("Todas");
+    setSearchText("");
+    setSelectedPrice(maxPrice);
   };
 
   return (
-    <Box sx={{ padding: "20px", backgroundColor: "#ece5dd" }}>
-      {/* Barra de búsqueda */}
-      <Paper
-        sx={{
-          display: "flex",
-          gap: "10px",
-          padding: "10px",
-          marginBottom: "20px",
-          alignItems: "center",
-          backgroundColor: "white",
-        }}
-      >
-        <TextField
-          label="Buscar producto"
-          variant="outlined"
-          fullWidth
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#a52a2a",
-              },
-            },
-          }}
-        />
-      </Paper>
+    <main className="catalog-page">
+      <header className="catalog-hero">
+        <div className="container">
+          <span className="catalog-eyebrow"><FaUtensils aria-hidden="true" /> Nuestra carta</span>
+          <h1>Encuentra tu próximo favorito</h1>
+          <p>Tacos, quesadillas, bebidas y más sabores preparados al momento.</p>
+        </div>
+      </header>
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={3}>
-          <Paper
-            sx={{
-              padding: "20px",
-              backgroundColor: "#ffffff",
-              borderRadius: "8px",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              position: "sticky",
-              top: "20px",
-            }}
-          >
-            <Box sx={{ marginBottom: "20px" }}>
-              <Typography sx={{ fontWeight: "bold", marginBottom: "10px" }}>
-                Filtrar por precio
-              </Typography>
-              <Slider
-                value={priceRange}
-                min={0}
-                max={MAX_PRICE}
-                step={1}
-                valueLabelDisplay="auto"
-                onChange={(e, newValue) => setPriceRange(newValue)}
-                sx={{
-                  color: "#a52a2a",
-                  "& .MuiSlider-thumb": {
-                    backgroundColor: "#4a1f1f",
-                  },
-                }}
+      <section className="container catalog-content">
+        <div className="catalog-toolbar">
+          <label className="catalog-search">
+            <FaMagnifyingGlass aria-hidden="true" />
+            <input
+              type="search"
+              placeholder="Buscar tacos, bebidas, quesadillas..."
+              value={searchText}
+              onChange={(event) => setSearchText(event.target.value)}
+            />
+          </label>
+          <span className="catalog-result-count">
+            {loading ? "Preparando la carta..." : `${filteredProducts.length} productos disponibles`}
+          </span>
+        </div>
+
+        <div className="catalog-layout">
+          <aside className="catalog-filters" aria-label="Filtros del catálogo">
+            <div className="catalog-filters__title">
+              <FaSliders aria-hidden="true" /><h2>Filtrar carta</h2>
+            </div>
+            <div className="catalog-filter-group">
+              <div className="catalog-filter-label">
+                <span>Precio máximo</span><strong>S/ {selectedPrice}</strong>
+              </div>
+              <input
+                className="catalog-range"
+                type="range"
+                min="0"
+                max={maxPrice}
+                step="1"
+                value={selectedPrice}
+                onChange={(event) => setSelectedPrice(Number(event.target.value))}
               />
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography> S/.{priceRange[0]}</Typography>
-                <Typography> S/.{priceRange[1]}</Typography>
-              </Box>
-            </Box>
+              <div className="catalog-range-labels"><span>S/ 0</span><span>S/ {maxPrice}</span></div>
+            </div>
 
-            <Typography sx={{ fontWeight: "bold", marginBottom: "10px" }}>
-              Categorías
-            </Typography>
-            <Box>
-              {["Todas", ...categories.map((category) => category.nombre)].map((category) => (
-                <Typography
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  sx={{
-                    color:
-                      category === selectedCategory ? "#4a1f1f" : "#a52a2a",
-                    fontWeight:
-                      category === selectedCategory ? "bold" : "normal",
-                    cursor: "pointer",
-                    marginBottom: "8px",
-                    "&:hover": { textDecoration: "underline" },
-                  }}
-                >
-                  {category}
-                </Typography>
-              ))}
-            </Box>
-          </Paper>
-        </Grid>
-
-        {/* Productos */}
-        <Grid item xs={12} md={9}>
-          <Grid container spacing={3}>
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => (
-                <Grid item xs={12} sm={6} md={4} key={product.id}>
-                  <Card
-                    sx={{
-                      backgroundColor: "#fff",
-                      border: "1px solid #a52a2a",
-                      borderRadius: "8px",
-                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                      "&:hover": {
-                        transform: "scale(1.05)",
-                        transition: "0.3s",
-                      },
-                    }}
+            <div className="catalog-filter-group">
+              <span className="catalog-filter-group__heading">Categorías</span>
+              <div className="catalog-categories">
+                {["Todas", ...categories.map((category) => category.nombre)].map((category) => (
+                  <button
+                    className={category === selectedCategory ? "active" : ""}
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
                   >
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={product.imagen}
-                      alt={product.nombre}
-                    />
-                    <CardContent>
-                      <Typography variant="h6" sx={{ color: "#4a1f1f" }}>
-                        {product.nombre}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: "#4a1f1f" }}>
-                        {product.descripcion}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: "#a52a2a" }}>
-                      S/.{product.precio.toFixed(2)}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: "#4a1f1f", fontWeight: "bold" }}>
-                        Stock disponible: {product.stock}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button
-                        variant="contained"
-                        fullWidth
-                        sx={{
-                          backgroundColor: "#a52a2a",
-                          "&:hover": { backgroundColor: "#4a1f1f" },
-                        }}
-                        onClick={() => addToCart(product)}
-                      >
-                        Añadir al Carrito
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))
-             ) : (
-              <Typography sx={{ textAlign: "center", width: "100%" }}>
-                No se encontraron productos en esta categoría o rango de precio.
-              </Typography>
-            )}
-          </Grid>
-        </Grid>
-      </Grid>
-    </Box>
-  );
-};
+                    <span>{category}</span>
+                    {category === "Todas" && <small>{products.length}</small>}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button className="catalog-clear" onClick={clearFilters}>Limpiar filtros</button>
+          </aside>
 
-export default Producto;
+          <div className="catalog-products">
+            {loading ? (
+              <div className="catalog-grid" aria-label="Cargando productos">
+                {[1, 2, 3, 4, 5, 6].map((item) => <div className="catalog-skeleton" key={item} />)}
+              </div>
+            ) : loadError ? (
+              <div className="catalog-empty"><h2>No pudimos cargar la carta</h2><p>Intenta nuevamente dentro de unos momentos.</p></div>
+            ) : filteredProducts.length > 0 ? (
+              <div className="catalog-grid">
+                {filteredProducts.map((product) => (
+                  <article className="catalog-card" key={product.id}>
+                    <div className="catalog-card__image">
+                      {product.imagen ? <img src={product.imagen} alt={product.nombre} /> : <FaUtensils aria-label="Producto sin imagen" />}
+                      <span>{product.categoria}</span>
+                    </div>
+                    <div className="catalog-card__body">
+                      <div className="catalog-card__heading">
+                        <h2>{product.nombre}</h2>
+                        <strong>S/ {product.precio.toFixed(2)}</strong>
+                      </div>
+                      <p>{product.descripcion}</p>
+                      <div className="catalog-card__footer">
+                        <span><i aria-hidden="true" /> {product.stock} disponibles</span>
+                        <button onClick={() => addToCart(product)}>
+                          <FaCartPlus aria-hidden="true" /> Agregar
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="catalog-empty">
+                <span><FaMagnifyingGlass aria-hidden="true" /></span>
+                <h2>No encontramos coincidencias</h2>
+                <p>Prueba otra categoría, búsqueda o rango de precio.</p>
+                <button onClick={clearFilters}>Mostrar toda la carta</button>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
