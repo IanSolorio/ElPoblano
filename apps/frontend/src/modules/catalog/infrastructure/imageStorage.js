@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_ENDPOINT_BASE || "http://localhost:3000/api";
+const API_URL = import.meta.env.VITE_ENDPOINT_BASE || "/api";
 
 const optimizeImage = async (image) => {
   if (!image.type.startsWith("image/") || image.type === "image/svg+xml") return image;

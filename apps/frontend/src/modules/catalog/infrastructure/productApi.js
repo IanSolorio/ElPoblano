@@ -2,7 +2,7 @@
 import axios from "axios";
 import { deleteFile } from "./imageStorage";
 
-const URL = import.meta.env.VITE_ENDPOINT_BASE || "http://localhost:3000/api";
+const URL = import.meta.env.VITE_ENDPOINT_BASE || "/api";
 const config = { withCredentials: true };
 
 const getProductos = async () => {
