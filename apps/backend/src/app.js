@@ -43,6 +43,7 @@ export const createApp = () => {
   const cookieOptions = { httpOnly: true, secure: env.nodeEnv === "production", sameSite: "lax", path: "/" };
 
   app.disable("x-powered-by");
+  app.set("trust proxy", env.nodeEnv === "production" ? 1 : false);
   app.use(requestContext);
   app.use(helmet());
   app.use(cors({ origin: env.frontendOrigin, credentials: true }));
