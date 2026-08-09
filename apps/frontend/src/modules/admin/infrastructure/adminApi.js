@@ -18,3 +18,12 @@ export const listCategories = () => request("/categorias");
 export const listAdminCategories = () => request("/categorias/admin");
 export const createCategory = (nombre) => request("/categorias", { method: "POST", body: JSON.stringify({ nombre }) });
 export const updateCategory = (id, data) => request(`/categorias/${id}`, { method: "PATCH", body: JSON.stringify(data) });
+export const listAdminOrders = ({ page = 1, limit = 12, status = "", search = "" } = {}) => {
+  const query = new URLSearchParams({ page, limit });
+  if (status) query.set("status", status);
+  if (search) query.set("search", search);
+  return request(`/pedidos/admin?${query}`);
+};
+export const getAdminOrder = (id) => request(`/pedidos/admin/${id}`);
+export const updateAdminOrderStatus = (id, status) => request(`/pedidos/admin/${id}/status`, { method: "PATCH", body: JSON.stringify({ status }) });
+export const getAdminOrderStatistics = (month) => request(`/pedidos/admin-estadisticas?month=${encodeURIComponent(month)}`);

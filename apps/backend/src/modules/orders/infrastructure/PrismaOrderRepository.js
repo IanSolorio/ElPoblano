@@ -11,13 +11,25 @@ const serializeOrder = (order) => ({
   payment: order.payment ? { ...order.payment, amount: Number(order.payment.amount) } : null,
 });
 
-export const calculatePromotionalPrice = (product) => product.promotions.reduce((lowestPrice, { promotion }) => {
+export const validateOperationalTransition = (order, nextStatus) => {
+  const expected = { PREPARING: "CONFIRMED", READY: "PREPARING", OUT_FOR_DELIVERY: "READY", DELIVERED: "OUT_FOR_DELIVERY" }[nextStatus];
+  if (!expected || order.status !== expected) {
+    throw new AppError(`No se puede cambiar un pedido ${order.status} a ${nextStatus}.`, 409, "INVALID_ORDER_STATUS_TRANSITION");
+  }
+  if (order.payment?.status !== "APPROVED") {
+    throw new AppError("Solo se pueden preparar pedidos con pago aprobado.", 409, "PAYMENT_NOT_APPROVED");
+  }
+  return expected;
+};
+
+export const calculatePromotionSelection = (product) => product.promotions.reduce((best, { promotion }) => {
   const discountValue = Number(promotion.discountValue);
-  const discount = promotion.discountType === "PERCENTAGE"
-    ? Number(product.price) * discountValue / 100
-    : discountValue;
-  return Math.min(lowestPrice, Math.max(0, Number(product.price) - discount));
-}, Number(product.price));
+  const discount = promotion.discountType === "PERCENTAGE" ? Number(product.price) * discountValue / 100 : discountValue;
+  const price = Math.max(0, Number(product.price) - discount);
+  return price < best.price ? { price, promotionId: promotion.id, promotionName: promotion.name } : best;
+}, { price: Number(product.price), promotionId: null, promotionName: null });
+
+export const calculatePromotionalPrice = (product) => calculatePromotionSelection(product).price;
 
 const allocateBundleItems = (bundle, bundleQuantity) => {
   const components = bundle.products.map(({ product, quantity }) => ({ product, quantity: quantity * bundleQuantity, weight: Math.round(Number(product.price) * 100) * quantity * bundleQuantity }));
@@ -86,9 +98,9 @@ export class PrismaOrderRepository extends OrderRepository {
 
       const items = products.map((product) => {
         const quantity = requested.get(product.id);
-        const unitPrice = calculatePromotionalPrice(product);
-        const unitCents = Math.round(unitPrice * 100);
-        return { productId: product.id, productName: product.name, unitPrice: unitCents / 100, quantity, subtotal: (unitCents * quantity) / 100 };
+        const selectedPromotion = calculatePromotionSelection(product);
+        const unitCents = Math.round(selectedPromotion.price * 100);
+        return { productId: product.id, productName: product.name, promotionId: selectedPromotion.promotionId, promotionName: selectedPromotion.promotionName, unitPrice: unitCents / 100, quantity, subtotal: (unitCents * quantity) / 100 };
       });
       for (const bundle of bundles) items.push(...allocateBundleItems(bundle, requestedBundles.get(bundle.id)));
       const subtotal = items.reduce((total, item) => total + Number(item.subtotal), 0);
@@ -153,6 +165,129 @@ export class PrismaOrderRepository extends OrderRepository {
   async findByIdAndUser(id, userId) {
     const order = await this.prisma.order.findFirst({ where: { id, userId }, include: orderInclude });
     return order ? serializeOrder(order) : null;
+  }
+
+  async findActiveByUser(userId) {
+    const statuses = ["PENDING", "CONFIRMED", "PREPARING", "READY", "OUT_FOR_DELIVERY"];
+    const orders = await this.prisma.order.findMany({ where: { userId, status: { in: statuses } }, include: orderInclude, orderBy: { createdAt: "desc" } });
+    return orders.map(serializeOrder);
+  }
+
+  async findMonthlyHistoryByUser(userId) {
+    const orders = await this.prisma.order.findMany({ where: { userId, status: "DELIVERED" }, include: orderInclude, orderBy: { createdAt: "desc" } });
+    const months = new Map();
+    for (const order of orders.map(serializeOrder)) {
+      const date = new Date(order.createdAt);
+      const key = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}`;
+      const current = months.get(key) || { month: key, orderCount: 0, totalSpent: 0, orders: [] };
+      current.orderCount += 1;
+      current.totalSpent += order.total;
+      current.orders.push(order);
+      months.set(key, current);
+    }
+    return [...months.values()];
+  }
+
+  async findAllForAdmin({ page, limit, status, search }) {
+    const searchable = search ? {
+      OR: [
+        { id: { contains: search } },
+        { customerName: { contains: search } },
+        { customerEmail: { contains: search } },
+        { customerPhone: { contains: search } },
+      ],
+    } : {};
+    const where = { ...searchable, ...(status ? { status } : {}) };
+    const [orders, total, grouped] = await this.prisma.$transaction([
+      this.prisma.order.findMany({ where, include: orderInclude, orderBy: { createdAt: "desc" }, skip: (page - 1) * limit, take: limit }),
+      this.prisma.order.count({ where }),
+      this.prisma.order.groupBy({ by: ["status"], where: searchable, _count: { _all: true } }),
+    ]);
+    const counts = Object.fromEntries(grouped.map((item) => [item.status, item._count._all]));
+    return {
+      data: orders.map(serializeOrder),
+      summary: {
+        confirmed: counts.CONFIRMED || 0,
+        preparing: counts.PREPARING || 0,
+        ready: counts.READY || 0,
+        outForDelivery: counts.OUT_FOR_DELIVERY || 0,
+        delivered: counts.DELIVERED || 0,
+        pending: counts.PENDING || 0,
+        cancelled: counts.CANCELLED || 0,
+      },
+      pagination: { page, limit, total, pages: Math.ceil(total / limit) },
+    };
+  }
+
+  async findByIdForAdmin(id) {
+    const order = await this.prisma.order.findUnique({ where: { id }, include: orderInclude });
+    return order ? serializeOrder(order) : null;
+  }
+
+  async updateOperationalStatus(id, nextStatus, actorId) {
+    return this.prisma.$transaction(async (transaction) => {
+      const order = await transaction.order.findUnique({ where: { id }, include: orderInclude });
+      if (!order) throw new AppError("Pedido no encontrado.", 404, "ORDER_NOT_FOUND");
+      const expected = validateOperationalTransition(order, nextStatus);
+      const updated = await transaction.order.updateMany({ where: { id, status: expected }, data: { status: nextStatus } });
+      if (updated.count !== 1) throw new AppError("El pedido fue actualizado por otro administrador. Recarga la lista.", 409, "ORDER_STATUS_CONFLICT");
+      await transaction.auditLog.create({
+        data: { userId: actorId, action: "ORDER_STATUS_UPDATED", entity: "Order", entityId: id, metadata: { previousStatus: expected, newStatus: nextStatus } },
+      });
+      return serializeOrder(await transaction.order.findUnique({ where: { id }, include: orderInclude }));
+    });
+  }
+
+  async getMonthlyStatistics(month) {
+    const [year, monthNumber] = month.split("-").map(Number);
+    const start = new Date(Date.UTC(year, monthNumber - 1, 1));
+    const end = new Date(Date.UTC(year, monthNumber, 1));
+    const orders = await this.prisma.order.findMany({
+      where: { payment: { is: { status: "APPROVED", paidAt: { gte: start, lt: end } } } },
+      include: { payment: true, items: { include: { promotion: { include: { products: true } } } } },
+      orderBy: { createdAt: "asc" },
+    });
+    const products = new Map();
+    const promotionGroups = new Map();
+    for (const order of orders) {
+      for (const item of order.items) {
+        const product = products.get(item.productId) || { productId: item.productId, name: item.productName, units: 0, revenue: 0 };
+        product.units += item.quantity;
+        product.revenue += Number(item.subtotal);
+        products.set(item.productId, product);
+        if (item.promotionId) {
+          const key = `${order.id}:${item.promotionId}`;
+          const group = promotionGroups.get(key) || { promotion: item.promotion, name: item.promotionName, items: [], revenue: 0 };
+          group.items.push(item);
+          group.revenue += Number(item.subtotal);
+          promotionGroups.set(key, group);
+        }
+      }
+    }
+    const promotions = new Map();
+    for (const group of promotionGroups.values()) {
+      const promotion = group.promotion;
+      let units = group.items.reduce((sum, item) => sum + item.quantity, 0);
+      if (promotion?.kind === "BUNDLE") {
+        units = Math.min(...group.items.map((item) => {
+          const component = promotion.products.find((entry) => entry.productId === item.productId);
+          return Math.floor(item.quantity / Math.max(1, component?.quantity || 1));
+        }));
+      }
+      const current = promotions.get(promotion?.id) || { promotionId: promotion?.id, name: group.name, kind: promotion?.kind || "PRODUCT_DISCOUNT", units: 0, revenue: 0 };
+      current.units += units;
+      current.revenue += group.revenue;
+      promotions.set(current.promotionId, current);
+    }
+    const revenue = orders.reduce((sum, order) => sum + Number(order.total), 0);
+    const byStatus = Object.fromEntries(Object.entries(orders.reduce((counts, order) => ({ ...counts, [order.status]: (counts[order.status] || 0) + 1 }), {})));
+    return {
+      month,
+      summary: { orders: orders.length, revenue, averageTicket: orders.length ? revenue / orders.length : 0, customers: new Set(orders.map((order) => order.userId)).size, productsSold: [...products.values()].reduce((sum, item) => sum + item.units, 0) },
+      ordersByStatus: byStatus,
+      topProducts: [...products.values()].sort((a, b) => b.units - a.units).slice(0, 10),
+      topPromotions: [...promotions.values()].sort((a, b) => b.units - a.units).slice(0, 10),
+    };
   }
 
   async updatePaymentFromProvider(orderId, providerPayment) {

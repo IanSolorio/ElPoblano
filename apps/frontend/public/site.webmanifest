@@ -1,0 +1,17 @@
+{
+  "name": "El Poblano",
+  "short_name": "El Poblano",
+  "description": "Catálogo y pedidos en línea de El Poblano. Proyecto académico demostrativo.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f4ee",
+  "theme_color": "#a62b25",
+  "icons": [
+    {
+      "src": "/elpoblano-logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

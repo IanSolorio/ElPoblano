@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { FaArrowRightFromBracket, FaBoxesStacked, FaLayerGroup, FaTag, FaUserGroup, FaUserShield, FaUtensils } from "react-icons/fa6";
+import { FaArrowRightFromBracket, FaBoxesStacked, FaChartLine, FaLayerGroup, FaReceipt, FaTag, FaUserGroup, FaUserShield, FaUtensils } from "react-icons/fa6";
 import logo from "../../../assets/image/LogoSinFondo.png";
 import { useAuth } from "../../auth/application/AuthContext";
 import "../../../css/SidebarAdmin.css";
@@ -12,6 +12,8 @@ export default function AdminSidebar() {
   const links = [
     { to: "/admin", label: "Productos", icon: FaBoxesStacked, end: true },
     { to: "/crearproducto", label: "Nuevo producto", icon: FaUtensils },
+    { to: "/admin/pedidos", label: "Pedidos", icon: FaReceipt },
+    { to: "/admin/estadisticas", label: "Estadísticas", icon: FaChartLine },
     { to: "/admin/promociones", label: "Promociones", icon: FaTag },
     { to: "/admin/usuarios", label: "Usuarios", icon: FaUserGroup },
     ...(user?.role === "SUPER_ADMIN" ? [{ to: "/admin/categorias", label: "Categorías", icon: FaLayerGroup }] : []),

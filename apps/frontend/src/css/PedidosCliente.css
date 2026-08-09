@@ -1,0 +1,54 @@
+.customer-orders-page { background: #f7f4ee; min-height: 70vh; padding: clamp(3rem,6vw,5rem) 0; }
+.customer-orders-heading { margin-bottom: 2rem; max-width: 760px; }
+.customer-orders-heading > span { align-items: center; color: #a62b25; display: flex; font-size: .72rem; font-weight: 900; gap: .45rem; letter-spacing: .1em; text-transform: uppercase; }
+.customer-orders-heading h1 { color: #2d201b; font-family: "Fraunces",serif; font-size: clamp(2.2rem,5vw,4rem); letter-spacing: -.04em; margin: .5rem 0; }
+.customer-orders-heading p { color: #77675f; font-size: .95rem; line-height: 1.7; }
+.customer-orders-heading > a,.customer-orders-heading > div a { color: #7e211d; font-size: .75rem; font-weight: 900; }
+.customer-orders-heading > div { align-items: center; display: flex; gap: 1rem; }
+.customer-orders-heading > div button { align-items: center; background: transparent; border: 1px solid #d8cec5; border-radius: 999px; color: #4c3c35; display: flex; font-size: .7rem; font-weight: 800; gap: .35rem; padding: .45rem .7rem; }
+.customer-order-error { background: #fce5e1; border-radius: .8rem; color: #8a2923; margin-bottom: 1rem; padding: 1rem; }
+.customer-orders-empty { align-items: center; background: #fff; border: 1px solid #e7dfd7; border-radius: 1.2rem; color: #75665f; display: flex; flex-direction: column; padding: 4rem 2rem; text-align: center; }
+.customer-orders-empty > svg { color: #a62b25; font-size: 2rem; margin-bottom: .8rem; }
+.customer-orders-empty h2 { color: #2d201b; font-family: "Fraunces",serif; }
+.customer-orders-empty a { background: #a62b25; border-radius: .65rem; color: #fff; font-weight: 900; margin-top: .8rem; padding: .7rem 1rem; text-decoration: none; }
+.current-orders,.monthly-history { display: grid; gap: 1.25rem; }
+.current-order-card,.monthly-history__card { background: #fff; border: 1px solid #e7dfd7; border-radius: 1.2rem; box-shadow: 0 16px 45px rgba(64,42,31,.06); overflow: hidden; }
+.current-order-card > header,.monthly-history__card > header { align-items: center; background: #2c4c3e; color: #fff; display: flex; justify-content: space-between; padding: 1.1rem 1.3rem; }
+.current-order-card > header div { display: flex; flex-direction: column; }
+.current-order-card > header span { font-weight: 900; }
+.current-order-card > header small { opacity: .65; }
+.current-order-card > header strong { font-family: "Fraunces",serif; font-size: 1.25rem; }
+.order-timeline { display: grid; grid-template-columns: repeat(4,1fr); padding: 1.5rem; }
+.order-timeline > div { align-items: center; display: flex; flex-direction: column; position: relative; text-align: center; }
+.order-timeline > div:not(:last-child)::after { background: #ddd5ce; content: ""; height: 3px; left: calc(50% + 24px); position: absolute; top: 20px; width: calc(100% - 48px); }
+.order-timeline > div.complete:not(:last-child)::after { background: #4f8a68; }
+.order-timeline > div > span { align-items: center; background: #eee9e3; border-radius: 50%; color: #9d918a; display: flex; height: 42px; justify-content: center; position: relative; width: 42px; z-index: 1; }
+.order-timeline > div.complete > span { background: #dceee3; color: #286145; }
+.order-timeline strong { color: #33251f; font-size: .72rem; margin-top: .55rem; }
+.order-timeline small { color: #8b7d75; font-size: .57rem; max-width: 130px; }
+.current-order-payment { align-items: center; background: #fff6e6; color: #97611c; display: flex; gap: .8rem; margin: 1.2rem; padding: 1rem; }
+.current-order-payment p { font-size: .7rem; margin: .15rem 0 0; }
+.current-order-summary { border-top: 1px solid #eee7e0; display: grid; gap: 1.5rem; grid-template-columns: 1.4fr .8fr; padding: 1.3rem; }
+.current-order-summary h3 { color: #33251f; font-family: "Fraunces",serif; font-size: 1rem; }
+.current-order-summary p { align-items: center; display: flex; font-size: .72rem; justify-content: space-between; margin: .45rem 0; }
+.current-order-summary p span { display: flex; flex-direction: column; }
+.current-order-summary p small { color: #a62b25; font-size: .55rem; }
+.current-order-summary aside { align-items: flex-start; background: #f7f4ee; border-radius: .8rem; color: #a62b25; display: flex; font-size: .75rem; gap: .55rem; padding: .8rem; }
+.current-order-summary aside span { color: #4b3d36; display: flex; flex-direction: column; }
+.current-order-summary aside small { color: #8b7d75; }
+.monthly-history__card > header > div { align-items: center; display: flex; gap: .7rem; }
+.monthly-history__card > header > div > span { align-items: center; background: rgba(255,255,255,.12); border-radius: .6rem; display: flex; height: 38px; justify-content: center; width: 38px; }
+.monthly-history__card h2 { color: #fff; font-family: "Fraunces",serif; font-size: 1.1rem; margin: 0; text-transform: capitalize; }
+.monthly-history__card header p { font-size: .62rem; margin: 0; opacity: .65; }
+.monthly-history__card header > strong { font-family: "Fraunces",serif; font-size: 1.3rem; }
+.monthly-history__orders details { border-bottom: 1px solid #eee7e0; }
+.monthly-history__orders details:last-child { border: 0; }
+.monthly-history__orders summary { align-items: center; cursor: pointer; display: grid; font-size: .7rem; gap: 1rem; grid-template-columns: 1.4fr .7fr auto auto; list-style: none; padding: 1rem 1.3rem; }
+.monthly-history__orders summary span:first-child { align-items: center; display: flex; font-weight: 800; gap: .4rem; }
+.monthly-history__orders details[open] summary > svg { transform: rotate(180deg); }
+.monthly-history__orders details > div { background: #faf8f5; padding: .8rem 1.3rem; }
+.monthly-history__orders details p { display: flex; font-size: .7rem; justify-content: space-between; margin: .4rem 0; }
+.monthly-history__orders details p span { display: flex; flex-direction: column; }
+.monthly-history__orders details p small { color: #a62b25; font-size: .55rem; }
+.monthly-history__orders details footer { color: #8b7d75; font-size: .62rem; margin-top: .7rem; }
+@media (max-width: 700px) { .order-timeline { gap: .8rem; grid-template-columns: 1fr; } .order-timeline > div { align-items: center; flex-direction: row; gap: .7rem; text-align: left; } .order-timeline > div::after { display: none; } .current-order-summary { grid-template-columns: 1fr; } .monthly-history__orders summary { grid-template-columns: 1fr auto; } .monthly-history__orders summary span:nth-child(2) { display: none; } }

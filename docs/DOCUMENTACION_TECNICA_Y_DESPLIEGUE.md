@@ -16,7 +16,7 @@
 
 El sistema digitaliza una parte del proceso comercial de una taquería presencial. Permite publicar el catálogo, registrar clientes con una dirección georreferenciada, administrar un carrito, crear pedidos, consultar el historial de compras y procesar pagos de prueba. También incorpora un panel protegido para administrar productos, categorías, promociones, existencias y cuentas.
 
-El alcance actual llega hasta el registro y pago del pedido. No incluye un módulo de repartidores ni el seguimiento operativo de estados como “en camino” o “entregado”.
+El alcance actual comprende el registro, pago, preparación, salida y entrega del pedido. Los administradores controlan temporalmente el flujo completo hasta `DELIVERED`; todavía no existe un rol o aplicación independiente para repartidores.
 
 ## 2. Requisitos funcionales
 
@@ -40,6 +40,17 @@ El alcance actual llega hasta el registro y pago del pedido. No incluye un módu
 | RF-16 | Un administrador activa o desactiva clientes. | Cambio de estado y revocación de sesiones al desactivar. |
 | RF-17 | Un administrador principal administra otras cuentas administrativas. | Rol `SUPER_ADMIN` y reglas de jerarquía en el servicio administrativo. |
 | RF-18 | Las acciones administrativas relevantes quedan auditadas. | Tabla `audit_logs` y registros en productos, categorías, promociones, usuarios, pedidos y pagos. |
+| RF-19 | Administradores y administradores principales consultan los pedidos. | Cola administrativa paginada, filtrada y actualizada automáticamente. |
+| RF-20 | Solo los pedidos pagados ingresan a preparación. | Validación conjunta de estado `CONFIRMED` y pago `APPROVED`. |
+| RF-21 | Un administrador inicia la preparación. | Transición controlada `CONFIRMED → PREPARING`. |
+| RF-22 | Un administrador marca el pedido como listo. | Transición controlada `PREPARING → READY`. |
+| RF-23 | El administrador consulta cliente, entrega, productos y pago. | Panel lateral con detalle operativo y enlace a coordenadas. |
+| RF-24 | Los cambios de estado quedan auditados. | Acción `ORDER_STATUS_UPDATED` con estado anterior y nuevo. |
+| RF-25 | El cliente consulta sus pedidos actuales y su progreso. | Página `/mis-pedidos`, línea de tiempo y actualización automática. |
+| RF-26 | El historial presenta las compras entregadas agrupadas por mes. | Resumen mensual con cantidad, importe total y detalle desplegable. |
+| RF-27 | El administrador registra salida y entrega. | Transiciones `READY → OUT_FOR_DELIVERY → DELIVERED`. |
+| RF-28 | El administrador consulta indicadores mensuales. | Ingresos, pedidos, unidades, clientes únicos y ticket promedio. |
+| RF-29 | El administrador identifica productos y promociones destacados. | Rankings mensuales basados exclusivamente en pagos aprobados. |
 
 ## 3. Arquitectura general
 
@@ -141,7 +152,7 @@ La protección visual del frontend no sustituye al backend: todas las operacione
 | Autenticación | `/api/auth` | Registro, login, logout y usuario actual. |
 | Productos | `/api/productos` | Catálogo público y CRUD administrativo. |
 | Categorías | `/api/categorias` | Listado público y administración por `SUPER_ADMIN`. |
-| Pedidos | `/api/pedidos` | Creación idempotente, detalle e historial. |
+| Pedidos | `/api/pedidos` | Creación idempotente, pedidos activos, historial mensual, estadísticas, cola administrativa, detalle y transición de estados. |
 | Pagos | `/api/pagos` | Pago Mercado Pago y webhook público. |
 | Promociones | `/api/promociones` | Vigentes públicas y CRUD administrativo. |
 | Archivos | `/api/archivos` | Carga administrativa a Firebase Storage. |
@@ -207,7 +218,10 @@ Sus módulos incluyen:
 | `/registro` | Registro con dirección. |
 | `/checkout` | Confirmación y pago. |
 | `/historial` | Pedidos del usuario. |
+| `/mis-pedidos` | Pedidos activos y seguimiento visual del cliente. |
 | `/admin` | Panel administrativo protegido. |
+| `/admin/pedidos` | Cola operativa y detalle administrativo de pedidos. |
+| `/admin/estadisticas` | Indicadores y rankings mensuales. |
 | `/crearproducto` | Alta de producto. |
 | `/editarproducto/:id` | Edición y reposición de stock. |
 | `/admin/promociones` | Gestión de promociones. |
@@ -509,7 +523,7 @@ npm test
 npm run build
 ```
 
-Al cierre del documento existen nueve pruebas unitarias aprobadas para administración, autenticación, pedidos, pagos, productos y promociones.
+Al cierre de esta actualización existen dieciocho pruebas unitarias aprobadas para administración, autenticación, estados de pedidos, pagos, productos y promociones.
 
 ### 9.2 Salud de producción
 
@@ -549,7 +563,7 @@ Respuestas esperadas:
 
 | Característica | Aplicación en el sistema |
 |---|---|
-| Adecuación funcional | RF-01 a RF-18, reglas de rol, stock, vigencia y pagos. |
+| Adecuación funcional | RF-01 a RF-29, reglas de rol, stock, vigencia, pagos, seguimiento y analítica mensual. |
 | Eficiencia | Índices, paginación, límites, proxy Nginx y consultas filtradas. |
 | Compatibilidad | API JSON, CORS, HTTPS y adaptadores externos. |
 | Capacidad de interacción | Validación, errores uniformes, mapa, alertas y panel por rol. |
@@ -621,4 +635,3 @@ El sistema se considera desplegado para demostración cuando:
 - El dominio público no solicita autenticación de Vercel.
 - El catálogo, sesiones y panel administrativo funcionan desde otro dispositivo.
 - Solo se realizan pagos con credenciales y datos de prueba.
-

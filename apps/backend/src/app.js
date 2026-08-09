@@ -57,7 +57,7 @@ export const createApp = () => {
   app.use("/api/auth", createAuthRouter(authService, authenticate, cookieOptions));
   app.use("/api/productos", createProductRouter(productService, authenticate, requireAdmin));
   app.use("/api/categorias", createCategoryRouter(categoryService, authenticate, requireSuperAdmin));
-  app.use("/api/pedidos", createOrderRouter(orderService, authenticate));
+  app.use("/api/pedidos", createOrderRouter(orderService, authenticate, requireAdmin));
   app.use("/api/pagos", createPaymentRouter(paymentService, authenticate));
   app.use("/api/archivos", createFileRouter(authenticate, requireAdmin));
   app.use("/api/promociones", createPromotionRouter(promotionService, authenticate, requireAdmin));

@@ -22,7 +22,7 @@ export default function CheckoutPage() {
   const handlePaymentError = useCallback((message) => setError(message), []);
   const handleRejected = useCallback(() => { setOrder(null); idempotencyKey.current = crypto.randomUUID(); }, []);
   const handleApproved = useCallback((paidOrder) => {
-    clearCart(); navigate(`/historial?pedido=${paidOrder.id}`);
+    clearCart(); navigate(`/mis-pedidos?pedido=${paidOrder.id}`);
   }, [navigate]);
 
   const continueToPayment = async (event) => {

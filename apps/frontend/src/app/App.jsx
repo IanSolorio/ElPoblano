@@ -15,9 +15,12 @@ import ProtectedAdminRoute from "../modules/admin/components/ProtectedAdminRoute
 import PromotionsAdminPage from "../modules/admin/pages/PromotionsAdminPage";
 import UsersAdminPage from "../modules/admin/pages/UsersAdminPage";
 import CategoriesAdminPage from "../modules/admin/pages/CategoriesAdminPage";
+import OrdersAdminPage from "../modules/admin/pages/OrdersAdminPage";
+import StatisticsAdminPage from "../modules/admin/pages/StatisticsAdminPage";
 import RegisterPage from "../modules/auth/pages/RegisterPage";
 import CheckoutPage from "../modules/orders/pages/CheckoutPage";
 import OrderHistoryPage from "../modules/orders/pages/OrderHistoryPage";
+import CurrentOrdersPage from "../modules/orders/pages/CurrentOrdersPage";
 import AcademicNotice from "../shared/components/AcademicNotice";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -44,6 +47,7 @@ function App() {
         <Route path="/registro" element={<><Navbar /><RegisterPage /><Footer /></>} />
         <Route path="/checkout" element={<><Navbar /><CheckoutPage /><Footer /></>} />
         <Route path="/historial" element={<><Navbar /><OrderHistoryPage /><Footer /></>} />
+        <Route path="/mis-pedidos" element={<><Navbar /><CurrentOrdersPage /><Footer /></>} />
         <Route
           path="/productos"
           element={
@@ -90,6 +94,8 @@ function App() {
         <Route path="/crearproducto" element={<ProtectedAdminRoute><CreateProductPage /></ProtectedAdminRoute>} />
         <Route path="/editarproducto/:id" element={<ProtectedAdminRoute><EditProductPage /></ProtectedAdminRoute>} />
         <Route path="/admin/promociones" element={<ProtectedAdminRoute><PromotionsAdminPage /></ProtectedAdminRoute>} />
+        <Route path="/admin/pedidos" element={<ProtectedAdminRoute><OrdersAdminPage /></ProtectedAdminRoute>} />
+        <Route path="/admin/estadisticas" element={<ProtectedAdminRoute><StatisticsAdminPage /></ProtectedAdminRoute>} />
         <Route path="/admin/usuarios" element={<ProtectedAdminRoute><UsersAdminPage /></ProtectedAdminRoute>} />
         <Route path="/admin/categorias" element={<ProtectedAdminRoute allowedRoles={["SUPER_ADMIN"]}><CategoriesAdminPage /></ProtectedAdminRoute>} />
       </Routes>

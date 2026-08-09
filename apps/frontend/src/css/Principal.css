@@ -428,6 +428,20 @@ body {
   grid-template-columns: repeat(3, 1fr);
 }
 
+.home-promotions__actions { align-items: center; display: flex; gap: 1rem; }
+.home-carousel-controls { display: flex; gap: .45rem; }
+.home-carousel-controls button { align-items: center; background: white; border: 1px solid var(--poblano-border); border-radius: 50%; color: var(--poblano-green); display: flex; height: 38px; justify-content: center; transition: .2s; width: 38px; }
+.home-carousel-controls button:hover { background: var(--poblano-green); border-color: var(--poblano-green); color: white; transform: translateY(-2px); }
+.home-promotions__viewport { margin: -1rem; overflow: hidden; padding: 1rem; }
+.home-promotions__track { cursor: grab; display: flex; gap: 1.25rem; overflow-x: auto; scroll-behavior: auto; scrollbar-width: none; touch-action: pan-y; user-select: none; }
+.home-promotions__track.is-dragging { cursor: grabbing; }
+.home-promotions__track img { -webkit-user-drag: none; pointer-events: none; user-select: none; }
+.home-promotions__track::-webkit-scrollbar { display: none; }
+.home-promotions__track .home-promo-card { flex: 0 0 calc((100% - 2.5rem) / 3); }
+.home-carousel-dots { display: flex; gap: .4rem; justify-content: center; margin-top: 1.25rem; }
+.home-carousel-dots button { background: #d9d0c8; border: 0; border-radius: 99px; height: 7px; padding: 0; transition: .2s; width: 7px; }
+.home-carousel-dots button.active { background: var(--poblano-red); width: 24px; }
+
 .home-promo-card {
   background: white;
   border: 1px solid var(--poblano-border);
@@ -845,6 +859,7 @@ body {
 }
 
 @media (max-width: 991px) {
+  .home-promotions__track .home-promo-card { flex-basis: calc((100% - 1.25rem) / 2); }
   .home-navbar {
     padding: 0.55rem 0;
   }
@@ -906,6 +921,8 @@ body {
 }
 
 @media (max-width: 767px) {
+  .home-promotions__track .home-promo-card { flex-basis: 100%; }
+  .home-promotions__actions { align-items: flex-end; flex-direction: column; }
   .home-hero__container {
     padding-bottom: 3.5rem;
     padding-top: 3rem;

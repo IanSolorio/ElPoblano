@@ -60,9 +60,7 @@ export default function Navbar() {
             {user ? (
               <div className="home-user-menu">
                 <span className="home-user-menu__greeting">Hola, <strong>{user.firstName}</strong></span>
-                <Link className="home-navbar__secondary" to={user.role === "CUSTOMER" ? "/historial" : "/admin"}>
-                  {user.role === "CUSTOMER" ? "Mis compras" : "Administrar"}
-                </Link>
+                {user.role === "CUSTOMER" ? <><Link className="home-navbar__secondary" to="/mis-pedidos">Mis pedidos</Link><Link className="home-navbar__secondary" to="/historial">Historial</Link></> : <Link className="home-navbar__secondary" to="/admin">Administrar</Link>}
                 <button className="home-navbar__login" onClick={logout}>Salir</button>
               </div>
             ) : (
