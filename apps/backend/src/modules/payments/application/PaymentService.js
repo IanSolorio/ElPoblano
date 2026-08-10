@@ -43,7 +43,6 @@ export class PaymentService {
       },
       external_reference: order.id,
       notification_url: this.notificationUrl || undefined,
-      binary_mode: true,
       metadata: { order_id: order.id, user_id: user.id },
     };
 
