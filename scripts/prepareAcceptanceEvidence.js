@@ -7,9 +7,9 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const plan = readFileSync(resolve(root, "docs/PLAN_MAESTRO_PRUEBAS_FASE_5.md"), "utf8");
 const pattern = /^\| (AT-\d{2}) \| (RF-\d{2}) \| (.*?) \| (P[0-2]) \|$/gm;
 const cases = [...plan.matchAll(pattern)].map((match) => ({ id: match[1], requirement: match[2], criterion: match[3], priority: match[4] }));
-const expected = Array.from({ length: 30 }, (_, index) => `AT-${String(index + 1).padStart(2, "0")}`);
-if (cases.length !== 30 || new Set(cases.map((item) => item.id)).size !== 30 || expected.some((id) => !cases.some((item) => item.id === id))) {
-  throw new Error(`Matriz de aceptación inválida: se esperaban 30 casos y se encontraron ${cases.length}.`);
+const expected = Array.from({ length: 32 }, (_, index) => `AT-${String(index + 1).padStart(2, "0")}`);
+if (cases.length !== 32 || new Set(cases.map((item) => item.id)).size !== 32 || expected.some((id) => !cases.some((item) => item.id === id))) {
+  throw new Error(`Matriz de aceptación inválida: se esperaban 32 casos y se encontraron ${cases.length}.`);
 }
 
 const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
@@ -44,7 +44,7 @@ const act = `# Acta de aceptación — El Poblano
 
 ## Resumen
 
-- Casos planificados: 30
+- Casos planificados: 32
 - Prioridad P0: ${p0}
 - Prioridad P1: ${p1}
 - Prioridad P2: ${p2}
@@ -52,7 +52,7 @@ const act = `# Acta de aceptación — El Poblano
 - Aceptados: 0
 - Rechazados: 0
 - Bloqueados: 0
-- No ejecutados: 30
+- No ejecutados: 32
 - Resultado general: PENDIENTE DE EVALUACIÓN
 
 ## Decisión
@@ -77,4 +77,3 @@ writeFileSync(resolve(output, "commit.txt"), `${commit}\n`, "utf8");
 writeFileSync(resolve(output, "estado-repositorio.txt"), `${status}\n`, "utf8");
 writeFileSync(resolve(output, "instrucciones.txt"), "Complete la matriz durante una demostración con evaluador. No marque ACEPTADO sin su conformidad ni incluya secretos en evidencias.\n", "utf8");
 console.log(`Expediente de aceptación creado con ${cases.length} casos en:\n${output}`);
-

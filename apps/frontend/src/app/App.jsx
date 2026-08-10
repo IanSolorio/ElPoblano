@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Navigate, Routes, Route } from "react-router-dom";
 import Navbar from "../shared/components/Navbar";
 import Footer from "../shared/components/Footer";
 import Hero from "../modules/home/components/Hero";
@@ -98,6 +98,7 @@ function App() {
         <Route path="/admin/estadisticas" element={<ProtectedAdminRoute><StatisticsAdminPage /></ProtectedAdminRoute>} />
         <Route path="/admin/usuarios" element={<ProtectedAdminRoute><UsersAdminPage /></ProtectedAdminRoute>} />
         <Route path="/admin/categorias" element={<ProtectedAdminRoute allowedRoles={["SUPER_ADMIN"]}><CategoriesAdminPage /></ProtectedAdminRoute>} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );

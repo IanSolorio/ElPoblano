@@ -22,6 +22,10 @@ export class OrderService {
     return this.repository.findMonthlyHistoryByUser(userId);
   }
 
+  cancel(userId, orderId) {
+    return this.repository.cancelPendingByUser(orderId, userId);
+  }
+
   async getById(userId, orderId) {
     const order = await this.repository.findByIdAndUser(orderId, userId);
     if (!order) throw new AppError("Pedido no encontrado.", 404, "ORDER_NOT_FOUND");

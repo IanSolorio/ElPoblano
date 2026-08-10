@@ -188,6 +188,34 @@ export class PrismaOrderRepository extends OrderRepository {
     return [...months.values()];
   }
 
+  async cancelPendingByUser(id, userId) {
+    return this.prisma.$transaction(async (transaction) => {
+      const order = await transaction.order.findFirst({ where: { id, userId }, include: orderInclude });
+      if (!order) throw new AppError("Pedido no encontrado.", 404, "ORDER_NOT_FOUND");
+      if (order.status !== "PENDING" || order.payment?.status !== "PENDING") {
+        throw new AppError("Solo puedes cancelar pedidos que todavía no han sido pagados.", 409, "ORDER_CANNOT_BE_CANCELLED");
+      }
+      if (order.payment.externalId) {
+        throw new AppError("Mercado Pago ya está procesando este pago. Espera su resultado antes de realizar otra acción.", 409, "PAYMENT_ALREADY_PROCESSING");
+      }
+
+      const cancelled = await transaction.order.updateMany({
+        where: { id, userId, status: "PENDING" },
+        data: { status: "CANCELLED" },
+      });
+      if (cancelled.count !== 1) throw new AppError("El pedido cambió mientras intentabas cancelarlo. Actualiza la página.", 409, "ORDER_STATUS_CONFLICT");
+
+      for (const item of order.items) {
+        await transaction.product.update({ where: { id: item.productId }, data: { stock: { increment: item.quantity } } });
+      }
+      await transaction.inventoryMovement.createMany({
+        data: order.items.map((item) => ({ productId: item.productId, type: "RETURN", quantity: item.quantity, reason: "Pedido cancelado por el cliente", reference: id })),
+      });
+      await transaction.auditLog.create({ data: { userId, action: "ORDER_CANCELLED_BY_CUSTOMER", entity: "Order", entityId: id } });
+      return serializeOrder(await transaction.order.findUnique({ where: { id }, include: orderInclude }));
+    });
+  }
+
   async findAllForAdmin({ page, limit, status, search }) {
     const searchable = search ? {
       OR: [

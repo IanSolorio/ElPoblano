@@ -18,16 +18,29 @@
 .current-order-card > header span { font-weight: 900; }
 .current-order-card > header small { opacity: .65; }
 .current-order-card > header strong { font-family: "Fraunces",serif; font-size: 1.25rem; }
-.order-timeline { display: grid; grid-template-columns: repeat(4,1fr); padding: 1.5rem; }
-.order-timeline > div { align-items: center; display: flex; flex-direction: column; position: relative; text-align: center; }
-.order-timeline > div:not(:last-child)::after { background: #ddd5ce; content: ""; height: 3px; left: calc(50% + 24px); position: absolute; top: 20px; width: calc(100% - 48px); }
+.order-timeline { background: linear-gradient(180deg,#fff 0%,#fcfaf7 100%); display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); padding: 2rem 1.5rem 1.65rem; }
+.order-timeline > div { align-items: center; display: flex; flex-direction: column; min-width: 0; position: relative; text-align: center; }
+.order-timeline > div:not(:last-child)::after { background: #e1dad3; border-radius: 999px; content: ""; height: 4px; left: calc(50% + 31px); position: absolute; top: 24px; width: calc(100% - 62px); }
 .order-timeline > div.complete:not(:last-child)::after { background: #4f8a68; }
-.order-timeline > div > span { align-items: center; background: #eee9e3; border-radius: 50%; color: #9d918a; display: flex; height: 42px; justify-content: center; position: relative; width: 42px; z-index: 1; }
-.order-timeline > div.complete > span { background: #dceee3; color: #286145; }
-.order-timeline strong { color: #33251f; font-size: .72rem; margin-top: .55rem; }
-.order-timeline small { color: #8b7d75; font-size: .57rem; max-width: 130px; }
+.order-timeline > div > span { align-items: center; background: #eee9e3; border: 4px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1px #e7dfd7; color: #9d918a; display: flex; flex: 0 0 auto; font-size: 1rem; height: 52px; justify-content: center; position: relative; transition: transform .2s ease,box-shadow .2s ease; width: 52px; z-index: 1; }
+.order-timeline > div.complete > span { background: #dceee3; box-shadow: 0 0 0 1px #c9dfd1; color: #286145; }
+.order-timeline > div.current > span { background: #2c6a4f; box-shadow: 0 0 0 5px rgba(79,138,104,.14),0 7px 18px rgba(44,106,79,.22); color: #fff; transform: scale(1.06); }
+.order-timeline__copy { align-items: center; display: flex; flex-direction: column; gap: .18rem; margin-top: .8rem; min-width: 0; padding: 0 .45rem; }
+.order-timeline strong { color: #33251f; display: block; font-size: .78rem; line-height: 1.25; }
+.order-timeline small { color: #8b7d75; display: block; font-size: .62rem; line-height: 1.4; max-width: 155px; }
+.order-timeline > div.current strong { color: #286145; }
 .current-order-payment { align-items: center; background: #fff6e6; color: #97611c; display: flex; gap: .8rem; margin: 1.2rem; padding: 1rem; }
 .current-order-payment p { font-size: .7rem; margin: .15rem 0 0; }
+.current-order-actions { display: flex; gap: .7rem; margin: -0.35rem 1.2rem 1.2rem; }
+.current-order-actions button { align-items: center; border-radius: 999px; display: inline-flex; font-size: .72rem; font-weight: 900; gap: .45rem; justify-content: center; padding: .7rem 1rem; }
+.current-order-actions button:disabled { cursor: wait; opacity: .6; }
+.current-order-pay { background: #a62b25; border: 1px solid #a62b25; color: #fff; }
+.current-order-pay:hover:not(:disabled) { background: #7e211d; }
+.current-order-cancel { background: #fff; border: 1px solid #d8cec5; color: #6c5b53; }
+.current-order-cancel:hover:not(:disabled) { background: #f7f4ee; color: #8a2923; }
+.current-order-checkout { background: #faf8f5; border: 1px solid #e7dfd7; border-radius: 1rem; margin: 0 1.2rem 1.2rem; padding: 1.2rem; }
+.current-order-checkout > h3 { color: #33251f; font-family: "Fraunces",serif; font-size: 1.15rem; margin: 0; }
+.current-order-checkout > p { color: #77675f; font-size: .72rem; margin: .25rem 0 1rem; }
 .current-order-summary { border-top: 1px solid #eee7e0; display: grid; gap: 1.5rem; grid-template-columns: 1.4fr .8fr; padding: 1.3rem; }
 .current-order-summary h3 { color: #33251f; font-family: "Fraunces",serif; font-size: 1rem; }
 .current-order-summary p { align-items: center; display: flex; font-size: .72rem; justify-content: space-between; margin: .45rem 0; }
@@ -51,4 +64,4 @@
 .monthly-history__orders details p span { display: flex; flex-direction: column; }
 .monthly-history__orders details p small { color: #a62b25; font-size: .55rem; }
 .monthly-history__orders details footer { color: #8b7d75; font-size: .62rem; margin-top: .7rem; }
-@media (max-width: 700px) { .order-timeline { gap: .8rem; grid-template-columns: 1fr; } .order-timeline > div { align-items: center; flex-direction: row; gap: .7rem; text-align: left; } .order-timeline > div::after { display: none; } .current-order-summary { grid-template-columns: 1fr; } .monthly-history__orders summary { grid-template-columns: 1fr auto; } .monthly-history__orders summary span:nth-child(2) { display: none; } }
+@media (max-width: 700px) { .order-timeline { gap: 0; grid-template-columns: 1fr; padding: 1.4rem; } .order-timeline > div { align-items: center; flex-direction: row; gap: .9rem; min-height: 72px; text-align: left; } .order-timeline > div:not(:last-child)::after { height: calc(100% - 52px); left: 24px; top: 50px; width: 4px; } .order-timeline__copy { align-items: flex-start; margin: 0; padding: 0; } .order-timeline small { max-width: none; } .current-order-actions { align-items: stretch; flex-direction: column; } .current-order-summary { grid-template-columns: 1fr; } .monthly-history__orders summary { grid-template-columns: 1fr auto; } .monthly-history__orders summary span:nth-child(2) { display: none; } }

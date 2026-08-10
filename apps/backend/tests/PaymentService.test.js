@@ -69,3 +69,11 @@ test("UT-PAY-13: webhook repetido conserva actualización idempotente", async ()
   const repository = new FakeOrderRepository(); const provider = { id: 1, status: "approved", external_reference: repository.value.id, payment_type_id: "credit_card" }; const service = configuredService(repository, provider);
   await service.synchronize(1); await service.synchronize(1); assert.equal(repository.updates.every((update) => update.id === repository.value.id && update.data.id === "1"), true);
 });
+
+test("UT-PAY-14: impide cobrar dos veces mientras Mercado Pago procesa el primer intento", async () => {
+  const repository = new FakeOrderRepository(order({ payment: { status: "PENDING", externalId: "mp-processing" } }));
+  await assert.rejects(
+    configuredService(repository).process(user, { orderId: repository.value.id, paymentData }, "new-key"),
+    { code: "PAYMENT_ALREADY_PROCESSING", status: 409 },
+  );
+});

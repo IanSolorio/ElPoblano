@@ -131,6 +131,19 @@ test("IT-ORD-12: estadísticas mensuales incluyen ventas, ticket y productos pag
   assert.equal(result.status, 200); assert.equal(result.body.summary.orders, 1); assert.equal(result.body.summary.revenue, 20); assert.equal(result.body.topProducts[0].units, 2);
 });
 
+test("IT-ORD-13: cancelar pedido pendiente propio devuelve stock una vez, audita y protege la propiedad", async () => {
+  const created = await createOrder();
+  const intruder = await prisma.user.create({ data: { email: "cancel-intruder@test.local", passwordHash: "hash", firstName: "Otro", lastName: "Cliente" } });
+  const intruderCookie = await issueSession(intruder.id);
+  assert.equal((await request(`/api/pedidos/${created.body.id}/cancelar`, { method: "PATCH", headers: auth(intruderCookie) })).status, 404);
+  const cancelled = await request(`/api/pedidos/${created.body.id}/cancelar`, { method: "PATCH", headers: auth(cookies.customer) });
+  assert.equal(cancelled.status, 200); assert.equal(cancelled.body.status, "CANCELLED");
+  assert.equal((await prisma.product.findUnique({ where: { id: fixture.product.id } })).stock, 20);
+  assert.equal(await prisma.inventoryMovement.count({ where: { reference: created.body.id, type: "RETURN" } }), 1);
+  assert.equal(await prisma.auditLog.count({ where: { entityId: created.body.id, action: "ORDER_CANCELLED_BY_CUSTOMER" } }), 1);
+  assert.equal((await request(`/api/pedidos/${created.body.id}/cancelar`, { method: "PATCH", headers: auth(cookies.customer) })).status, 409);
+});
+
 test("IT-PAY-01: aprobación persiste proveedor, confirma pedido y registra auditoría", async () => {
   const order = await createOrder(); const updated = await approve(order.body.id, "mp-approved");
   assert.equal(updated.status, "CONFIRMED"); assert.equal(updated.payment.externalId, "mp-approved"); assert.ok(updated.payment.paidAt);
@@ -167,6 +180,17 @@ test("IT-PAY-06: webhook sin identificador responde 200 y no modifica pagos", as
   const order = await createOrder(); const before = await prisma.payment.findUnique({ where: { orderId: order.body.id } });
   const result = await request("/api/pagos/webhook", { method: "POST", body: { type: "payment" } }); const afterPayment = await prisma.payment.findUnique({ where: { orderId: order.body.id } });
   assert.equal(result.status, 200); assert.equal(afterPayment.status, before.status); assert.equal(afterPayment.externalId, null);
+});
+
+test("IT-PAY-07: reintentar pago pendiente confirma el mismo pedido y bloquea otro intento", async () => {
+  const created = await createOrder();
+  const service = new PaymentService(orders, "token", "");
+  let providerCalls = 0;
+  service.paymentClient = { create: async () => { providerCalls += 1; return { id: "mp-retry", status: "approved", payment_type_id: "credit_card" }; } };
+  const result = await service.process(fixture.customer, { orderId: created.body.id, paymentData: { token: "card-token", payment_method_id: "master", installments: 1, payer: { email: fixture.customer.email } } }, "retry-key");
+  assert.equal(result.id, created.body.id); assert.equal(result.status, "CONFIRMED"); assert.equal(result.payment.externalId, "mp-retry");
+  const second = await service.process(fixture.customer, { orderId: created.body.id, paymentData: { token: "another-token", payment_method_id: "master" } }, "retry-key-2");
+  assert.equal(second.id, created.body.id); assert.equal(second.payment.status, "APPROVED"); assert.equal(providerCalls, 1);
 });
 
 test("IT-DB-01: las ocho migraciones de Prisma están aplicadas en la base de prueba", async () => {

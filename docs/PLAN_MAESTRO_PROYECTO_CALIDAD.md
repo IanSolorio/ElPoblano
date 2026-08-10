@@ -64,7 +64,7 @@ Establecer qué se audita y evitar conclusiones sobre componentes inexistentes.
 | Modelar actores | Visitante, cliente, administrador, superadministrador y proveedores externos |
 | Documentar casos de uso | Catálogo, registro, compra, pago, gestión y seguimiento |
 | Inventariar módulos | Frontend y backend por capacidad de negocio |
-| Catalogar funcionalidades | Matriz RF-01 a RF-30 |
+| Catalogar funcionalidades | Matriz RF-01 a RF-32 |
 
 Documento base: [`DOCUMENTACION_TECNICA_Y_DESPLIEGUE.md`](./DOCUMENTACION_TECNICA_Y_DESPLIEGUE.md).
 
@@ -215,7 +215,7 @@ Para cada métrica se conservarán tres valores: `línea base`, `objetivo` y `re
 
 El diseño detallado se encuentra en [`PLAN_MAESTRO_PRUEBAS_FASE_5.md`](./PLAN_MAESTRO_PRUEBAS_FASE_5.md): 104 pruebas unitarias, 59 de integración, 46 de sistema y 30 de aceptación.
 
-La matriz funcional se complementa con los RNF anteriores. Cada RNF debe tener al menos una prueba o medición asociada; por tanto, la Fase 5 no se limita a RF-01–RF-30.
+La matriz funcional se complementa con los RNF anteriores. Cada RNF debe tener al menos una prueba o medición asociada; por tanto, la Fase 5 no se limita a RF-01–RF-32.
 
 ### Criterios de salida
 
@@ -332,7 +332,7 @@ Se compararán línea base y resultado posterior para demostrar reducción de de
 
 | Origen | Especificación | Evidencia | Automatización | Reporte |
 |---|---|---|---|---|
-| RF-01–RF-30 | Funcionalidades | UT/IT/ST/AT | Node test + Selenium | JUnit/HTML |
+| RF-01–RF-32 | Funcionalidades | UT/IT/ST/AT | Node test + Selenium | JUnit/HTML |
 | RNF-SEG | Seguridad | RBAC, sesión, headers, Sonar | Integración + Sonar | JUnit/Sonar |
 | RNF-REN/ESC | Rendimiento/escalabilidad | p95, throughput, error | JMeter | HTML/JTL |
 | RNF-USA | Usabilidad | tareas, responsive, accesibilidad | Selenium + evaluación humana | HTML/checklist |

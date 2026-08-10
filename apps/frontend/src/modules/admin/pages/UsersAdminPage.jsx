@@ -27,7 +27,9 @@ export default function UsersAdminPage() {
           <label className="admin-field">Correo<input type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} required /></label>
           <label className="admin-field">Contraseña<input type="password" minLength="10" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} required /></label>
         </div>
-        <button className="admin-primary-action"><FaPlus /> Crear cuenta</button>
+        <div className="admin-create-user-actions">
+          <button className="admin-primary-action"><FaPlus /> Crear cuenta</button>
+        </div>
       </form>}
 
       <section className="admin-panel-card">

@@ -14,6 +14,7 @@ const request = async (path, options = {}) => {
 export const createOrder = (order, key) => request("/pedidos", { method: "POST", headers: { "Idempotency-Key": key }, body: JSON.stringify(order) });
 export const getOrderHistory = () => request("/pedidos/historial?page=1&limit=50");
 export const getCurrentOrders = () => request("/pedidos/actuales");
+export const cancelPendingOrder = (orderId) => request(`/pedidos/${orderId}/cancelar`, { method: "PATCH" });
 export const getMonthlyOrderHistory = () => request("/pedidos/historial-mensual");
 export const processMercadoPagoPayment = (orderId, paymentData, key) => request("/pagos/mercadopago", {
   method: "POST",

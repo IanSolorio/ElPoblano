@@ -38,6 +38,9 @@ export const createOrderRouter = (orderService, authenticate, requireAdmin) => {
   router.get("/historial-mensual", async (request, response, next) => {
     try { response.json(await orderService.monthlyHistory(request.user.id)); } catch (error) { next(error); }
   });
+  router.patch("/:id/cancelar", async (request, response, next) => {
+    try { response.json(await orderService.cancel(request.user.id, request.params.id)); } catch (error) { next(error); }
+  });
   router.get("/admin", requireAdmin, validate(adminListSchema, "query"), async (request, response, next) => {
     try { response.json(await orderService.listForAdmin(request.validated.query)); } catch (error) { next(error); }
   });

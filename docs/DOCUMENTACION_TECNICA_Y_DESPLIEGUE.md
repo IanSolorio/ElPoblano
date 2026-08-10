@@ -52,6 +52,8 @@ El alcance actual comprende el registro, pago, preparación, salida y entrega de
 | RF-28 | El administrador consulta indicadores mensuales. | Ingresos, pedidos, unidades, clientes únicos y ticket promedio. |
 | RF-29 | El administrador identifica productos y promociones destacados. | Rankings mensuales basados exclusivamente en pagos aprobados. |
 | RF-30 | La página principal presenta promociones de manera continua e interactiva. | Carrusel animado en bucle infinito, desplazamiento automático y arrastre mediante puntero. |
+| RF-31 | El cliente puede reintentar el pago de un pedido pendiente. | Acción `Pagar pedido` en seguimiento; reutiliza el pedido existente y bloquea cobros duplicados mientras el proveedor procesa la operación. |
+| RF-32 | El cliente puede cancelar un pedido que todavía no ha sido pagado. | Cancelación restringida al propietario, devolución transaccional del stock y registro de auditoría; se bloquea cuando Mercado Pago ya procesa el pago. |
 
 ## 3. Arquitectura general
 
@@ -572,7 +574,7 @@ Respuestas esperadas:
 
 | Característica | Aplicación en el sistema |
 |---|---|
-| Adecuación funcional | RF-01 a RF-30, reglas de rol, stock, vigencia, pagos, seguimiento y analítica mensual. |
+| Adecuación funcional | RF-01 a RF-32, reglas de rol, stock, vigencia, pagos, seguimiento y analítica mensual. |
 | Eficiencia | Índices, paginación, límites, proxy Nginx y consultas filtradas. |
 | Compatibilidad | API JSON, CORS, HTTPS y adaptadores externos. |
 | Capacidad de interacción | Validación, errores uniformes, mapa, alertas y panel por rol. |

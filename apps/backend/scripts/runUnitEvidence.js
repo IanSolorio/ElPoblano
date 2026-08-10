@@ -56,7 +56,7 @@ const summary = `# Evidencia de pruebas unitarias
 - Estado del repositorio: ${gitStatus ? "CAMBIOS SIN COMMIT (consultar git-status.txt)" : "CLEAN"}
 - Node.js: ${process.version}
 - npm: ${npmVersion}
-- Casos planificados: 104
+- Casos planificados: 107
 - Casos implementados: ${executed}
 - Casos ejecutados: ${executed}
 - Aprobados: ${passed}
@@ -64,7 +64,7 @@ const summary = `# Evidencia de pruebas unitarias
 - Cobertura de líneas: ${coverage?.[1] ?? "consultar resultado-consola.txt"} %
 - Cobertura de ramas: ${coverage?.[2] ?? "consultar resultado-consola.txt"} %
 - Cobertura de funciones: ${coverage?.[3] ?? "consultar resultado-consola.txt"} %
-- Resultado: ${failed === 0 && executed === 104 ? "APROBADO" : "NO APROBADO"}
+- Resultado: ${failed === 0 && executed === 107 ? "APROBADO" : "NO APROBADO"}
 
 ## Archivos
 
@@ -76,4 +76,4 @@ const summary = `# Evidencia de pruebas unitarias
 writeFileSync(resolve(reportDirectory, "resumen.md"), summary, "utf8");
 
 console.log(`\nEvidencia generada en: ${reportDirectory}`);
-if (consoleResult.status !== 0 || junitResult.status !== 0 || lcovResult.status !== 0 || executed !== 104 || failed !== 0) process.exitCode = 1;
+if (consoleResult.status !== 0 || junitResult.status !== 0 || lcovResult.status !== 0 || executed !== 107 || failed !== 0) process.exitCode = 1;

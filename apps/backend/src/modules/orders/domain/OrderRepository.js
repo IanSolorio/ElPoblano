@@ -8,4 +8,5 @@ export class OrderRepository {
   findByIdForAdmin() { throw new Error("Método findByIdForAdmin no implementado."); }
   updateOperationalStatus() { throw new Error("Método updateOperationalStatus no implementado."); }
   getMonthlyStatistics() { throw new Error("Método getMonthlyStatistics no implementado."); }
+  cancelPendingByUser() { throw new Error("Metodo cancelPendingByUser no implementado."); }
 }

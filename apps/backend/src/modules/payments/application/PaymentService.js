@@ -23,6 +23,9 @@ export class PaymentService {
     if (!order) throw new AppError("Pedido no encontrado.", 404, "ORDER_NOT_FOUND");
     if (order.payment?.status === "APPROVED") return order;
     if (order.status === "CANCELLED") throw new AppError("El pedido fue cancelado. Crea uno nuevo para volver a pagar.", 409, "ORDER_CANCELLED");
+    if (order.payment?.status === "PENDING" && order.payment.externalId) {
+      throw new AppError("Este pago ya está siendo procesado por Mercado Pago.", 409, "PAYMENT_ALREADY_PROCESSING");
+    }
     const transactionAmount = Number(Number(order.total).toFixed(2));
     if (!Number.isFinite(transactionAmount) || transactionAmount < 3) {
       throw new AppError("El monto del pedido no es válido para Mercado Pago. Usa un total de al menos S/ 3.00.", 422, "INVALID_PAYMENT_AMOUNT");

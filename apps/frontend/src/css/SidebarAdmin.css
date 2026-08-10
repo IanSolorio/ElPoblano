@@ -168,6 +168,7 @@
 .admin-user-cell { align-items: center; display: flex; gap: .6rem; }
 .admin-user-cell > span { align-items: center; background: #e5edea; border-radius: 50%; color: var(--admin-30); display: flex; height: 34px; justify-content: center; width: 34px; }
 .admin-user-cell strong { color: var(--admin-ink); }
+.admin-create-user-actions { align-items: center; border-top: 1px solid var(--admin-border); display: flex; justify-content: flex-end; margin-top: 1.4rem; padding-top: 1.2rem; }
 
 @media (max-width: 1100px) {
   .admin-shell { grid-template-columns: 230px minmax(0,1fr); }
@@ -204,6 +205,8 @@
   .admin-promotion-form__footer { align-items: stretch; flex-direction: column; gap: .75rem; }
   .admin-panel-card__toolbar { align-items: stretch; flex-direction: column; }
   .admin-search { min-width: 0; width: 100%; }
+  .admin-create-user-actions { align-items: stretch; }
+  .admin-create-user-actions .admin-primary-action { justify-content: center; width: 100%; }
   .admin-list article { grid-template-columns: auto 1fr; }
   .admin-list article .admin-status,.admin-list article .admin-outline-action { grid-column: 2; }
 }
