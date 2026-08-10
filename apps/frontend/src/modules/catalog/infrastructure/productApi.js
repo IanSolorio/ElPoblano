@@ -36,13 +36,11 @@ const postProductos = async (producto) => {
 const getProductoId = async (id) => {
   try {
     const respuesta = await axios.get(`${URL}/productos/${id}`, config);
-    console.log("Respuesta del API:", respuesta.data);
     if (respuesta.status === 200) {
       return respuesta.data;
     }
     throw new Error("Error al obtener el producto");
   } catch (error) {
-    console.error("Error en getProductoId:", error);
     throw error;
   }
 };
@@ -50,7 +48,6 @@ const getProductoId = async (id) => {
 const putProductoId = async (id, producto) => {
   try {
     const respuesta = await axios.put(`${URL}/productos/${id}`, producto, config);
-    console.log(respuesta);
     if (respuesta.status === 200) {
       return respuesta.data;
     }
@@ -70,9 +67,7 @@ const deleteProductoId = async (id) => {
     if (imageStorageUrl) {
       try {
         await deleteFile(imageStorageUrl);
-        console.log(`Imagen eliminada correctamente: ${imageStorageUrl}`);
-      } catch (error) {
-        console.error(`Error al eliminar la imagen (${imageStorageUrl}):`, error);
+      } catch {
         throw new Error("No se pudo eliminar la imagen del almacenamiento.");
       }
     }

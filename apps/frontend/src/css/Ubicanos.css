@@ -11,7 +11,7 @@
 .location-info article { align-items: flex-start; background: white; border: 1px solid rgba(73,48,37,.12); border-radius: 1.15rem; box-shadow: 0 15px 40px rgba(54,35,25,.09); display: flex; gap: 1rem; padding: 1.35rem; }
 .location-info article > span { align-items: center; background: #f7e8e2; border-radius: .85rem; color: #a62b25; display: flex; flex: 0 0 auto; height: 46px; justify-content: center; width: 46px; }
 .location-info article:nth-child(2) > span { background: #e4efe7; color: #285943; }
-.location-info article:nth-child(3) > span { background: #f8eac9; color: #9a6314; }
+.location-info article:nth-child(3) > span { background: #f8eac9; color: #704506; }
 .location-info small { color: #a62b25; font-size: .65rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .location-info h2 { color: #251915; font-family: "Fraunces",serif; font-size: 1.08rem; margin: .25rem 0; }
 .location-info p { color: #71635d; font-size: .75rem; margin: 0; }

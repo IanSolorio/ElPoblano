@@ -18,7 +18,10 @@ export default function PromotionsAdminPage() {
   useEffect(() => { load().catch((loadError) => setError(loadError.message)); }, []);
 
   const change = (field) => (event) => setForm((current) => ({ ...current, [field]: event.target.value ?? "" }));
-  const changeKind = (event) => { if (fileInput.current) fileInput.current.value = ""; setForm((current) => ({ ...current, kind: event.target.value, products: [], image: null })); };
+  const changeKind = (event) => {
+    if (fileInput.current) fileInput.current.value = "";
+    setForm((current) => ({ ...current, kind: event.target.value, products: [], image: null }));
+  };
   const toggleProduct = (productId) => setForm((current) => ({ ...current, products: current.products.some((item) => item.productId === productId) ? current.products.filter((item) => item.productId !== productId) : [...current.products, { productId, quantity: 1 }] }));
   const setQuantity = (productId, value) => setForm((current) => ({ ...current, products: current.products.map((item) => item.productId === productId ? { ...item, quantity: Math.max(1, Number(value) || 1) } : item) }));
 
@@ -32,10 +35,21 @@ export default function PromotionsAdminPage() {
         ...(form.kind === "BUNDLE" ? { bundlePrice: Number(form.bundlePrice), imageUrl } : { discountType: form.discountType, discountValue: Number(form.discountValue) }),
         startsAt: new Date(form.startsAt).toISOString(), endsAt: new Date(form.endsAt).toISOString(), active: true, products: form.products,
       });
-      setForm(newForm()); if (fileInput.current) fileInput.current.value = ""; await load();
+      setForm(newForm());
+      if (fileInput.current) fileInput.current.value = "";
+      await load();
     } catch (submitError) { setError(submitError.message); } finally { setSaving(false); }
   };
   const remove = async (id) => { try { await removePromotion(id); await load(); } catch (removeError) { setError(removeError.message); } };
+  const describeProducts = (items) => items.map((item) => {
+    const quantity = item.quantity > 1 ? `${item.quantity}× ` : "";
+    return `${quantity}${item.nombre}`;
+  }).join(", ");
+  const describeValue = (promotion) => {
+    if (promotion.kind === "BUNDLE") return `S/ ${Number(promotion.bundlePrice).toFixed(2)}`;
+    const unit = promotion.discountType === "PERCENTAGE" ? "%" : " soles";
+    return `${promotion.discountValue}${unit}`;
+  };
 
   return <AdminLayout eyebrow="Campañas" title="Promociones" description="Crea descuentos individuales o combos con precio e imagen propios.">
     {error && <div className="admin-alert" role="alert">{error}</div>}
@@ -59,12 +73,12 @@ export default function PromotionsAdminPage() {
             <div className="admin-promotion-products">{products.map((product) => { const selected = form.products.find((item) => item.productId === product.id); return <label key={product.id} className={selected ? "is-selected" : ""}><input type="checkbox" checked={Boolean(selected)} onChange={() => toggleProduct(product.id)} /><span>{product.nombre}</span>{form.kind === "BUNDLE" && selected && <span className="admin-product-quantity"><small>Cantidad</small><input aria-label={`Cantidad de ${product.nombre}`} type="number" min="1" max="99" value={selected.quantity ?? 1} onChange={(event) => setQuantity(product.id, event.target.value)} /></span>}</label>; })}</div>
           </div>
         </div>
-        <div className="admin-promotion-form__footer"><small>{form.products.length} producto(s) seleccionado(s)</small><button className="admin-primary-action" disabled={saving || !form.products.length || (form.kind === "BUNDLE" && form.products.length < 2)}><FaPlus /> {saving ? "Guardando..." : "Crear promoción"}</button></div>
+        <div className="admin-promotion-form__footer"><small>{form.products.length} producto(s) seleccionado(s)</small><button type="submit" className="admin-primary-action" disabled={saving || !form.products.length || (form.kind === "BUNDLE" && form.products.length < 2)}><FaPlus /> {saving ? "Guardando..." : "Crear promoción"}</button></div>
       </form>
 
       <section className="admin-panel-card">
         <div className="admin-panel-card__toolbar"><div><h2>Promociones programadas</h2><p>{promotions.length} campañas registradas.</p></div><span className="admin-panel-icon"><FaTag /></span></div>
-        <div className="admin-promotion-list">{promotions.length === 0 ? <div className="admin-table-empty">No hay promociones registradas.</div> : promotions.map((promotion) => <article key={promotion.id}><span className="admin-promotion-list__icon">{promotion.kind === "BUNDLE" ? <FaGift /> : <FaTag />}</span><div><strong>{promotion.name}</strong><small><FaCalendarDays /> {new Date(promotion.startsAt).toLocaleDateString()} – {new Date(promotion.endsAt).toLocaleDateString()}</small><small>{promotion.products.map((item) => `${item.quantity > 1 ? `${item.quantity}× ` : ""}${item.nombre}`).join(", ")}</small></div><b>{promotion.kind === "BUNDLE" ? `S/ ${Number(promotion.bundlePrice).toFixed(2)}` : `${promotion.discountValue}${promotion.discountType === "PERCENTAGE" ? "%" : " soles"}`}</b><button onClick={() => remove(promotion.id)} aria-label={`Retirar ${promotion.name}`}><FaTrash /></button></article>)}</div>
+        <div className="admin-promotion-list">{promotions.length === 0 ? <div className="admin-table-empty">No hay promociones registradas.</div> : promotions.map((promotion) => <article key={promotion.id}><span className="admin-promotion-list__icon">{promotion.kind === "BUNDLE" ? <FaGift /> : <FaTag />}</span><div><strong>{promotion.name}</strong><small><FaCalendarDays /> {new Date(promotion.startsAt).toLocaleDateString()} – {new Date(promotion.endsAt).toLocaleDateString()}</small><small>{describeProducts(promotion.products)}</small></div><b>{describeValue(promotion)}</b><button type="button" onClick={() => remove(promotion.id)} aria-label={`Retirar ${promotion.name}`}><FaTrash /></button></article>)}</div>
       </section>
     </section>
   </AdminLayout>;

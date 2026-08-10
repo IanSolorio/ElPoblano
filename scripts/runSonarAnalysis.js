@@ -8,41 +8,34 @@ const token = process.env.SONAR_TOKEN;
 const projectKey = process.env.SONAR_PROJECT_KEY;
 const organization = process.env.SONAR_ORGANIZATION;
 const output = resolve(root, "tests/results/fase7");
+const collectOnly = process.argv.includes("--collect-only");
 
 if (!token || !projectKey || !organization) {
   console.error("Configura SONAR_TOKEN, SONAR_PROJECT_KEY y SONAR_ORGANIZATION en la terminal.");
   process.exit(1);
 }
 
-try {
-  const response = await fetch(`${host}/api/system/status`);
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  const status = await response.json();
-  if (status.status !== "UP") throw new Error(`estado ${status.status}`);
-} catch (error) {
-  console.error(`SonarQube no está disponible en ${host}: ${error.message}`);
-  process.exit(1);
+if (!collectOnly) {
+  const prepare = spawnSync(process.execPath, [resolve(root, "scripts/prepareSonarCoverage.js")], {
+    cwd: root,
+    stdio: "inherit",
+  });
+  if (prepare.status !== 0) process.exit(prepare.status ?? 1);
+
+  const scanner = resolve(root, "node_modules/@sonar/scan/bin/sonar-scanner.js");
+  const scan = spawnSync(process.execPath, [
+    scanner,
+    `-Dsonar.host.url=${host}`,
+    `-Dsonar.token=${token}`,
+    `-Dsonar.projectKey=${projectKey}`,
+    `-Dsonar.organization=${organization}`,
+  ], {
+    cwd: root,
+    stdio: "inherit",
+    env: process.env,
+  });
+  if (scan.status !== 0) process.exit(scan.status ?? 1);
 }
-
-const prepare = spawnSync(process.execPath, [resolve(root, "scripts/prepareSonarCoverage.js")], {
-  cwd: root,
-  stdio: "inherit",
-});
-if (prepare.status !== 0) process.exit(prepare.status ?? 1);
-
-const scanner = resolve(root, "node_modules/@sonar/scan/bin/sonar-scanner.js");
-const scan = spawnSync(process.execPath, [
-  scanner,
-  `-Dsonar.host.url=${host}`,
-  `-Dsonar.token=${token}`,
-  `-Dsonar.projectKey=${projectKey}`,
-  `-Dsonar.organization=${organization}`,
-], {
-  cwd: root,
-  stdio: "inherit",
-  env: process.env,
-});
-if (scan.status !== 0) process.exit(scan.status ?? 1);
 
 const taskFile = resolve(root, ".scannerwork/report-task.txt");
 if (!existsSync(taskFile)) {
@@ -53,9 +46,21 @@ if (!existsSync(taskFile)) {
 const task = Object.fromEntries(readFileSync(taskFile, "utf8").trim().split(/\r?\n/).map((line) => line.split(/=(.*)/s).slice(0, 2)));
 const authorization = `Basic ${Buffer.from(`${token}:`).toString("base64")}`;
 const request = async (url) => {
-  const response = await fetch(url, { headers: { Authorization: authorization } });
-  if (!response.ok) throw new Error(`${response.status} ${response.statusText}: ${url}`);
-  return response.json();
+  let lastError;
+  for (let attempt = 1; attempt <= 5; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        headers: { Authorization: authorization },
+        signal: AbortSignal.timeout(30_000),
+      });
+      if (!response.ok) throw new Error(`${response.status} ${response.statusText}: ${url}`);
+      return await response.json();
+    } catch (error) {
+      lastError = error;
+      if (attempt < 5) await new Promise((resolvePromise) => setTimeout(resolvePromise, attempt * 1_000));
+    }
+  }
+  throw lastError;
 };
 
 let processing;

@@ -14,6 +14,27 @@ export default function ProductTable({ products, onDelete, loading }) {
 
   useEffect(() => { if (page >= pages) setPage(pages - 1); }, [page, pages]);
 
+  const renderRows = () => {
+    if (loading) return <tr><td colSpan="6"><div className="admin-table-empty">Cargando inventario...</div></td></tr>;
+    if (visible.length === 0) return <tr><td colSpan="6"><div className="admin-table-empty">No se encontraron productos.</div></td></tr>;
+    return visible.map((product) => {
+      const outOfStock = Number(product.stock) === 0;
+      return (
+        <tr key={product.id} className={outOfStock ? "admin-table__warning" : ""}>
+          <td><div className="admin-product-cell">
+            <div className="admin-product-cell__image">{product.imagen ? <img src={product.imagen} alt="" /> : <span>{product.nombre.charAt(0)}</span>}{outOfStock && <i><FaTriangleExclamation /></i>}</div>
+            <div><strong>{product.nombre}</strong><span>{product.descripcion}</span></div>
+          </div></td>
+          <td><span className="admin-category-pill">{product.categoria}</span></td>
+          <td><strong>S/ {Number(product.precio).toFixed(2)}</strong></td>
+          <td><span className={outOfStock ? "admin-stock admin-stock--empty" : "admin-stock"}>{outOfStock ? "Agotado" : `${product.stock} unidades`}</span></td>
+          <td><span className="admin-status"><i /> Disponible</span></td>
+          <td><div className="admin-row-actions"><Link to={`/editarproducto/${product.id}`} aria-label={`Editar ${product.nombre}`}><FaPen /></Link><button type="button" onClick={() => onDelete(product.id)} aria-label={`Retirar ${product.nombre}`}><FaTrash /></button></div></td>
+        </tr>
+      );
+    });
+  };
+
   return (
     <section className="admin-panel-card">
       <div className="admin-panel-card__toolbar">
@@ -24,30 +45,11 @@ export default function ProductTable({ products, onDelete, loading }) {
         <table className="admin-table">
           <thead><tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Inventario</th><th>Estado</th><th aria-label="Acciones" /></tr></thead>
           <tbody>
-            {loading ? (
-              <tr><td colSpan="6"><div className="admin-table-empty">Cargando inventario...</div></td></tr>
-            ) : visible.length === 0 ? (
-              <tr><td colSpan="6"><div className="admin-table-empty">No se encontraron productos.</div></td></tr>
-            ) : visible.map((product) => {
-              const outOfStock = Number(product.stock) === 0;
-              return (
-                <tr key={product.id} className={outOfStock ? "admin-table__warning" : ""}>
-                  <td><div className="admin-product-cell">
-                    <div className="admin-product-cell__image">{product.imagen ? <img src={product.imagen} alt="" /> : <span>{product.nombre.charAt(0)}</span>}{outOfStock && <i><FaTriangleExclamation /></i>}</div>
-                    <div><strong>{product.nombre}</strong><span>{product.descripcion}</span></div>
-                  </div></td>
-                  <td><span className="admin-category-pill">{product.categoria}</span></td>
-                  <td><strong>S/ {Number(product.precio).toFixed(2)}</strong></td>
-                  <td><span className={outOfStock ? "admin-stock admin-stock--empty" : "admin-stock"}>{outOfStock ? "Agotado" : `${product.stock} unidades`}</span></td>
-                  <td><span className="admin-status"><i /> Disponible</span></td>
-                  <td><div className="admin-row-actions"><Link to={`/editarproducto/${product.id}`} aria-label={`Editar ${product.nombre}`}><FaPen /></Link><button onClick={() => onDelete(product.id)} aria-label={`Retirar ${product.nombre}`}><FaTrash /></button></div></td>
-                </tr>
-              );
-            })}
+            {renderRows()}
           </tbody>
         </table>
       </div>
-      {pages > 1 && <div className="admin-pagination"><button disabled={page === 0} onClick={() => setPage(page - 1)}>Anterior</button><span>Página {page + 1} de {pages}</span><button disabled={page + 1 >= pages} onClick={() => setPage(page + 1)}>Siguiente</button></div>}
+      {pages > 1 && <div className="admin-pagination"><button type="button" disabled={page === 0} onClick={() => setPage(page - 1)}>Anterior</button><span>Página {page + 1} de {pages}</span><button type="button" disabled={page + 1 >= pages} onClick={() => setPage(page + 1)}>Siguiente</button></div>}
     </section>
   );
 }

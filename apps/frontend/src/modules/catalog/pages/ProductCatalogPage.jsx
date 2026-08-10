@@ -59,6 +59,31 @@ export default function ProductCatalogPage() {
     setSelectedPrice(maxPrice);
   };
 
+  const renderProducts = () => {
+    if (loading) {
+      return <div className="catalog-grid" aria-label="Cargando productos">{[1, 2, 3, 4, 5, 6].map((item) => <div className="catalog-skeleton" key={item} />)}</div>;
+    }
+    if (loadError) {
+      return <div className="catalog-empty"><h2>No pudimos cargar la carta</h2><p>Intenta nuevamente dentro de unos momentos.</p></div>;
+    }
+    if (filteredProducts.length === 0) {
+      return <div className="catalog-empty"><span><FaMagnifyingGlass aria-hidden="true" /></span><h2>No encontramos coincidencias</h2><p>Prueba otra categoría, búsqueda o rango de precio.</p><button type="button" onClick={clearFilters}>Mostrar toda la carta</button></div>;
+    }
+    return <div className="catalog-grid">{filteredProducts.map((product) => (
+      <article className="catalog-card" key={product.id}>
+        <div className="catalog-card__image">
+          {product.imagen ? <img src={product.imagen} alt={product.nombre} /> : <FaUtensils aria-label="Producto sin imagen" />}
+          <span>{product.categoria}</span>
+        </div>
+        <div className="catalog-card__body">
+          <div className="catalog-card__heading"><h2>{product.nombre}</h2><strong>S/ {product.precio.toFixed(2)}</strong></div>
+          <p>{product.descripcion}</p>
+          <div className="catalog-card__footer"><span><i aria-hidden="true" /> {product.stock} disponibles</span><button type="button" onClick={() => addToCart(product)}><FaCartPlus aria-hidden="true" /> Agregar</button></div>
+        </div>
+      </article>
+    ))}</div>;
+  };
+
   return (
     <main className="catalog-page">
       <header className="catalog-hero">
@@ -110,7 +135,7 @@ export default function ProductCatalogPage() {
               <span className="catalog-filter-group__heading">Categorías</span>
               <div className="catalog-categories">
                 {["Todas", ...categories.map((category) => category.nombre)].map((category) => (
-                  <button
+                  <button type="button"
                     className={category === selectedCategory ? "active" : ""}
                     key={category}
                     onClick={() => setSelectedCategory(category)}
@@ -121,49 +146,10 @@ export default function ProductCatalogPage() {
                 ))}
               </div>
             </div>
-            <button className="catalog-clear" onClick={clearFilters}>Limpiar filtros</button>
+            <button type="button" className="catalog-clear" onClick={clearFilters}>Limpiar filtros</button>
           </aside>
 
-          <div className="catalog-products">
-            {loading ? (
-              <div className="catalog-grid" aria-label="Cargando productos">
-                {[1, 2, 3, 4, 5, 6].map((item) => <div className="catalog-skeleton" key={item} />)}
-              </div>
-            ) : loadError ? (
-              <div className="catalog-empty"><h2>No pudimos cargar la carta</h2><p>Intenta nuevamente dentro de unos momentos.</p></div>
-            ) : filteredProducts.length > 0 ? (
-              <div className="catalog-grid">
-                {filteredProducts.map((product) => (
-                  <article className="catalog-card" key={product.id}>
-                    <div className="catalog-card__image">
-                      {product.imagen ? <img src={product.imagen} alt={product.nombre} /> : <FaUtensils aria-label="Producto sin imagen" />}
-                      <span>{product.categoria}</span>
-                    </div>
-                    <div className="catalog-card__body">
-                      <div className="catalog-card__heading">
-                        <h2>{product.nombre}</h2>
-                        <strong>S/ {product.precio.toFixed(2)}</strong>
-                      </div>
-                      <p>{product.descripcion}</p>
-                      <div className="catalog-card__footer">
-                        <span><i aria-hidden="true" /> {product.stock} disponibles</span>
-                        <button onClick={() => addToCart(product)}>
-                          <FaCartPlus aria-hidden="true" /> Agregar
-                        </button>
-                      </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            ) : (
-              <div className="catalog-empty">
-                <span><FaMagnifyingGlass aria-hidden="true" /></span>
-                <h2>No encontramos coincidencias</h2>
-                <p>Prueba otra categoría, búsqueda o rango de precio.</p>
-                <button onClick={clearFilters}>Mostrar toda la carta</button>
-              </div>
-            )}
-          </div>
+          <div className="catalog-products">{renderProducts()}</div>
         </div>
       </section>
     </main>

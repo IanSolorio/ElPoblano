@@ -10,5 +10,5 @@ export default function CartButton({ toggleCart }) {
     window.addEventListener("storage", updateCount);
     return () => { window.removeEventListener("elpoblano:cart-updated", updateCount); window.removeEventListener("storage", updateCount); };
   }, []);
-  return <button className="home-cart-button" onClick={() => toggleCart(true)} aria-label={`Abrir carrito, ${count} productos`}><FaCartShopping aria-hidden="true" />{count > 0 && <span>{count > 99 ? "99+" : count}</span>}</button>;
+  return <button type="button" className="home-cart-button" onClick={() => toggleCart(true)} aria-label={`Abrir carrito, ${count} productos`}><FaCartShopping aria-hidden="true" />{count > 0 && <span>{count > 99 ? "99+" : count}</span>}</button>;
 }

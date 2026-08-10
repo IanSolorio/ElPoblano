@@ -15,18 +15,18 @@ export default function ProductForm({ values, onChange, onImageChange, onSubmit,
         <label className="admin-field">Categoría<select name="categoriaId" value={values.categoriaId || ""} onChange={onChange} required><option value="">Selecciona una categoría</option>{categories.map((category) => <option key={category.id} value={category.id}>{category.nombre}</option>)}</select></label>
         <label className="admin-field">Precio (S/)<input required type="number" min="0" step="0.01" name="precio" value={values.precio ?? ""} onChange={onChange} placeholder="0.00" /></label>
         <label className="admin-field">Stock disponible<input required type="number" min="0" name="stock" value={values.stock ?? 0} onChange={onChange} /></label>
-        <label className="admin-switch"><input type="checkbox" name="activo" checked={values.activo ?? true} onChange={onChange} /><span aria-hidden="true" /><div><strong>Disponible para la venta</strong><small>Visible cuando tenga stock.</small></div></label>
+        <label className="admin-switch"><input aria-label="Disponible para la venta" type="checkbox" name="activo" checked={values.activo ?? true} onChange={onChange} /><span aria-hidden="true" /><div><strong>Disponible para la venta</strong><small>Visible cuando tenga stock.</small></div></label>
       </div>
 
       <div className="admin-form-card__section-title"><span>Imagen del producto</span><p>Formatos JPG, PNG o WebP.</p></div>
       <label className="admin-file-field">
         <span>{values.imagen && typeof values.imagen === "string" ? <img src={values.imagen} alt="Vista actual del producto" /> : <FaImage aria-hidden="true" />}</span>
         <div><strong><FaCloudArrowUp aria-hidden="true" /> Seleccionar imagen</strong><small>La imagen se optimizará antes de subirla.</small></div>
-        <input type="file" accept="image/jpeg,image/png,image/webp" onChange={onImageChange} disabled={isSubmitting} />
+        <input aria-label="Seleccionar imagen del producto" type="file" accept="image/jpeg,image/png,image/webp" onChange={onImageChange} disabled={isSubmitting} />
       </label>
 
       <div className="admin-form-actions">
-        <button className="admin-primary-action" disabled={isSubmitting}><FaFloppyDisk aria-hidden="true" /> {isSubmitting ? "Procesando..." : "Guardar producto"}</button>
+        <button type="submit" className="admin-primary-action" disabled={isSubmitting}><FaFloppyDisk aria-hidden="true" /> {isSubmitting ? "Procesando..." : "Guardar producto"}</button>
         {submitStatus && <p role="status" aria-live="polite">{submitStatus}</p>}
       </div>
     </form>

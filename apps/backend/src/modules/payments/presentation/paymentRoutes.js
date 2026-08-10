@@ -3,16 +3,16 @@ import { z } from "zod";
 import { validate } from "../../../shared/middleware/validate.js";
 
 const paymentSchema = z.object({
-  orderId: z.string().uuid(),
-  paymentData: z.object({
+  orderId: z.uuid(),
+  paymentData: z.looseObject({
     token: z.string().min(1).optional(),
     payment_method_id: z.string().min(1).max(50),
     issuer_id: z.union([z.string(), z.number()]).optional(),
     installments: z.coerce.number().int().min(1).max(48).optional(),
-    payer: z.object({
+    payer: z.looseObject({
       identification: z.object({ type: z.string().max(20), number: z.string().max(30) }).optional(),
-    }).passthrough().optional(),
-  }).passthrough(),
+    }).optional(),
+  }),
 });
 
 export const createPaymentRouter = (paymentService, authenticate) => {

@@ -30,6 +30,14 @@ npm.cmd run sonar:analyze
 El comando normaliza la cobertura de la Fase 5, ejecuta el escáner, espera el
 procesamiento y descarga las evidencias en `tests/results/fase7/`.
 
+Si el análisis fue cargado correctamente pero falló temporalmente la descarga
+de evidencias, no es necesario repetir el escaneo. Conservando las mismas
+variables de entorno, ejecutar:
+
+```powershell
+npm.cmd run sonar:collect
+```
+
 ## Evidencias
 
 - `cobertura.lcov`: cobertura importada.
@@ -37,4 +45,3 @@ procesamiento y descarga las evidencias en `tests/results/fase7/`.
 - `quality-gate.json`: condiciones y resultado del Quality Gate.
 - `incidencias.json`: problemas abiertos detectados.
 - `RESUMEN.md`: resultado ejecutivo de la fase.
-

@@ -39,10 +39,10 @@ export default function CheckoutPage() {
     <section className="card p-3 mb-3"><h2 className="h5">Productos</h2>{cart.map((item) => <div key={item.id} className="d-flex justify-content-between"><span>{item.quantity || 1} × {item.nombre}</span><span>S/ {(Number(item.precio) * (item.quantity || 1)).toFixed(2)}</span></div>)}<hr/><strong>Total: S/ {getCartTotal(cart).toFixed(2)}</strong></section>
     {!order ? <form onSubmit={continueToPayment} className="card p-3"><h2 className="h5">Pago seguro</h2>
       <div className="alert alert-info">En el siguiente paso Mercado Pago mostrará los medios de prueba disponibles. ElPoblano no recibe ni almacena los datos de tu tarjeta.</div>
-      <label className="form-label">Indicaciones</label><textarea className="form-control" maxLength="1000" value={notes} onChange={(event) => setNotes(event.target.value)} />
-      <button disabled={saving || !address} className="btn btn-success mt-3">{saving ? "Preparando pago..." : "Continuar al pago"}</button>
+      <label className="form-label" htmlFor="checkout-notes">Indicaciones</label><textarea id="checkout-notes" className="form-control" maxLength="1000" value={notes} onChange={(event) => setNotes(event.target.value)} />
+      <button type="submit" disabled={saving || !address} className="btn btn-success mt-3">{saving ? "Preparando pago..." : "Continuar al pago"}</button>
     </form> : <section className="card p-3"><h2 className="h5">Pagar pedido</h2>
-      {saving && <p role="status">Procesando pago...</p>}
+      {saving && <output aria-live="polite">Procesando pago...</output>}
       <MercadoPagoPayment order={order} user={user}
         onStatus={handlePaymentStatus}
         onError={handlePaymentError}

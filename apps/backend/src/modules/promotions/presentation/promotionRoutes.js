@@ -5,12 +5,12 @@ import { validate } from "../../../shared/middleware/validate.js";
 const common = {
   name: z.string().trim().min(1).max(150),
   description: z.string().trim().max(5000).optional(),
-  imageUrl: z.string().url().optional().or(z.literal("")),
+  imageUrl: z.url().optional().or(z.literal("")),
   startsAt: z.iso.datetime(),
   endsAt: z.iso.datetime(),
   active: z.boolean().default(true),
 };
-const product = z.object({ productId: z.string().uuid(), quantity: z.coerce.number().int().min(1).max(99).default(1) });
+const product = z.object({ productId: z.uuid(), quantity: z.coerce.number().int().min(1).max(99).default(1) });
 const schema = z.discriminatedUnion("kind", [
   z.object({ ...common, kind: z.literal("PRODUCT_DISCOUNT"), discountType: z.enum(["PERCENTAGE", "FIXED_AMOUNT"]), discountValue: z.coerce.number().positive(), products: z.array(product).min(1).max(100) }),
   z.object({ ...common, kind: z.literal("BUNDLE"), bundlePrice: z.coerce.number().positive(), products: z.array(product).min(2).max(100) }),

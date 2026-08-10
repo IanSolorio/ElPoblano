@@ -22,7 +22,7 @@
 .contact-direct strong { font-family: "Fraunces",serif; font-size: 1.1rem; }
 .contact-form { background: white; border: 1px solid rgba(73,48,37,.12); border-radius: 1.4rem; box-shadow: 0 25px 65px rgba(37,25,21,.18); display: flex; flex-direction: column; gap: 1.15rem; padding: clamp(1.5rem,4vw,2.5rem); }
 .contact-form__heading { align-items: center; border-bottom: 1px solid rgba(73,48,37,.1); display: flex; gap: 1rem; margin-bottom: .3rem; padding-bottom: 1.3rem; }
-.contact-form__heading > span { align-items: center; background: #dff1e5; border-radius: 1rem; color: #198754; display: flex; flex: 0 0 auto; font-size: 1.3rem; height: 52px; justify-content: center; width: 52px; }
+.contact-form__heading > span { align-items: center; background: #dff1e5; border-radius: 1rem; color: #12663f; display: flex; flex: 0 0 auto; font-size: 1.3rem; height: 52px; justify-content: center; width: 52px; }
 .contact-form__heading h2 { color: #251915; font-family: "Fraunces",serif; font-size: 1.45rem; margin: 0 0 .2rem; }
 .contact-form__heading p { color: #71635d; font-size: .75rem; margin: 0; }
 .contact-form label { color: #493c37; display: flex; flex-direction: column; font-size: .78rem; font-weight: 800; gap: .45rem; }

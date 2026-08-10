@@ -19,11 +19,11 @@ export default function CategoriesAdminPage() {
         <form className="admin-compact-form" onSubmit={submit}>
           <span className="admin-compact-form__icon"><FaLayerGroup /></span><h2>Nueva categoría</h2><p>Crea una clasificación para los productos.</p>
           <label className="admin-field">Nombre<input required minLength="2" maxLength="100" value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej. Postres" /></label>
-          <button className="admin-primary-action"><FaPlus /> Agregar categoría</button>
+          <button type="submit" className="admin-primary-action"><FaPlus /> Agregar categoría</button>
         </form>
         <section className="admin-panel-card">
           <div className="admin-panel-card__toolbar"><div><h2>Categorías registradas</h2><p>Solo el administrador principal puede modificarlas.</p></div></div>
-          <div className="admin-list">{categories.map((category) => <article key={category.id}><span className="admin-list__letter">{category.nombre.charAt(0)}</span><div><strong>{category.nombre}</strong><small>{category.activo ? "Visible en la carta" : "Categoría oculta"}</small></div><span className={category.activo ? "admin-status" : "admin-status admin-status--off"}><i /> {category.activo ? "Activa" : "Inactiva"}</span><button className="admin-outline-action" onClick={() => toggle(category)}>{category.activo ? "Desactivar" : "Activar"}</button></article>)}</div>
+          <div className="admin-list">{categories.map((category) => <article key={category.id}><span className="admin-list__letter">{category.nombre.charAt(0)}</span><div><strong>{category.nombre}</strong><small>{category.activo ? "Visible en la carta" : "Categoría oculta"}</small></div><span className={category.activo ? "admin-status" : "admin-status admin-status--off"}><i /> {category.activo ? "Activa" : "Inactiva"}</span><button type="button" className="admin-outline-action" onClick={() => toggle(category)}>{category.activo ? "Desactivar" : "Activar"}</button></article>)}</div>
         </section>
       </section>
     </AdminLayout>

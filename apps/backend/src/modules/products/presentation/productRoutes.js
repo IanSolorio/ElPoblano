@@ -7,7 +7,7 @@ const productSchema = z.object({
   descripcion: z.string().trim().min(1).max(5000),
   categoriaId: z.coerce.number().int().positive(),
   precio: z.coerce.number().nonnegative().max(99999999.99),
-  imagen: z.string().url().or(z.literal("")).optional(),
+  imagen: z.url().or(z.literal("")).optional(),
   stock: z.coerce.number().int().nonnegative().optional(),
   activo: z.boolean().optional(),
 });

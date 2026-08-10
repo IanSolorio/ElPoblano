@@ -36,20 +36,20 @@ export default function CartDrawer({ open, toggleCart }) {
     <Drawer anchor="right" open={open} onClose={() => toggleCart(false)} classes={{ paper: "cart-drawer" }}>
       <div className="cart-drawer__header">
         <div><span><FaBagShopping aria-hidden="true" /></span><div><h2>Tu pedido</h2><p>{units} {units === 1 ? "producto" : "productos"}</p></div></div>
-        <button onClick={() => toggleCart(false)} aria-label="Cerrar carrito"><FaXmark /></button>
+        <button type="button" onClick={() => toggleCart(false)} aria-label="Cerrar carrito"><FaXmark /></button>
       </div>
 
       <div className="cart-drawer__body">
         {items.length === 0 ? (
-          <div className="cart-empty"><span><FaBagShopping /></span><h3>Tu carrito está esperando</h3><p>Explora nuestra carta y agrega tus sabores favoritos.</p><button onClick={() => { toggleCart(false); navigate("/productos"); }}>Ver productos <FaArrowRight /></button></div>
+          <div className="cart-empty"><span><FaBagShopping /></span><h3>Tu carrito está esperando</h3><p>Explora nuestra carta y agrega tus sabores favoritos.</p><button type="button" onClick={() => { toggleCart(false); navigate("/productos"); }}>Ver productos <FaArrowRight /></button></div>
         ) : items.map((item) => (
           <article className="cart-item" key={item.id}>
             <div className="cart-item__image">{item.imagen ? <img src={item.imagen} alt={item.nombre} /> : <FaBagShopping />}{item.esPromocion && <span><FaTag /> Promo</span>}</div>
             <div className="cart-item__content">
-              <div className="cart-item__top"><div>{item.esPromocion && <small>{item.promocionNombre}</small>}<h3>{item.nombre}</h3></div><button onClick={() => removeCartItem(item.id)} aria-label={`Eliminar ${item.nombre}`}><FaTrash /></button></div>
+              <div className="cart-item__top"><div>{item.esPromocion && <small>{item.promocionNombre}</small>}<h3>{item.nombre}</h3></div><button type="button" onClick={() => removeCartItem(item.id)} aria-label={`Eliminar ${item.nombre}`}><FaTrash /></button></div>
               {item.promotionKind === "BUNDLE" && <p className="cart-item__components">{item.componentes?.map((component) => `${component.quantity}× ${component.nombre}`).join(" + ")}</p>}
               <div className="cart-item__bottom">
-                <div className="cart-quantity"><button onClick={() => updateQuantity(item, -1)} aria-label="Reducir cantidad"><FaMinus /></button><span>{item.quantity || 1}</span><button disabled={Number(item.stock) > 0 && item.quantity >= item.stock} onClick={() => updateQuantity(item, 1)} aria-label="Aumentar cantidad"><FaPlus /></button></div>
+                <div className="cart-quantity"><button type="button" onClick={() => updateQuantity(item, -1)} aria-label="Reducir cantidad"><FaMinus /></button><span>{item.quantity || 1}</span><button type="button" disabled={Number(item.stock) > 0 && item.quantity >= item.stock} onClick={() => updateQuantity(item, 1)} aria-label="Aumentar cantidad"><FaPlus /></button></div>
                 <div className="cart-item__price">{item.precioOriginal && Number(item.precioOriginal) > Number(item.precio) && <del>S/ {Number(item.precioOriginal).toFixed(2)}</del>}<strong>S/ {(Number(item.precio) * (item.quantity || 1)).toFixed(2)}</strong></div>
               </div>
             </div>
@@ -60,7 +60,7 @@ export default function CartDrawer({ open, toggleCart }) {
       {items.length > 0 && <footer className="cart-drawer__footer">
         <div className="cart-summary"><span>Subtotal</span><strong>S/ {total.toFixed(2)}</strong><span>Envío</span><b>Por confirmar</b></div>
         <div className="cart-total"><span>Total estimado</span><strong>S/ {total.toFixed(2)}</strong></div>
-        <button className="cart-checkout" onClick={checkout}>{user ? "Continuar al pago" : "Regístrate para comprar"}<FaArrowRight /></button>
+        <button type="button" className="cart-checkout" onClick={checkout}>{user ? "Continuar al pago" : "Regístrate para comprar"}<FaArrowRight /></button>
         <p><FaShieldHalved /> Pago procesado de forma segura</p>
       </footer>}
     </Drawer>

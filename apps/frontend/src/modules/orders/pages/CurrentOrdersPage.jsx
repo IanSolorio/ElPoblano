@@ -58,9 +58,11 @@ export default function CurrentOrdersPage() {
   if (!user) return <Navigate to="/productos" replace />;
 
   return <main className="customer-orders-page"><section className="container">
-    <header className="customer-orders-heading"><span><FaClock /> Seguimiento de pedidos</span><h1>¿Cómo va tu pedido?</h1><p>Aquí encontrarás tus compras que todavía están siendo preparadas o entregadas.</p><div><Link to="/historial">Ver historial mensual</Link><button onClick={() => load()}><FaRotate /> Actualizar</button></div></header>
+    <header className="customer-orders-heading"><span><FaClock /> Seguimiento de pedidos</span><h1>¿Cómo va tu pedido?</h1><p>Aquí encontrarás tus compras que todavía están siendo preparadas o entregadas.</p><div><Link to="/historial">Ver historial mensual</Link><button type="button" onClick={() => load()}><FaRotate /> Actualizar</button></div></header>
     {error && <div className="customer-order-error">{error}</div>}
-    {loading ? <div className="customer-orders-empty">Cargando tus pedidos...</div> : !orders.length ? <div className="customer-orders-empty"><FaBagShopping /><h2>No tienes pedidos en curso</h2><p>Todos tus pedidos están entregados o todavía no realizaste una compra.</p><Link to="/productos">Pedir ahora</Link></div> : <div className="current-orders">{orders.map((order) => {
+    {loading && <div className="customer-orders-empty">Cargando tus pedidos...</div>}
+    {!loading && !orders.length && <div className="customer-orders-empty"><FaBagShopping /><h2>No tienes pedidos en curso</h2><p>Todos tus pedidos están entregados o todavía no realizaste una compra.</p><Link to="/productos">Pedir ahora</Link></div>}
+    {!loading && orders.length > 0 && <div className="current-orders">{orders.map((order) => {
       const currentRank = rank[order.status] ?? -1;
       const paymentPending = order.status === "PENDING" && order.payment?.status === "PENDING";
       const providerProcessing = paymentPending && Boolean(order.payment?.externalId);
@@ -71,8 +73,8 @@ export default function CurrentOrdersPage() {
         {order.status === "PENDING" ? <>
           <div className="current-order-payment"><FaClock /><div><strong>{providerProcessing ? "Pago en procesamiento" : "Pago pendiente"}</strong><p>{providerProcessing ? "Mercado Pago está validando la operación. No realices otro pago." : "Puedes completar el pago o cancelar este pedido antes de que sea procesado."}</p></div></div>
           {canManagePayment && <div className="current-order-actions">
-            <button className="current-order-pay" disabled={busyOrderId === order.id} onClick={() => setPayingOrderId(paymentOpen ? null : order.id)}><FaCreditCard /> {paymentOpen ? "Ocultar pago" : "Pagar pedido"}</button>
-            <button className="current-order-cancel" disabled={busyOrderId === order.id} onClick={() => cancelOrder(order)}><FaBan /> {busyOrderId === order.id ? "Cancelando..." : "Cancelar pedido"}</button>
+            <button type="button" className="current-order-pay" disabled={busyOrderId === order.id} onClick={() => setPayingOrderId(paymentOpen ? null : order.id)}><FaCreditCard /> {paymentOpen ? "Ocultar pago" : "Pagar pedido"}</button>
+            <button type="button" className="current-order-cancel" disabled={busyOrderId === order.id} onClick={() => cancelOrder(order)}><FaBan /> {busyOrderId === order.id ? "Cancelando..." : "Cancelar pedido"}</button>
           </div>}
           {paymentOpen && canManagePayment && <section className="current-order-checkout"><h3>Completa el pago</h3><p>Mercado Pago procesará el importe pendiente de {money(order.total)}.</p><MercadoPagoPayment
             order={order}

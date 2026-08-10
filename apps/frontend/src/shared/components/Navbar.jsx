@@ -61,10 +61,10 @@ export default function Navbar() {
               <div className="home-user-menu">
                 <span className="home-user-menu__greeting">Hola, <strong>{user.firstName}</strong></span>
                 {user.role === "CUSTOMER" ? <><Link className="home-navbar__secondary" to="/mis-pedidos">Mis pedidos</Link><Link className="home-navbar__secondary" to="/historial">Historial</Link></> : <Link className="home-navbar__secondary" to="/admin">Administrar</Link>}
-                <button className="home-navbar__login" onClick={logout}>Salir</button>
+                <button type="button" className="home-navbar__login" onClick={logout}>Salir</button>
               </div>
             ) : (
-              <button className="home-navbar__login" onClick={() => setOpenLoginModal(true)}>
+              <button type="button" className="home-navbar__login" onClick={() => setOpenLoginModal(true)}>
                 <FaUser aria-hidden="true" /> Iniciar sesión
               </button>
             )}

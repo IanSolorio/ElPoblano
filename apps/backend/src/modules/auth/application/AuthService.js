@@ -45,7 +45,7 @@ export class AuthService {
 
   async login(emailInput, password) {
     const user = await this.repository.findByEmail(emailInput.trim().toLowerCase());
-    if (!user || !user.active || !(await this.passwordHasher.verify(user.passwordHash, password))) {
+    if (!user?.active || !(await this.passwordHasher.verify(user.passwordHash, password))) {
       throw new AppError("Credenciales incorrectas.", 401, "INVALID_CREDENTIALS");
     }
     await this.repository.writeAudit({ userId: user.id, action: "USER_LOGGED_IN", entity: "Session" });
