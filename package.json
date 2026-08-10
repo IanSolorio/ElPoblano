@@ -21,6 +21,7 @@
     "test:acceptance:prepare": "node scripts/prepareAcceptanceEvidence.js",
     "test:selenium": "node scripts/runSeleniumEvidence.js",
     "test:load": "node scripts/runJMeterEvidence.js",
+    "test:ec2": "bash scripts/runEc2SystemTests.sh",
     "sonar:prepare": "node scripts/prepareSonarCoverage.js",
     "sonar:analyze": "node scripts/runSonarAnalysis.js",
     "sonar:collect": "node scripts/runSonarAnalysis.js --collect-only"

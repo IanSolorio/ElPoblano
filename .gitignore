@@ -19,6 +19,7 @@ tests/results/fase7/cobertura.lcov
 tests/results/fase7/frontend-coverage/
 tests/reports/unit/
 tests/reports/selenium/
+tests/results/fase5/ec2/.reboot-state
 *.local
 .env
 .env.*
