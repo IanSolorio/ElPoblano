@@ -18,9 +18,12 @@
     "test:system:prepare": "node scripts/prepareSystemTestEvidence.js",
     "test:acceptance:prepare": "node scripts/prepareAcceptanceEvidence.js",
     "test:selenium": "node scripts/runSeleniumEvidence.js",
-    "test:load": "node scripts/runJMeterEvidence.js"
+    "test:load": "node scripts/runJMeterEvidence.js",
+    "sonar:prepare": "node scripts/prepareSonarCoverage.js",
+    "sonar:analyze": "node scripts/runSonarAnalysis.js"
   },
   "devDependencies": {
+    "@sonar/scan": "^5.0.0",
     "concurrently": "^9.2.0",
     "selenium-webdriver": "^4.46.0"
   }

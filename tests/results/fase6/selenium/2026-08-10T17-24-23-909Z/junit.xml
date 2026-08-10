@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="ST-E2E-01: visitante navega las páginas públicas y conserva el aviso académico" time="12.354287" classname="test"/>
+	<testcase name="ST-E2E-02: catálogo público presenta disponibilidad, precio y stock" time="1.668921" classname="test"/>
+	<testcase name="ST-E2E-03: búsqueda actualiza el catálogo y puede limpiarse" time="1.718481" classname="test"/>
+	<testcase name="ST-E2E-04: producto se agrega al carrito y cantidad modifica el resumen" time="2.492280" classname="test"/>
+	<testcase name="ST-E2E-05: visitante que confirma es dirigido al registro" time="2.428595" classname="test"/>
+	<testcase name="ST-E2E-16: visitante no puede abrir el panel administrativo" time="2.443520" classname="test"/>
+	<testcase name="ST-E2E-31: las rutas limpias profundas sobreviven a una recarga" time="2.673828" classname="test"/>
+	<testcase name="ST-E2E-36: catálogo y navegación son operables en viewport móvil" time="1.855906" classname="test"/>
+	<testcase name="ST-E2E-37: controles esenciales son alcanzables por teclado y tienen nombre accesible" time="1.503473" classname="test"/>
+	<!-- tests 9 -->
+	<!-- suites 0 -->
+	<!-- pass 9 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 29332.7393 -->
+</testsuites>

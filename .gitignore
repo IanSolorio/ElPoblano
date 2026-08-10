@@ -10,6 +10,12 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+.scannerwork/
+.sonar/
+se-metadata.json
+tests/results/**/chrome-profile-*/
+tests/results/fase6/jmeter/**/dashboard/
+tests/results/fase7/cobertura.lcov
 *.local
 .env
 .env.*

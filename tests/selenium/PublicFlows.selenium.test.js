@@ -53,20 +53,21 @@ test("ST-E2E-05: visitante que confirma es dirigido al registro", withEvidence("
   const buttons = await driver.findElements(By.css(".catalog-card button")); if (buttons.length === 0) return context.skip("Precondición: se requiere un producto disponible");
   await buttons[0].click(); await (await visible(driver, By.css(".swal2-confirm"))).click();
   await driver.findElement(By.css(".home-cart-button")).click(); await (await visible(driver, By.css(".cart-checkout"))).click();
-  await driver.wait(until.urlContains("#/registro"), 5_000); assert.match(await driver.findElement(By.css("h1")).getText(), /próximo pedido/i);
+  await driver.wait(until.urlContains("/registro"), 5_000); assert.match(await driver.findElement(By.css("h1")).getText(), /próximo pedido/i);
 }));
 
 test("ST-E2E-16: visitante no puede abrir el panel administrativo", withEvidence("ST-E2E-16", async (driver) => {
   await openRoute(driver, "/admin");
   await driver.sleep(800);
-  assert.equal((await driver.getCurrentUrl()).includes("#/admin"), false);
+  assert.equal(new URL(await driver.getCurrentUrl()).pathname === "/admin", false);
   assert.match(await driver.findElement(By.css("body")).getText(), /Iniciar sesión|Inicio|Proyecto académico/i);
 }));
 
-test("ST-E2E-31: las rutas hash profundas sobreviven a una recarga", withEvidence("ST-E2E-31", async (driver) => {
+test("ST-E2E-31: las rutas limpias profundas sobreviven a una recarga", withEvidence("ST-E2E-31", async (driver) => {
   for (const route of ["/productos", "/nosotros", "/ubicanos", "/contact"]) {
     await openRoute(driver, route); await driver.navigate().refresh(); await visible(driver, By.css("body"));
-    assert.equal((await driver.getCurrentUrl()).includes(`#${route}`), true);
+    const current = new URL(await driver.getCurrentUrl());
+    assert.equal(current.pathname, route); assert.equal(current.hash, "");
   }
 }));
 

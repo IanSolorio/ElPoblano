@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 
 const root = process.cwd();
 const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-const output = resolve(root, "tests/reports/selenium", timestamp);
+const output = resolve(root, "tests/results/fase6/selenium", timestamp);
 mkdirSync(output, { recursive: true });
 
 const healthUrl = `${(process.env.E2E_BASE_URL || "http://localhost:5173").replace(/\/$/, "")}/`;
@@ -22,4 +22,3 @@ const result = spawnSync(process.execPath, args, { cwd: root, stdio: "inherit", 
 writeFileSync(resolve(output, "entorno.txt"), `Fecha UTC: ${new Date().toISOString()}\nURL: ${healthUrl}\nNode: ${process.version}\nHeadless: ${process.env.E2E_HEADLESS !== "false"}\n`, "utf8");
 console.log(`Evidencia Selenium: ${output}`);
 process.exitCode = result.status ?? 1;
-

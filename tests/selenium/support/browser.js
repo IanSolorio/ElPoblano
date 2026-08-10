@@ -1,4 +1,5 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { homedir } from "node:os";
 import { resolve } from "node:path";
 import { Builder, Browser, By, until } from "selenium-webdriver";
 import chrome from "selenium-webdriver/chrome.js";
@@ -10,12 +11,34 @@ mkdirSync(reportDir, { recursive: true });
 export const createDriver = async () => {
   const options = new chrome.Options();
   if (process.env.E2E_HEADLESS !== "false") options.addArguments("--headless=new");
-  options.addArguments("--window-size=1440,1000", "--disable-dev-shm-usage", "--no-sandbox");
-  return new Builder().forBrowser(Browser.CHROME).setChromeOptions(options).build();
+  const profileDirectory = resolve(reportDir, `chrome-profile-${crypto.randomUUID()}`);
+  mkdirSync(profileDirectory, { recursive: true });
+  options.addArguments(
+    "--window-size=1440,1000",
+    "--disable-dev-shm-usage",
+    "--no-sandbox",
+    `--user-data-dir=${profileDirectory}`,
+  );
+
+  const cachedDriver = resolve(
+    homedir(),
+    ".cache",
+    "selenium",
+    "chromedriver",
+    "win64",
+    "151.0.7922.77",
+    "chromedriver.exe",
+  );
+  const driverPath = process.env.CHROMEDRIVER_PATH || (existsSync(cachedDriver) ? cachedDriver : null);
+  const builder = new Builder().forBrowser(Browser.CHROME).setChromeOptions(options);
+  if (driverPath) builder.setChromeService(new chrome.ServiceBuilder(driverPath));
+  const driver = await builder.build();
+  driver.testProfileDirectory = profileDirectory;
+  return driver;
 };
 
 export const openRoute = async (driver, route = "/") => {
-  await driver.get(`${baseUrl}/#${route}`);
+  await driver.get(`${baseUrl}${route}`);
   await driver.wait(until.elementLocated(By.css("body")), 10_000);
 };
 
@@ -37,6 +60,20 @@ export const withEvidence = (id, action) => async (context) => {
     throw error;
   } finally {
     await driver.quit();
+    if (driver.testProfileDirectory) {
+      try {
+        rmSync(driver.testProfileDirectory, {
+          recursive: true,
+          force: true,
+          maxRetries: 5,
+          retryDelay: 250,
+        });
+      } catch (cleanupError) {
+        // En Windows Chrome puede conservar por unos instantes archivos de caché.
+        // La limpieza pendiente no debe convertir un flujo válido en prueba fallida.
+        console.warn(`No se pudo eliminar inmediatamente el perfil temporal: ${cleanupError.message}`);
+      }
+    }
   }
 };
 

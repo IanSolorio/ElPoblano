@@ -1,0 +1,4 @@
+Fecha UTC: 2026-08-10T17:24:53.368Z
+URL: http://localhost:5173/
+Node: v22.20.0
+Headless: true
