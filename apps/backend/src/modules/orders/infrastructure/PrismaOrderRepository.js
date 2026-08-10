@@ -294,6 +294,10 @@ export class PrismaOrderRepository extends OrderRepository {
     return this.prisma.$transaction(async (transaction) => {
       const existing = await transaction.order.findUnique({ where: { id: orderId }, include: orderInclude });
       if (!existing) throw new AppError("Pedido no encontrado.", 404, "ORDER_NOT_FOUND");
+      // Una notificación atrasada nunca debe degradar un pago que ya fue aprobado.
+      if (existing.payment?.status === "APPROVED" && providerPayment.status !== "REFUNDED") {
+        return serializeOrder(existing);
+      }
       const approved = providerPayment.status === "APPROVED";
       await transaction.payment.update({
         where: { orderId },

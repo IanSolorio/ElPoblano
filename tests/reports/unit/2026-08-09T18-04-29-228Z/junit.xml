@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="UT-USR-01: SUPER_ADMIN crea un administrador cifrado, normalizado y auditado" time="0.001382" classname="test"/>
+	<testcase name="UT-USR-02: ADMIN no puede crear administradores" time="0.000878" classname="test"/>
+	<testcase name="UT-USR-03: rechaza el correo de administrador existente" time="0.000196" classname="test"/>
+	<testcase name="UT-USR-04: ADMIN actualiza y audita a un cliente" time="0.000304" classname="test"/>
+	<testcase name="UT-USR-05: ADMIN no actualiza a otro administrador" time="0.000255" classname="test"/>
+	<testcase name="UT-USR-06: SUPER_ADMIN actualiza a otro administrador" time="0.000146" classname="test"/>
+	<testcase name="UT-USR-07: usuario inexistente o retirado produce USER_NOT_FOUND" time="0.000321" classname="test"/>
+	<testcase name="UT-USR-08: desactivar cliente revoca sesiones y audita" time="0.000638" classname="test"/>
+	<testcase name="UT-USR-09: reactivar cliente limpia el retiro y audita" time="0.000501" classname="test"/>
+	<testcase name="UT-USR-10: un actor no puede desactivarse a sí mismo" time="0.000680" classname="test"/>
+	<testcase name="UT-USR-11: retirar usuario usa eliminación lógica y preserva el registro" time="0.000511" classname="test"/>
+	<testcase name="UT-USR-12: listado pagina y no expone contraseñas" time="0.000570" classname="test"/>
+	<testcase name="UT-AUTH-01: registra datos válidos, dirección, auditoría y sesión" time="0.003123" classname="test"/>
+	<testcase name="UT-AUTH-02: rechaza correo existente sin distinguir mayúsculas" time="0.001261" classname="test"/>
+	<testcase name="UT-AUTH-03: normaliza nombres, teléfono y correo" time="0.001013" classname="test"/>
+	<testcase name="UT-AUTH-04: inicia sesión y respeta la expiración configurada" time="0.000666" classname="test"/>
+	<testcase name="UT-AUTH-05: rechaza contraseña incorrecta sin revelar el correo" time="0.000322" classname="test"/>
+	<testcase name="UT-AUTH-06: usa el mismo error para un usuario inexistente" time="0.000247" classname="test"/>
+	<testcase name="UT-AUTH-07: impide el login de un usuario inactivo" time="0.000364" classname="test"/>
+	<testcase name="UT-AUTH-08: exige token para autenticar" time="0.000307" classname="test"/>
+	<testcase name="UT-AUTH-09: rechaza tokens inexistentes, expirados y revocados" time="0.000998" classname="test"/>
+	<testcase name="UT-AUTH-10: cerrar sesión revoca el hash y no el token en claro" time="0.001206" classname="test"/>
+	<testcase name="UT-AUTH-11: cerrar sesión sin token es idempotente" time="0.000318" classname="test"/>
+	<testcase name="UT-AUTH-12: el usuario público no expone credenciales o sesión" time="0.000341" classname="test"/>
+	<testcase name="UT-AUTH-13: Argon2 verifica solo la contraseña correcta" time="0.202312" classname="test"/>
+	<testcase name="UT-AUTH-14: el hash de sesión es determinista y no conserva el token" time="0.000421" classname="test"/>
+	<testcase name="UT-AUTH-15: CUSTOMER no puede usar rutas administrativas" time="0.000375" classname="test"/>
+	<testcase name="UT-AUTH-16: ADMIN no puede usar rutas de SUPER_ADMIN" time="0.000224" classname="test"/>
+	<testcase name="UT-AUTH-17: ADMIN y SUPER_ADMIN son autorizados correctamente" time="0.000314" classname="test"/>
+	<testcase name="UT-CART-01: agregar producto nuevo crea una línea con cantidad uno" time="0.002231" classname="test"/>
+	<testcase name="UT-CART-02: agregar producto repetido incrementa sin duplicarlo" time="0.000351" classname="test"/>
+	<testcase name="UT-CART-03: agregar promoción conserva identificador, composición y precio" time="0.000624" classname="test"/>
+	<testcase name="UT-CART-04: incrementar cantidad respeta el stock" time="0.000280" classname="test"/>
+	<testcase name="UT-CART-05: reducir y eliminar una línea recalcula la colección" time="0.000709" classname="test"/>
+	<testcase name="UT-CART-06: calcula subtotal y total con cantidades" time="0.000274" classname="test"/>
+	<testcase name="UT-CART-07: persiste, recupera y notifica cambios del carrito" time="0.000720" classname="test"/>
+	<testcase name="UT-CART-08: almacenamiento corrupto se recupera como carrito vacío" time="0.000238" classname="test"/>
+	<testcase name="UT-CAT-01: el listado público solicita solo categorías activas" time="0.002165" classname="test"/>
+	<testcase name="UT-CAT-02: el listado administrativo solicita todas las categorías" time="0.000368" classname="test"/>
+	<testcase name="UT-CAT-03: crea categoría con slug normalizado y auditoría" time="0.000923" classname="test"/>
+	<testcase name="UT-CAT-04: un nombre o slug duplicado propaga el conflicto de unicidad" time="0.001848" classname="test"/>
+	<testcase name="UT-CAT-05: actualizar categoría inexistente devuelve CATEGORY_NOT_FOUND" time="0.000724" classname="test"/>
+	<testcase name="UT-CAT-06: activar o desactivar conserva productos y audita" time="0.001208" classname="test"/>
+	<testcase name="UT-FILE-01: acepta extensiones JPG, PNG y WebP" time="0.001318" classname="test"/>
+	<testcase name="UT-FILE-02: rechaza tipos no admitidos con 415" time="0.001144" classname="test"/>
+	<testcase name="UT-FILE-03: limita tamaño, archivos, campos y partes" time="0.000766" classname="test"/>
+	<testcase name="UT-FILE-04: Firebase sin credenciales devuelve error controlado" time="0.000597" classname="test"/>
+	<testcase name="UT-FILE-05: construye objeto Firebase con UUID, carpeta, MIME, caché y token" time="0.001152" classname="test"/>
+	<testcase name="UT-ORD-01: crear pedido exige Idempotency-Key" time="0.002493" classname="test"/>
+	<testcase name="UT-ORD-02: consultar pedido propio devuelve su detalle" time="0.001700" classname="test"/>
+	<testcase name="UT-ORD-03: pedido ajeno e inexistente producen el mismo ORDER_NOT_FOUND" time="0.000578" classname="test"/>
+	<testcase name="UT-ORD-04: pedidos actuales delega el usuario y excluye estados terminales" time="0.000387" classname="test"/>
+	<testcase name="UT-ORD-05: historial mensual contiene solo entregados agrupados por mes" time="0.001947" classname="test"/>
+	<testcase name="UT-ORD-06: pedido confirmado y pagado puede iniciar preparación" time="0.001768" classname="test"/>
+	<testcase name="UT-ORD-07: pedido en preparación puede marcarse listo" time="0.000281" classname="test"/>
+	<testcase name="UT-ORD-08: no permite preparar sin pago aprobado" time="0.001168" classname="test"/>
+	<testcase name="UT-ORD-09: impide saltar estados operativos" time="0.000283" classname="test"/>
+	<testcase name="UT-ORD-10: pedido listo puede pasar a reparto" time="0.000312" classname="test"/>
+	<testcase name="UT-ORD-11: pedido en reparto puede marcarse entregado" time="0.000195" classname="test"/>
+	<testcase name="UT-ORD-12: cambiar estado de pedido inexistente devuelve 404" time="0.000956" classname="test"/>
+	<testcase name="UT-ORD-13: cambio correcto audita estado anterior, nuevo y actor" time="0.001358" classname="test"/>
+	<testcase name="UT-ORD-14: estadísticas calculan resumen mensual correctamente" time="0.001598" classname="test"/>
+	<testcase name="UT-ORD-15: rankings usan pagos aprobados y ordenan productos y promociones" time="0.000931" classname="test"/>
+	<testcase name="UT-ORD-16: mes sin ventas devuelve ceros y rankings vacíos" time="0.000546" classname="test"/>
+	<testcase name="UT-PAY-01: rechaza procesamiento sin credenciales" time="0.002189" classname="test"/>
+	<testcase name="UT-PAY-02: exige clave idempotente para procesar" time="0.000662" classname="test"/>
+	<testcase name="UT-PAY-03: no permite pagar pedido ajeno o inexistente" time="0.000255" classname="test"/>
+	<testcase name="UT-PAY-04: pedido ya aprobado se devuelve sin cobrar otra vez" time="0.000357" classname="test"/>
+	<testcase name="UT-PAY-05: pedido cancelado no puede pagarse" time="0.000413" classname="test"/>
+	<testcase name="UT-PAY-06: rechaza montos menores a S/ 3 o no finitos" time="0.000354" classname="test"/>
+	<testcase name="UT-PAY-07: solicitud usa total del servidor, usuario y referencia" time="0.000669" classname="test"/>
+	<testcase name="UT-PAY-08: aprobación actualiza pago y confirma el pedido" time="0.000314" classname="test"/>
+	<testcase name="UT-PAY-09: rechazo cancela y restituye inventario exactamente una vez" time="0.001108" classname="test"/>
+	<testcase name="UT-PAY-10: error del proveedor se traduce sin exponer detalles internos" time="0.000695" classname="test"/>
+	<testcase name="UT-PAY-11: mapea Yape, débito, prepago y crédito" time="0.000277" classname="test"/>
+	<testcase name="UT-PAY-12: webhook sin referencia externa no altera pedidos" time="0.000298" classname="test"/>
+	<testcase name="UT-PAY-13: webhook repetido conserva actualización idempotente" time="0.000242" classname="test"/>
+	<testcase name="UT-PRD-01: construye un producto válido conservando todos sus campos" time="0.002860" classname="test"/>
+	<testcase name="UT-PRD-02: crea un producto con categoría activa y actor de auditoría" time="0.001208" classname="test"/>
+	<testcase name="UT-PRD-03: rechaza crear o editar con categoría inactiva" time="0.001437" classname="test"/>
+	<testcase name="UT-PRD-04: consultar un producto inexistente devuelve 404" time="0.000327" classname="test"/>
+	<testcase name="UT-PRD-05: edita un producto existente y registra al actor" time="0.000636" classname="test"/>
+	<testcase name="UT-PRD-06: cambiar stock registra un movimiento por la diferencia" time="0.001498" classname="test"/>
+	<testcase name="UT-PRD-07: retirar producto usa eliminación lógica y auditoría" time="0.000823" classname="test"/>
+	<testcase name="UT-PRD-08: listado público filtra retirados, inactivos, stock cero y categoría inactiva" time="0.001834" classname="test"/>
+	<testcase name="UT-PRD-09: listado administrativo incluye stock cero e inactivos no retirados" time="0.000748" classname="test"/>
+	<testcase name="UT-PRO-01: rechaza promoción con fin anterior o igual al inicio" time="0.002320" classname="test"/>
+	<testcase name="UT-PRO-02: rechaza porcentaje mayor a cien" time="0.000340" classname="test"/>
+	<testcase name="UT-PRO-03: acepta descuentos porcentuales y fijos positivos" time="0.000352" classname="test"/>
+	<testcase name="UT-PRO-04: un combo necesita al menos dos productos" time="0.000253" classname="test"/>
+	<testcase name="UT-PRO-05: un combo necesita imagen representativa" time="0.000464" classname="test"/>
+	<testcase name="UT-PRO-06: combo válido conserva composición, cantidades y precio" time="0.000274" classname="test"/>
+	<testcase name="UT-PRO-07: promoción individual reutiliza la imagen del producto" time="0.000836" classname="test"/>
+	<testcase name="UT-PRO-08: promoción inactiva, futura o expirada queda fuera por filtro de vigencia" time="0.000895" classname="test"/>
+	<testcase name="UT-PRO-09: promoción activa y vigente con stock aparece públicamente" time="0.001205" classname="test"/>
+	<testcase name="UT-PRO-12: editar promoción reemplaza relaciones y audita" time="0.001421" classname="test"/>
+	<testcase name="UT-PRO-13: retirar promoción usa eliminación lógica y auditoría" time="0.000785" classname="test"/>
+	<testcase name="UT-PRO-14: combo con stock insuficiente no aparece como comprable" time="0.000326" classname="test"/>
+	<testcase name="UT-PRO-10: aplica el mejor precio promocional disponible" time="0.003928" classname="test"/>
+	<testcase name="UT-PRO-11: una promoción nunca genera precio negativo" time="0.000288" classname="test"/>
+	<testcase name="UT-SHR-01: validación correcta entrega datos transformados" time="0.004846" classname="test"/>
+	<testcase name="UT-SHR-02: validación inválida produce ZodError uniforme con 422" time="0.001307" classname="test"/>
+	<testcase name="UT-SHR-03: error de producción incluye requestId y oculta stack" time="0.000432" classname="test"/>
+	<testcase name="UT-SHR-04: contexto genera o propaga identificador de solicitud" time="0.000614" classname="test"/>
+	<!-- tests 104 -->
+	<!-- suites 0 -->
+	<!-- pass 104 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 397.1929 -->
+</testsuites>

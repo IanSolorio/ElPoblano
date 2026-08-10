@@ -2,12 +2,12 @@ import { Router } from "express";
 import { AppError } from "../../../shared/errors/AppError.js";
 import { productImageUpload, saveImage } from "../infrastructure/productImageUpload.js";
 
-export const createFileRouter = (authenticate, requireAdmin) => {
+export const createFileRouter = (authenticate, requireAdmin, storeImage = saveImage) => {
   const router = Router();
   const upload = (folder) => async (request, response, next) => {
     try {
       if (!request.file) throw new AppError("Debes seleccionar una imagen.", 400, "IMAGE_REQUIRED");
-      response.status(201).json({ url: await saveImage(request.file, folder) });
+      response.status(201).json({ url: await storeImage(request.file, folder) });
     } catch (error) { next(error); }
   };
   router.post("/productos", authenticate, requireAdmin, productImageUpload.single("imagen"), upload("products"));

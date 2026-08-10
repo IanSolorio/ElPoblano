@@ -1,0 +1,8 @@
+[
+  {
+    "level": "SEVERE",
+    "message": "https://elpoblano.vercel.app/api/auth/me - Failed to load resource: the server responded with a status of 401 ()",
+    "timestamp": 1786320504753,
+    "type": ""
+  }
+]

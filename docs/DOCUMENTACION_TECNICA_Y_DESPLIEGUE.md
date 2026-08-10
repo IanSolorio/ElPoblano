@@ -5,8 +5,8 @@
 | Proyecto | Plataforma web de comercio electrónico para la taquería El Poblano |
 | Tipo | Proyecto académico de demostración |
 | Arquitectura | Monorepo, Clean Architecture modular y cliente-servidor |
-| Versión del documento | 1.0 |
-| Fecha de corte | 8 de agosto de 2026 |
+| Versión del documento | 2.0 |
+| Fecha de corte | 9 de agosto de 2026 |
 | Frontend de producción | `https://elpoblano.vercel.app` |
 | API de producción | `https://elpoblano-api.duckdns.org/api` |
 
@@ -34,7 +34,7 @@ El alcance actual comprende el registro, pago, preparación, salida y entrega de
 | RF-10 | Un administrador crea productos. | Formulario administrativo y ruta protegida. |
 | RF-11 | Un administrador edita datos, precio, categoría, imagen y stock. | Actualización de producto, imagen en Firebase Storage y movimiento de inventario. |
 | RF-12 | Un administrador retira productos. | Eliminación lógica con `active=false` y `deletedAt`. |
-| RF-13 | Un administrador crea promociones con vigencia. | Promociones asociadas a productos, inicio y fin validados. |
+| RF-13 | Un administrador crea promociones con vigencia. | Promociones individuales o combos, productos asociados, descuentos, imagen representativa e inicio y fin validados. |
 | RF-14 | Una promoción solo se muestra activa y vigente. | Consulta filtrada por estado y rango temporal. |
 | RF-15 | Un administrador consulta y actualiza clientes. | Módulo administrativo de usuarios. |
 | RF-16 | Un administrador activa o desactiva clientes. | Cambio de estado y revocación de sesiones al desactivar. |
@@ -51,6 +51,7 @@ El alcance actual comprende el registro, pago, preparación, salida y entrega de
 | RF-27 | El administrador registra salida y entrega. | Transiciones `READY → OUT_FOR_DELIVERY → DELIVERED`. |
 | RF-28 | El administrador consulta indicadores mensuales. | Ingresos, pedidos, unidades, clientes únicos y ticket promedio. |
 | RF-29 | El administrador identifica productos y promociones destacados. | Rankings mensuales basados exclusivamente en pagos aprobados. |
+| RF-30 | La página principal presenta promociones de manera continua e interactiva. | Carrusel animado en bucle infinito, desplazamiento automático y arrastre mediante puntero. |
 
 ## 3. Arquitectura general
 
@@ -209,6 +210,8 @@ Sus módulos incluyen:
 - `admin`, productos, categorías, promociones y usuarios.
 - Componentes compartidos, navegación, pie y aviso académico.
 
+La interfaz pública utiliza una identidad visual propia del proyecto y declara expresamente su finalidad académica. La página principal incluye un carrusel de promociones que avanza continuamente, repite el contenido en bucle y permite desplazamiento manual mediante mouse o entrada táctil. Las promociones individuales reutilizan la imagen del producto; los combos requieren una imagen representativa.
+
 ### 6.2 Rutas destacadas
 
 | Ruta | Uso |
@@ -227,6 +230,8 @@ Sus módulos incluyen:
 | `/admin/promociones` | Gestión de promociones. |
 | `/admin/usuarios` | Gestión de cuentas. |
 | `/admin/categorias` | Gestión exclusiva de `SUPER_ADMIN`. |
+
+La cola administrativa consulta nuevamente la API cada 10 segundos y los pedidos actuales del cliente cada 30 segundos. Esto proporciona actualización automática por sondeo periódico; no constituye comunicación en tiempo real mediante WebSocket. Los intervalos se cancelan al desmontar cada página para evitar solicitudes huérfanas.
 
 ### 6.3 Imágenes
 
@@ -370,7 +375,7 @@ sudo mkdir -p /var/www/elpoblano
 sudo chown -R ubuntu:ubuntu /var/www/elpoblano
 git clone <URL_DEL_REPOSITORIO> /var/www/elpoblano
 cd /var/www/elpoblano
-npm ci
+npm ci --include=dev
 npm run db:generate -w @elpoblano/backend
 npm run db:deploy -w @elpoblano/backend
 ```
@@ -515,6 +520,10 @@ rama developer → deployment Preview → pruebas → merge a main → Productio
 
 ## 9. Verificación
 
+El diseño completo de la Fase 5 se encuentra en [`PLAN_MAESTRO_PRUEBAS_FASE_5.md`](./PLAN_MAESTRO_PRUEBAS_FASE_5.md). La matriz define 239 casos trazables: 104 unitarios, 59 de integración, 46 de sistema y 30 de aceptación.
+
+El plan integral de auditoría, atributos de calidad, 42 requisitos no funcionales, métricas y relación entre las Fases 1–10 se encuentra en [`PLAN_MAESTRO_PROYECTO_CALIDAD.md`](./PLAN_MAESTRO_PROYECTO_CALIDAD.md).
+
 ### 9.1 Calidad de código
 
 ```powershell
@@ -563,7 +572,7 @@ Respuestas esperadas:
 
 | Característica | Aplicación en el sistema |
 |---|---|
-| Adecuación funcional | RF-01 a RF-29, reglas de rol, stock, vigencia, pagos, seguimiento y analítica mensual. |
+| Adecuación funcional | RF-01 a RF-30, reglas de rol, stock, vigencia, pagos, seguimiento y analítica mensual. |
 | Eficiencia | Índices, paginación, límites, proxy Nginx y consultas filtradas. |
 | Compatibilidad | API JSON, CORS, HTTPS y adaptadores externos. |
 | Capacidad de interacción | Validación, errores uniformes, mapa, alertas y panel por rol. |
@@ -582,14 +591,16 @@ Después de publicar cambios en Git:
 ```bash
 cd /var/www/elpoblano
 git pull origin main
-npm ci
+npm ci --include=dev
 npm run db:generate -w @elpoblano/backend
 npm run db:deploy -w @elpoblano/backend
 sudo systemctl restart elpoblano
-sudo systemctl status elpoblano
+sudo systemctl status elpoblano --no-pager -l
 ```
 
-Si la rama desplegada es otra, sustituir `main` por la rama aprobada. No ejecutar `prisma migrate dev` en producción.
+Se incluye temporalmente el conjunto de dependencias de desarrollo porque el ejecutable de Prisma está declarado como `devDependency` y es necesario para `generate` y `migrate deploy`. Si se adopta una fase de construcción independiente, el artefacto generado puede desplegarse sin esa dependencia. Si la rama desplegada es otra, sustituir `main` por la rama aprobada. No ejecutar `prisma migrate dev` en producción.
+
+El acceso a Prisma usa una importación compatible con la interoperabilidad CommonJS/ESM de Node.js 22. Después de actualizar dependencias siempre se regenera el cliente antes de reiniciar `systemd`; esto evita que EC2 arranque con un cliente ausente o incompatible.
 
 Comandos operativos:
 
@@ -617,7 +628,8 @@ sudo certbot renew --dry-run
 - Mercado Pago continúa con credenciales de prueba.
 - Verificar criptográficamente la firma del webhook antes de aceptar pagos reales.
 - Yape requiere proveedor/adquirente o flujo comercial autorizado; no está integrado como cobro real.
-- No existe módulo de repartidores ni seguimiento de entrega.
+- No existe un rol o aplicación independiente para repartidores; los administradores registran actualmente la salida y entrega.
+- La actualización automática de pedidos usa sondeo periódico; una evolución futura puede utilizar Server-Sent Events o WebSocket.
 - Revisar y corregir vulnerabilidades reportadas por `npm audit --omit=dev`.
 - Incorporar monitoreo y alertas centralizadas.
 - Definir restauración probada de RDS y objetivos RPO/RTO.
@@ -635,3 +647,10 @@ El sistema se considera desplegado para demostración cuando:
 - El dominio público no solicita autenticación de Vercel.
 - El catálogo, sesiones y panel administrativo funcionan desde otro dispositivo.
 - Solo se realizan pagos con credenciales y datos de prueba.
+
+## 15. Historial de revisiones
+
+| Versión | Fecha | Cambios principales |
+|---|---|---|
+| 1.0 | 8 de agosto de 2026 | Documento integral inicial: arquitectura, requisitos RF-01 a RF-29, configuración local y despliegue. |
+| 2.0 | 9 de agosto de 2026 | Promociones individuales y combos, carrusel continuo interactivo, seguimiento automático de pedidos, estadísticas administrativas y procedimiento corregido de Prisma en EC2. |

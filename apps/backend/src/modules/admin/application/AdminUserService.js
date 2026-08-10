@@ -19,16 +19,16 @@ export class AdminUserService {
 
   async setStatus(id, active, actor) {
     if (id === actor.id && !active) throw new AppError("No puedes desactivar tu propia cuenta.", 409, "SELF_DEACTIVATION");
-    const target = await this.#target(id);
+    const target = await this.#target(id, active);
     this.#canManage(target, actor);
     return this.repository.setStatus(id, active, actor.id);
   }
 
   async remove(id, actor) { return this.setStatus(id, false, actor); }
 
-  async #target(id) {
+  async #target(id, allowInactive = false) {
     const user = await this.repository.findById(id);
-    if (!user || user.deletedAt) throw new AppError("Usuario no encontrado.", 404, "USER_NOT_FOUND");
+    if (!user || (user.deletedAt && !allowInactive)) throw new AppError("Usuario no encontrado.", 404, "USER_NOT_FOUND");
     return user;
   }
 
