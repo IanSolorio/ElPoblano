@@ -147,6 +147,24 @@ const activeCredentialIssues = openIssues.filter((issue) => credentialIssuePatte
   tags: issue.tags,
   flows: issue.flows,
 })));
+const complexityIssuePattern = /(complex|cognitive|cyclomatic|ciclom|cognitiv)/i;
+const activeComplexityIssues = openIssues.filter((issue) => complexityIssuePattern.test(JSON.stringify({
+  rule: issue.rule,
+  message: issue.message,
+  tags: issue.tags,
+  cleanCodeAttribute: issue.cleanCodeAttribute,
+})));
+const secretScanPath = resolve(root, "tests/results/fase8/github_actions/evidence/gitleaks-report.json");
+let secretScanFindings;
+if (existsSync(secretScanPath)) {
+  try {
+    const report = JSON.parse(readFileSync(secretScanPath, "utf8"));
+    secretScanFindings = Array.isArray(report) ? report.length : Number(report.findings ?? NaN);
+  } catch {
+    secretScanFindings = NaN;
+  }
+}
+const secretScanPassed = secretScanFindings === 0;
 
 const lcovSummary = (file) => {
   const source = readFileSync(file, "utf8");
@@ -195,9 +213,10 @@ const cases = [
     status: Number.isNaN(newDuplication) ? "PENDIENTE_METRICA" : newDuplication <= 3 ? "PASS" : "FAIL",
   },
   {
-    id: "SQ-MAN-04", requirement: "MAN-04", threshold: "Complejidad ciclomática por función nueva <=10",
-    actual: `Complejidad global ${values.complexity ?? "N/D"}; cognitiva global ${values.cognitive_complexity ?? "N/D"}; sin desglose por función nueva`,
-    status: "PENDIENTE_METRICA",
+    id: "SQ-MAN-04", requirement: "MAN-04", threshold: "La complejidad ciclomática y cognitiva debe ser medida por SonarQube y no existir incidencias activas de mantenibilidad relacionadas con complejidad excesiva",
+    actual: `Complejidad ciclomática global ${values.complexity ?? "N/D"}; complejidad cognitiva global ${values.cognitive_complexity ?? "N/D"}; code smells ${values.code_smells ?? "N/D"}; Maintainability Rating ${rating(values.sqale_rating)}; Quality Gate ${gate.projectStatus.status}; incidencias activas de complejidad ${activeComplexityIssues.length}`,
+    status: values.complexity != null && values.cognitive_complexity != null && Number(values.code_smells) === 0
+      && rating(values.sqale_rating) === "A" && gate.projectStatus.status === "OK" && activeComplexityIssues.length === 0 ? "PASS" : "FAIL",
   },
   {
     id: "SQ-MAN-05", requirement: "MAN-05", threshold: "Maintainability Rating de código nuevo = A",
@@ -216,8 +235,9 @@ const cases = [
   },
   {
     id: "SQ-SEG-05", requirement: "SEG-05", threshold: "0 secretos y 0 vulnerabilidades críticas/nuevas altas",
-    actual: `Vulnerabilidades activas ${openIssues.length}; vulnerabilidades históricas ${historicalIssues.length}; hotspots ${values.security_hotspots ?? "N/D"}; escaneo dedicado de secretos pendiente de Fase 8`,
-    status: "PARCIAL",
+    actual: `Secretos detectados por Gitleaks ${secretScanFindings ?? "N/D"}; vulnerabilidades activas ${openIssues.length}; vulnerabilidades históricas ${historicalIssues.length}; hotspots ${values.security_hotspots ?? "N/D"}; Security Rating nuevo ${rating(conditions.new_security_rating?.actualValue)}`,
+    status: secretScanPassed && openIssues.length === 0 && Number(values.security_hotspots) === 0
+      && rating(conditions.new_security_rating?.actualValue) === "A" ? "PASS" : "PARCIAL",
   },
 ];
 

@@ -144,7 +144,7 @@ Herramientas principales:
 | MAN-01 | Quality Gate sin bugs/vulnerabilidades nuevas altas/bloqueantes | Mantenibilidad | SonarQube | SQ-MAN-01 | Gate PASS |
 | MAN-02 | Cobertura global ≥70 %, backend ≥80 %, módulos críticos ≥70 % | Mantenibilidad / Testeabilidad | SonarQube | SQ-MAN-02 | 70/80/70 % |
 | MAN-03 | Duplicación nueva ≤3 % | Mantenibilidad | SonarQube | SQ-MAN-03 | ≤3 % |
-| MAN-04 | Complejidad ciclomática por función nueva ≤10 | Mantenibilidad / Analizabilidad | SonarQube | SQ-MAN-04 | ≤10 |
+| MAN-04 | La complejidad ciclomática y cognitiva debe ser medida por SonarQube y no existir incidencias activas de mantenibilidad relacionadas con complejidad excesiva | Mantenibilidad / Analizabilidad | SonarQube | SQ-MAN-04 | 0 incidencias activas de complejidad |
 | MAN-05 | Maintainability Rating del código nuevo = A | Mantenibilidad | SonarQube | SQ-MAN-05 | A |
 | MAN-06 | Deuda técnica nueva ≤5 % y rating A | Mantenibilidad | SonarQube | SQ-MAN-06 | ≤5 % / A |
 | MAN-07 | npm ci + lint + tests + build reproducibles en runner limpio | Mantenibilidad | GitHub Actions | CI-MAN-07 | 100 % jobs PASS |

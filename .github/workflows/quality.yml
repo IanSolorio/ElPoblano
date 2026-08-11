@@ -58,6 +58,19 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Escanear secretos con Gitleaks
+        shell: bash
+        run: |
+          mkdir -p tests/results/fase8/github_actions/evidence
+          docker run --rm \
+            -v "$PWD:/repo" \
+            ghcr.io/gitleaks/gitleaks:v8.30.1 \
+            dir /repo \
+            --no-banner \
+            --redact \
+            --report-format json \
+            --report-path /repo/tests/results/fase8/github_actions/evidence/gitleaks-report.json
+
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
@@ -111,6 +124,7 @@ jobs:
             tests/results/fase5/
             tests/results/fase7/sonarqube/evidence/
             tests/results/fase7/sonarqube/results/*.json
+            tests/results/fase8/github_actions/evidence/
             tests/results/trazabilidad/
           if-no-files-found: warn
           retention-days: 30
