@@ -12,7 +12,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
-      reportsDirectory: '../../tests/results/fase7/frontend-coverage',
+      reportsDirectory: '../../tests/results/fase5/unitarias/reports/frontend-coverage',
       include: ['src/**/*.{js,jsx}'],
       exclude: ['src/main.jsx', 'src/shared/config/firebase.js'],
     },

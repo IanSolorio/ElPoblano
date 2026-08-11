@@ -1,0 +1,26 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1786423720951,86,REN01 GET productos,200,OK,25 visitantes 1-2,text,true,,1347,125,2,2,http://127.0.0.1:3301/api/productos,81,0,1
+1786423720829,207,REN01 GET productos,200,OK,25 visitantes 1-1,text,true,,1347,125,2,2,http://127.0.0.1:3301/api/productos,202,0,18
+1786423721145,9,REN01 GET productos,200,OK,25 visitantes 1-3,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,9,0,1
+1786423721345,8,REN01 GET productos,200,OK,25 visitantes 1-4,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,8,0,1
+1786423721547,9,REN01 GET productos,200,OK,25 visitantes 1-5,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,9,0,1
+1786423721746,9,REN01 GET productos,200,OK,25 visitantes 1-6,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,9,0,1
+1786423721947,8,REN01 GET productos,200,OK,25 visitantes 1-7,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,8,0,1
+1786423722148,8,REN01 GET productos,200,OK,25 visitantes 1-8,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,7,0,1
+1786423722351,8,REN01 GET productos,200,OK,25 visitantes 1-9,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,8,0,1
+1786423722551,8,REN01 GET productos,200,OK,25 visitantes 1-10,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,8,0,1
+1786423722753,7,REN01 GET productos,200,OK,25 visitantes 1-11,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,7,0,1
+1786423722954,6,REN01 GET productos,200,OK,25 visitantes 1-12,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,6,0,1
+1786423723154,7,REN01 GET productos,200,OK,25 visitantes 1-13,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,7,0,1
+1786423723356,6,REN01 GET productos,200,OK,25 visitantes 1-14,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,6,0,0
+1786423723541,6,REN01 GET productos,200,OK,25 visitantes 1-15,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,6,0,1
+1786423723747,8,REN01 GET productos,200,OK,25 visitantes 1-16,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,8,0,1
+1786423723941,8,REN01 GET productos,200,OK,25 visitantes 1-17,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,8,0,1
+1786423724149,8,REN01 GET productos,200,OK,25 visitantes 1-18,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,8,0,1
+1786423724348,7,REN01 GET productos,200,OK,25 visitantes 1-19,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,7,0,1
+1786423724543,8,REN01 GET productos,200,OK,25 visitantes 1-20,text,true,,1347,125,1,1,http://127.0.0.1:3301/api/productos,8,0,1
+1786423724747,7,REN01 GET productos,200,OK,25 visitantes 1-21,text,true,,1346,125,1,1,http://127.0.0.1:3301/api/productos,7,0,1
+1786423724944,8,REN01 GET productos,200,OK,25 visitantes 1-22,text,true,,1346,125,1,1,http://127.0.0.1:3301/api/productos,8,0,1
+1786423725147,8,REN01 GET productos,200,OK,25 visitantes 1-23,text,true,,1346,125,1,1,http://127.0.0.1:3301/api/productos,8,0,1
+1786423725342,7,REN01 GET productos,200,OK,25 visitantes 1-24,text,true,,1346,125,1,1,http://127.0.0.1:3301/api/productos,7,0,1
+1786423725554,7,REN01 GET productos,200,OK,25 visitantes 1-25,text,true,,1346,125,1,1,http://127.0.0.1:3301/api/productos,7,0,1

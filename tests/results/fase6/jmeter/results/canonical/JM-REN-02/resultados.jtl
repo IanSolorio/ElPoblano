@@ -1,0 +1,16 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1786423762723,259,REN02 POST login,200,OK,15 clientes 1-1,text,true,,1917,272,2,2,http://127.0.0.1:3301/api/auth/login,258,0,19
+1786423762975,71,REN02 POST login,200,OK,15 clientes 1-2,text,true,,1917,272,1,1,http://127.0.0.1:3301/api/auth/login,71,0,1
+1786423763309,68,REN02 POST login,200,OK,15 clientes 1-3,text,true,,1917,272,1,1,http://127.0.0.1:3301/api/auth/login,68,0,1
+1786423763641,66,REN02 POST login,200,OK,15 clientes 1-4,text,true,,1917,272,1,1,http://127.0.0.1:3301/api/auth/login,66,0,0
+1786423763973,70,REN02 POST login,200,OK,15 clientes 1-5,text,true,,1917,272,1,1,http://127.0.0.1:3301/api/auth/login,70,0,1
+1786423764305,63,REN02 POST login,200,OK,15 clientes 1-6,text,true,,1917,272,1,1,http://127.0.0.1:3301/api/auth/login,63,0,0
+1786423764638,66,REN02 POST login,200,OK,15 clientes 1-7,text,true,,1917,272,1,1,http://127.0.0.1:3301/api/auth/login,66,0,1
+1786423764970,73,REN02 POST login,200,OK,15 clientes 1-8,text,true,,1917,272,1,1,http://127.0.0.1:3301/api/auth/login,72,0,0
+1786423765304,67,REN02 POST login,200,OK,15 clientes 1-9,text,true,,1917,272,1,1,http://127.0.0.1:3301/api/auth/login,67,0,1
+1786423765636,73,REN02 POST login,200,OK,15 clientes 1-10,text,true,,1919,273,1,1,http://127.0.0.1:3301/api/auth/login,73,0,1
+1786423765969,75,REN02 POST login,200,OK,15 clientes 1-11,text,true,,1918,273,1,1,http://127.0.0.1:3301/api/auth/login,74,0,1
+1786423766300,64,REN02 POST login,200,OK,15 clientes 1-12,text,true,,1918,273,1,1,http://127.0.0.1:3301/api/auth/login,63,0,1
+1786423766634,64,REN02 POST login,200,OK,15 clientes 1-13,text,true,,1918,273,1,1,http://127.0.0.1:3301/api/auth/login,64,0,1
+1786423766967,72,REN02 POST login,200,OK,15 clientes 1-14,text,true,,1918,273,1,1,http://127.0.0.1:3301/api/auth/login,72,0,1
+1786423767297,63,REN02 POST login,200,OK,15 clientes 1-15,text,true,,1918,273,1,1,http://127.0.0.1:3301/api/auth/login,62,0,0

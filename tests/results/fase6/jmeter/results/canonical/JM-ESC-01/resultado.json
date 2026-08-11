@@ -1,0 +1,105 @@
+{
+  "id": "JM-ESC-01",
+  "status": "PASS",
+  "profile": "smoke",
+  "executedAt": "2026-08-11T04:55:38.144Z",
+  "criterion": "5→25 usuarios; errores < 1 %; degradación p95 <= 3x",
+  "elapsedSeconds": 164.47,
+  "metrics": [
+    {
+      "label": "ESC01 GET productos",
+      "samples": 15,
+      "p95Ms": 366,
+      "errorPct": 0,
+      "throughput": 9.8
+    },
+    {
+      "label": "ESC01 GET productos",
+      "samples": 30,
+      "p95Ms": 146.1,
+      "errorPct": 0,
+      "throughput": 17.26
+    },
+    {
+      "label": "ESC01 GET productos",
+      "samples": 45,
+      "p95Ms": 151.1,
+      "errorPct": 0,
+      "throughput": 25.25
+    },
+    {
+      "label": "ESC01 GET productos",
+      "samples": 60,
+      "p95Ms": 130.75,
+      "errorPct": 0,
+      "throughput": 32.84
+    },
+    {
+      "label": "ESC01 GET productos",
+      "samples": 75,
+      "p95Ms": 100.2,
+      "errorPct": 0,
+      "throughput": 40.61
+    }
+  ],
+  "stageMetrics": [
+    {
+      "stage": 5,
+      "label": "ESC01 GET productos",
+      "samples": 15,
+      "p95Ms": 366,
+      "errorPct": 0,
+      "throughput": 9.8
+    },
+    {
+      "stage": 10,
+      "label": "ESC01 GET productos",
+      "samples": 30,
+      "p95Ms": 146.1,
+      "errorPct": 0,
+      "throughput": 17.26
+    },
+    {
+      "stage": 15,
+      "label": "ESC01 GET productos",
+      "samples": 45,
+      "p95Ms": 151.1,
+      "errorPct": 0,
+      "throughput": 25.25
+    },
+    {
+      "stage": 20,
+      "label": "ESC01 GET productos",
+      "samples": 60,
+      "p95Ms": 130.75,
+      "errorPct": 0,
+      "throughput": 32.84
+    },
+    {
+      "stage": 25,
+      "label": "ESC01 GET productos",
+      "samples": 75,
+      "p95Ms": 100.2,
+      "errorPct": 0,
+      "throughput": 40.61
+    }
+  ],
+  "oracle": {
+    "passed": true,
+    "details": "El escenario no requiere mutaciones persistentes."
+  },
+  "evidenceFound": true,
+  "selection": {
+    "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+    "priority": 300,
+    "sourceRun": "2026-08-11T04-47-44-008Z",
+    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T04-47-44-008Z/JM-ESC-01/resultado.json",
+    "jtlFiles": [
+      "tests/results/fase6/jmeter/results/canonical/JM-ESC-01/jtl/10-usuarios/resultados.jtl",
+      "tests/results/fase6/jmeter/results/canonical/JM-ESC-01/jtl/15-usuarios/resultados.jtl",
+      "tests/results/fase6/jmeter/results/canonical/JM-ESC-01/jtl/20-usuarios/resultados.jtl",
+      "tests/results/fase6/jmeter/results/canonical/JM-ESC-01/jtl/25-usuarios/resultados.jtl",
+      "tests/results/fase6/jmeter/results/canonical/JM-ESC-01/jtl/5-usuarios/resultados.jtl"
+    ]
+  }
+}

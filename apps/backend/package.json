@@ -9,7 +9,6 @@
     "lint": "eslint src tests",
     "test": "npm run test:unit",
     "test:unit": "node --test \"tests/*.test.js\"",
-    "test:unit:evidence": "node scripts/runUnitEvidence.js",
     "test:integration": "node --test --test-concurrency=1 \"tests/integration/*.integration.test.js\"",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",

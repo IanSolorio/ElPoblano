@@ -15,16 +15,17 @@
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "test:integration": "npm run test:integration -w @elpoblano/backend",
+    "test:phase5": "node scripts/runPhase5.js",
     "test:frontend": "npm run test -w @elpoblano/frontend",
     "test:frontend:coverage": "npm run test:coverage -w @elpoblano/frontend",
-    "test:system:prepare": "node scripts/prepareSystemTestEvidence.js",
-    "test:acceptance:prepare": "node scripts/prepareAcceptanceEvidence.js",
     "test:selenium": "node scripts/runSeleniumEvidence.js",
-    "test:load": "node scripts/runJMeterEvidence.js",
+    "test:jmeter": "node scripts/runJMeterPhase6.js",
     "test:ec2": "bash scripts/runEc2SystemTests.sh",
     "sonar:prepare": "node scripts/prepareSonarCoverage.js",
     "sonar:analyze": "node scripts/runSonarAnalysis.js",
-    "sonar:collect": "node scripts/runSonarAnalysis.js --collect-only"
+    "sonar:collect": "node scripts/runSonarAnalysis.js --collect-only",
+    "quality:consolidate": "node scripts/consolidateQualityResults.js",
+    "quality:jmeter:consolidate": "node scripts/consolidateJMeterEvidence.js"
   },
   "devDependencies": {
     "@sonar/scan": "^5.0.0",

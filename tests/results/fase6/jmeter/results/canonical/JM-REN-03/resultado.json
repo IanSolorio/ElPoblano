@@ -1,0 +1,31 @@
+{
+  "id": "JM-REN-03",
+  "status": "PASS",
+  "profile": "smoke",
+  "executedAt": "2026-08-11T05:04:56.329Z",
+  "criterion": "10 creaciones concurrentes; p95 <= 2 s; persistencia íntegra",
+  "elapsedSeconds": 32.61,
+  "metrics": [
+    {
+      "label": "REN03 POST pedido",
+      "samples": 10,
+      "p95Ms": 675,
+      "errorPct": 0,
+      "throughput": 14.79
+    }
+  ],
+  "oracle": {
+    "passed": true,
+    "details": "Pedidos=10; pagos=10; auditorías=10; stock=90"
+  },
+  "evidenceFound": true,
+  "selection": {
+    "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+    "priority": 300,
+    "sourceRun": "2026-08-11T05-04-18-366Z",
+    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T05-04-18-366Z/JM-REN-03/resultado.json",
+    "jtlFiles": [
+      "tests/results/fase6/jmeter/results/canonical/JM-REN-03/resultados.jtl"
+    ]
+  }
+}

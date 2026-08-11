@@ -4,7 +4,7 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
-RESULT_DIR="${REPO_DIR}/tests/results/fase5/ec2"
+RESULT_DIR="${REPO_DIR}/tests/results/fase5/sistema/reports"
 RESULT_FILE="${RESULT_DIR}/ejecucion-ec2.csv"
 STATE_FILE="${RESULT_DIR}/.reboot-state"
 API_HOST="${ELPOBLANO_API_HOST:-elpoblano-api.duckdns.org}"

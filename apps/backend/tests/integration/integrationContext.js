@@ -62,12 +62,12 @@ export const seedFixture = async () => {
   const superAdmin = await prisma.user.create({ data: { email: "super@test.local", passwordHash, firstName: "Super", lastName: "Admin", role: "SUPER_ADMIN" } });
   const admin = await prisma.user.create({ data: { email: "admin@test.local", passwordHash, firstName: "Ana", lastName: "Admin", role: "ADMIN" } });
   const customer = await prisma.user.create({ data: { email: "cliente@test.local", passwordHash, firstName: "Carlos", lastName: "Cliente", role: "CUSTOMER", phone: "999111222", addresses: { create: { label: "Casa", addressLine: "Av. Pruebas 123", latitude: -12.0464, longitude: -77.0428, isDefault: true } } } });
-  const inactiveCustomer = await prisma.user.create({ data: { email: "inactivo@test.local", passwordHash, firstName: "Inés", lastName: "Inactiva", role: "CUSTOMER", active: false, deletedAt: new Date() } });
+  const inactiveCustomer = await prisma.user.create({ data: { email: "inactivo@test.local", passwordHash, firstName: "Inés", lastName: "Inactiva", role: "CUSTOMER", active: false } });
   /*
     prisma.user.create({ data: { email: "super@test.local", passwordHash, firstName: "Super", lastName: "Admin", role: "SUPER_ADMIN" } }),
     prisma.user.create({ data: { email: "admin@test.local", passwordHash, firstName: "Ana", lastName: "Admin", role: "ADMIN" } }),
     prisma.user.create({ data: { email: "cliente@test.local", passwordHash, firstName: "Carlos", lastName: "Cliente", role: "CUSTOMER", phone: "999111222", addresses: { create: { label: "Casa", addressLine: "Av. Pruebas 123", latitude: -12.0464, longitude: -77.0428, isDefault: true } } } }),
-    prisma.user.create({ data: { email: "inactivo@test.local", passwordHash, firstName: "Inés", lastName: "Inactiva", role: "CUSTOMER", active: false, deletedAt: new Date() } }),
+    prisma.user.create({ data: { email: "inactivo@test.local", passwordHash, firstName: "Inés", lastName: "Inactiva", role: "CUSTOMER", active: false } }),
   ]); */
   const category = await prisma.category.create({ data: { name: "Tacos", slug: "tacos-test", active: true } });
   const inactiveCategory = await prisma.category.create({ data: { name: "Oculta", slug: "oculta-test", active: false } });

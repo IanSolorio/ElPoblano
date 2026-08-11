@@ -47,7 +47,7 @@ test("UT-PAY-08: aprobación actualiza pago y confirma el pedido", async () => {
 
 test("UT-PAY-09: rechazo cancela y restituye inventario exactamente una vez", async () => {
   let status = "PENDING"; let returns = 0; const existing = order({ items: [{ productId: "p1", quantity: 2, unitPrice: 10, subtotal: 20 }], subtotal: 20, deliveryFee: 0 });
-  const tx = { order: { findUnique: async () => ({ ...existing, status }), update: async ({ data }) => { status = data.status; }, }, payment: { update: async () => {} }, product: { update: async () => { returns += 1; } }, inventoryMovement: { createMany: async () => {} }, auditLog: { create: async () => {} } };
+  const tx = { order: { findUnique: async () => ({ ...existing, status }), update: async ({ data }) => { status = data.status; }, updateMany: async ({ where, data }) => { if (status !== where.status) return { count: 0 }; status = data.status; return { count: 1 }; } }, payment: { update: async () => {} }, product: { update: async () => { returns += 1; } }, inventoryMovement: { createMany: async () => {} }, auditLog: { create: async () => {} } };
   const repository = new PrismaOrderRepository({ $transaction: async (callback) => callback(tx) }); await repository.updatePaymentFromProvider(existing.id, { id: "mp-1", status: "REJECTED", method: "CREDIT_CARD" }); await repository.updatePaymentFromProvider(existing.id, { id: "mp-1", status: "REJECTED", method: "CREDIT_CARD" });
   assert.equal(status, "CANCELLED"); assert.equal(returns, 1);
 });

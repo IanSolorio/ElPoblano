@@ -1,0 +1,129 @@
+name: Calidad continua
+
+on:
+  push:
+    branches:
+      - main
+      - developer
+  pull_request:
+    branches:
+      - main
+      - developer
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test-sonar:
+    name: Build, pruebas y SonarQube
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root_test_password
+          MYSQL_DATABASE: elpoblano_test
+          MYSQL_USER: elpoblano_test
+          MYSQL_PASSWORD: elpoblano_test_password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot_test_password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      NODE_ENV: test
+      DATABASE_URL: mysql://elpoblano_test:elpoblano_test_password@127.0.0.1:3306/elpoblano_test
+      TEST_DATABASE_URL: mysql://elpoblano_test:elpoblano_test_password@127.0.0.1:3306/elpoblano_test
+      FRONTEND_ORIGIN: http://integration.test
+      PAYMENT_PROVIDER_MODE: stub
+      VITE_ENDPOINT_BASE: /api
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+      SONAR_ORGANIZATION: ${{ vars.SONAR_ORGANIZATION }}
+      SONAR_PROJECT_KEY: ${{ vars.SONAR_PROJECT_KEY }}
+
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+
+      - name: Instalar dependencias reproducibles
+        run: npm ci
+
+      - name: Generar Prisma Client
+        run: npm run db:generate -w @elpoblano/backend
+
+      - name: Inicializar MySQL mediante migraciones
+        run: npm run db:deploy -w @elpoblano/backend
+
+      - name: Analizar estilo y errores estáticos
+        run: npm run lint
+
+      - name: Compilar frontend
+        run: npm run build
+
+      - name: Ejecutar y consolidar Fase 5
+        run: npm run test:phase5
+
+      - name: Verificar configuración de SonarQube
+        shell: bash
+        run: |
+          test -n "$SONAR_TOKEN" || { echo "Falta el secret SONAR_TOKEN"; exit 1; }
+          test -n "$SONAR_HOST_URL" || { echo "Falta la variable SONAR_HOST_URL"; exit 1; }
+          test -n "$SONAR_ORGANIZATION" || { echo "Falta la variable SONAR_ORGANIZATION"; exit 1; }
+          test -n "$SONAR_PROJECT_KEY" || { echo "Falta la variable SONAR_PROJECT_KEY"; exit 1; }
+
+      - name: Analizar y verificar Quality Gate en SonarQube Cloud
+        run: npm run sonar:analyze
+
+      - name: Publicar build del frontend
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build-${{ github.run_number }}
+          path: dist/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Publicar reportes de calidad
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reportes-calidad-${{ github.run_number }}
+          path: |
+            tests/results/fase5/
+            tests/results/fase7/sonarqube/evidence/
+            tests/results/fase7/sonarqube/results/*.json
+            tests/results/trazabilidad/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Resumen de la ejecución
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "# Pipeline de calidad — El Poblano"
+            echo
+            echo "- Commit: \`${GITHUB_SHA}\`"
+            echo "- Rama o referencia: \`${GITHUB_REF_NAME}\`"
+            echo "- Resultado del job: **${{ job.status }}**"
+            echo "- Evidencias: artefacto \`reportes-calidad-${{ github.run_number }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -32,9 +32,18 @@ export class PrismaAdminUserRepository {
 
   async setStatus(id, active, actorId) {
     return this.prisma.$transaction(async (transaction) => {
-      const user = await transaction.user.update({ where: { id }, data: { active, deletedAt: active ? null : new Date() } });
+      const user = await transaction.user.update({ where: { id }, data: { active } });
       if (!active) await transaction.session.updateMany({ where: { userId: id, revokedAt: null }, data: { revokedAt: new Date() } });
       await transaction.auditLog.create({ data: { userId: actorId, action: active ? "USER_ACTIVATED" : "USER_DEACTIVATED", entity: "User", entityId: id } });
+      return publicUser(user);
+    });
+  }
+
+  async remove(id, actorId) {
+    return this.prisma.$transaction(async (transaction) => {
+      const user = await transaction.user.update({ where: { id }, data: { active: false, deletedAt: new Date() } });
+      await transaction.session.updateMany({ where: { userId: id, revokedAt: null }, data: { revokedAt: new Date() } });
+      await transaction.auditLog.create({ data: { userId: actorId, action: "USER_DELETED", entity: "User", entityId: id } });
       return publicUser(user);
     });
   }

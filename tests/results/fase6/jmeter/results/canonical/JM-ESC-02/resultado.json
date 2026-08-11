@@ -1,0 +1,31 @@
+{
+  "id": "JM-ESC-02",
+  "status": "PASS",
+  "profile": "formal",
+  "executedAt": "2026-08-11T05:25:22.922Z",
+  "criterion": "Dataset de al menos 100 pedidos; 25 usuarios x 3; p95 <= 2 s",
+  "elapsedSeconds": 35.7,
+  "metrics": [
+    {
+      "label": "ESC02 GET 100 pedidos",
+      "samples": 75,
+      "p95Ms": 111.4,
+      "errorPct": 0,
+      "throughput": 15.77
+    }
+  ],
+  "oracle": {
+    "passed": true,
+    "details": "Pedidos sintéticos=100"
+  },
+  "evidenceFound": true,
+  "selection": {
+    "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+    "priority": 400,
+    "sourceRun": "2026-08-11T05-24-41-647Z",
+    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T05-24-41-647Z/JM-ESC-02/resultado.json",
+    "jtlFiles": [
+      "tests/results/fase6/jmeter/results/canonical/JM-ESC-02/resultados.jtl"
+    ]
+  }
+}

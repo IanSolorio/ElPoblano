@@ -922,6 +922,7 @@ body {
 
 @media (max-width: 767px) {
   .home-promotions__track .home-promo-card { flex-basis: 100%; }
+  .home-promotions__viewport { margin-inline: 0; padding-inline: 0; }
   .home-promotions__actions { align-items: flex-end; flex-direction: column; }
   .home-hero__container {
     padding-bottom: 3.5rem;

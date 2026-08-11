@@ -1,0 +1,585 @@
+{
+  "runId": "canonical",
+  "profile": "mixed",
+  "consolidatedThrough": "2026-08-11T05:44:22.580Z",
+  "complete": true,
+  "expectedCases": 14,
+  "evidencedCases": 14,
+  "databaseNames": [
+    "elpoblano_test"
+  ],
+  "selectionRule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+  "outcomes": [
+    {
+      "id": "JM-SEG-06",
+      "status": "PASS",
+      "profile": "smoke",
+      "executedAt": "2026-08-11T04:48:19.811Z",
+      "criterion": "120 solicitudes permitidas y 100 % de excesos con HTTP 429",
+      "elapsedSeconds": 30.55,
+      "metrics": [
+        {
+          "label": "SEG06 permitida",
+          "samples": 120,
+          "p95Ms": 4,
+          "errorPct": 0,
+          "throughput": 282.35
+        },
+        {
+          "label": "SEG06 exceso 429",
+          "samples": 10,
+          "p95Ms": 4,
+          "errorPct": 0,
+          "throughput": 19.53
+        }
+      ],
+      "oracle": {
+        "passed": true,
+        "details": "El escenario no requiere mutaciones persistentes."
+      },
+      "evidenceFound": true,
+      "selection": {
+        "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+        "priority": 300,
+        "sourceRun": "2026-08-11T04-47-44-008Z",
+        "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T04-47-44-008Z/JM-SEG-06/resultado.json",
+        "jtlFiles": [
+          "tests/results/fase6/jmeter/results/canonical/JM-SEG-06/resultados.jtl"
+        ]
+      }
+    },
+    {
+      "id": "JM-REN-01",
+      "status": "PASS",
+      "profile": "smoke",
+      "executedAt": "2026-08-11T04:48:59.939Z",
+      "criterion": "25 usuarios; p95 <= 800 ms; errores < 1 %",
+      "elapsedSeconds": 35.28,
+      "metrics": [
+        {
+          "label": "REN01 GET productos",
+          "samples": 25,
+          "p95Ms": 170.7,
+          "errorPct": 0,
+          "throughput": 5.28
+        }
+      ],
+      "oracle": {
+        "passed": true,
+        "details": "El escenario no requiere mutaciones persistentes."
+      },
+      "evidenceFound": true,
+      "selection": {
+        "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+        "priority": 300,
+        "sourceRun": "2026-08-11T04-47-44-008Z",
+        "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T04-47-44-008Z/JM-REN-01/resultado.json",
+        "jtlFiles": [
+          "tests/results/fase6/jmeter/results/canonical/JM-REN-01/resultados.jtl"
+        ]
+      }
+    },
+    {
+      "id": "JM-REN-02",
+      "status": "PASS",
+      "profile": "smoke",
+      "executedAt": "2026-08-11T04:49:41.726Z",
+      "criterion": "15 usuarios distintos; p95 <= 1.5 s; errores < 1 %",
+      "elapsedSeconds": 36.52,
+      "metrics": [
+        {
+          "label": "REN02 POST login",
+          "samples": 15,
+          "p95Ms": 259,
+          "errorPct": 0,
+          "throughput": 3.23
+        }
+      ],
+      "oracle": {
+        "passed": true,
+        "details": "Sesiones nuevas=15; auditorías login=15"
+      },
+      "evidenceFound": true,
+      "selection": {
+        "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+        "priority": 300,
+        "sourceRun": "2026-08-11T04-47-44-008Z",
+        "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T04-47-44-008Z/JM-REN-02/resultado.json",
+        "jtlFiles": [
+          "tests/results/fase6/jmeter/results/canonical/JM-REN-02/resultados.jtl"
+        ]
+      }
+    },
+    {
+      "id": "JM-REN-03",
+      "status": "PASS",
+      "profile": "smoke",
+      "executedAt": "2026-08-11T05:04:56.329Z",
+      "criterion": "10 creaciones concurrentes; p95 <= 2 s; persistencia íntegra",
+      "elapsedSeconds": 32.61,
+      "metrics": [
+        {
+          "label": "REN03 POST pedido",
+          "samples": 10,
+          "p95Ms": 675,
+          "errorPct": 0,
+          "throughput": 14.79
+        }
+      ],
+      "oracle": {
+        "passed": true,
+        "details": "Pedidos=10; pagos=10; auditorías=10; stock=90"
+      },
+      "evidenceFound": true,
+      "selection": {
+        "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+        "priority": 300,
+        "sourceRun": "2026-08-11T05-04-18-366Z",
+        "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T05-04-18-366Z/JM-REN-03/resultado.json",
+        "jtlFiles": [
+          "tests/results/fase6/jmeter/results/canonical/JM-REN-03/resultados.jtl"
+        ]
+      }
+    },
+    {
+      "id": "JM-REN-05",
+      "status": "PASS",
+      "profile": "smoke",
+      "executedAt": "2026-08-11T04:50:42.490Z",
+      "criterion": "Todos los listados paginados devuelven <= 50; limit=51 se rechaza",
+      "elapsedSeconds": 30.67,
+      "metrics": [
+        {
+          "label": "REN05 historial cliente",
+          "samples": 1,
+          "p95Ms": 256,
+          "errorPct": 0,
+          "throughput": 3.91
+        },
+        {
+          "label": "REN05 pedidos admin",
+          "samples": 1,
+          "p95Ms": 29,
+          "errorPct": 0,
+          "throughput": 34.48
+        },
+        {
+          "label": "REN05 usuarios admin",
+          "samples": 1,
+          "p95Ms": 20,
+          "errorPct": 0,
+          "throughput": 50
+        },
+        {
+          "label": "REN05 rechaza limit 51",
+          "samples": 1,
+          "p95Ms": 10,
+          "errorPct": 0,
+          "throughput": 100
+        }
+      ],
+      "oracle": {
+        "passed": true,
+        "details": "Dataset conserva 60 pedidos y al menos 60 usuarios."
+      },
+      "evidenceFound": true,
+      "selection": {
+        "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+        "priority": 300,
+        "sourceRun": "2026-08-11T04-47-44-008Z",
+        "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T04-47-44-008Z/JM-REN-05/resultado.json",
+        "jtlFiles": [
+          "tests/results/fase6/jmeter/results/canonical/JM-REN-05/resultados.jtl"
+        ]
+      }
+    },
+    {
+      "id": "JM-DIS-01",
+      "status": "PASS",
+      "profile": "formal",
+      "executedAt": "2026-08-11T05:44:22.580Z",
+      "criterion": "5 minutos de carga sostenida y disponibilidad observada >= 99 %",
+      "elapsedSeconds": 328.44,
+      "metrics": [
+        {
+          "label": "DIS01 GET frontend",
+          "samples": 246,
+          "p95Ms": 5,
+          "errorPct": 0,
+          "throughput": 0.84
+        },
+        {
+          "label": "DIS01 GET productos",
+          "samples": 240,
+          "p95Ms": 8,
+          "errorPct": 0,
+          "throughput": 0.84
+        }
+      ],
+      "oracle": {
+        "passed": true,
+        "details": "El escenario no requiere mutaciones persistentes."
+      },
+      "evidenceFound": true,
+      "selection": {
+        "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+        "priority": 400,
+        "sourceRun": "2026-08-11T05-38-39-174Z",
+        "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T05-38-39-174Z/JM-DIS-01/resultado.json",
+        "jtlFiles": [
+          "tests/results/fase6/jmeter/results/canonical/JM-DIS-01/resultados.jtl"
+        ]
+      }
+    },
+    {
+      "id": "JM-DIS-03",
+      "status": "PENDIENTE_FORMAL",
+      "profile": "smoke",
+      "executedAt": "2026-08-11T04:52:28.691Z",
+      "criterion": "/health y /ready responden 100 % correctamente bajo carga",
+      "elapsedSeconds": 47.16,
+      "metrics": [
+        {
+          "label": "DIS03 carga productos",
+          "samples": 38,
+          "p95Ms": 22,
+          "errorPct": 0,
+          "throughput": 2.76
+        },
+        {
+          "label": "DIS03 GET health",
+          "samples": 7,
+          "p95Ms": 77,
+          "errorPct": 0,
+          "throughput": 0.57
+        },
+        {
+          "label": "DIS03 GET ready",
+          "samples": 7,
+          "p95Ms": 8,
+          "errorPct": 0,
+          "throughput": 0.57
+        }
+      ],
+      "oracle": {
+        "passed": true,
+        "details": "El escenario no requiere mutaciones persistentes."
+      },
+      "evidenceFound": true,
+      "selection": {
+        "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+        "priority": 200,
+        "sourceRun": "2026-08-11T04-47-44-008Z",
+        "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T04-47-44-008Z/JM-DIS-03/resultado.json",
+        "jtlFiles": [
+          "tests/results/fase6/jmeter/results/canonical/JM-DIS-03/resultados.jtl"
+        ]
+      }
+    },
+    {
+      "id": "JM-ESC-01",
+      "status": "PASS",
+      "profile": "smoke",
+      "executedAt": "2026-08-11T04:55:38.144Z",
+      "criterion": "5→25 usuarios; errores < 1 %; degradación p95 <= 3x",
+      "elapsedSeconds": 164.47,
+      "metrics": [
+        {
+          "label": "ESC01 GET productos",
+          "samples": 15,
+          "p95Ms": 366,
+          "errorPct": 0,
+          "throughput": 9.8
+        },
+        {
+          "label": "ESC01 GET productos",
+          "samples": 30,
+          "p95Ms": 146.1,
+          "errorPct": 0,
+          "throughput": 17.26
+        },
+        {
+          "label": "ESC01 GET productos",
+          "samples": 45,
+          "p95Ms": 151.1,
+          "errorPct": 0,
+          "throughput": 25.25
+        },
+        {
+          "label": "ESC01 GET productos",
+          "samples": 60,
+          "p95Ms": 130.75,
+          "errorPct": 0,
+          "throughput": 32.84
+        },
+        {
+          "label": "ESC01 GET productos",
+          "samples": 75,
+          "p95Ms": 100.2,
+          "errorPct": 0,
+          "throughput": 40.61
+        }
+      ],
+      "stageMetrics": [
+        {
+          "stage": 5,
+          "label": "ESC01 GET productos",
+          "samples": 15,
+          "p95Ms": 366,
+          "errorPct": 0,
+          "throughput": 9.8
+        },
+        {
+          "stage": 10,
+          "label": "ESC01 GET productos",
+          "samples": 30,
+          "p95Ms": 146.1,
+          "errorPct": 0,
+          "throughput": 17.26
+        },
+        {
+          "stage": 15,
+          "label": "ESC01 GET productos",
+          "samples": 45,
+          "p95Ms": 151.1,
+          "errorPct": 0,
+          "throughput": 25.25
+        },
+        {
+          "stage": 20,
+          "label": "ESC01 GET productos",
+          "samples": 60,
+          "p95Ms": 130.75,
+          "errorPct": 0,
+          "throughput": 32.84
+        },
+        {
+          "stage": 25,
+          "label": "ESC01 GET productos",
+          "samples": 75,
+          "p95Ms": 100.2,
+          "errorPct": 0,
+          "throughput": 40.61
+        }
+      ],
+      "oracle": {
+        "passed": true,
+        "details": "El escenario no requiere mutaciones persistentes."
+      },
+      "evidenceFound": true,
+      "selection": {
+        "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+        "priority": 300,
+        "sourceRun": "2026-08-11T04-47-44-008Z",
+        "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T04-47-44-008Z/JM-ESC-01/resultado.json",
+        "jtlFiles": [
+          "tests/results/fase6/jmeter/results/canonical/JM-ESC-01/jtl/10-usuarios/resultados.jtl",
+          "tests/results/fase6/jmeter/results/canonical/JM-ESC-01/jtl/15-usuarios/resultados.jtl",
+          "tests/results/fase6/jmeter/results/canonical/JM-ESC-01/jtl/20-usuarios/resultados.jtl",
+          "tests/results/fase6/jmeter/results/canonical/JM-ESC-01/jtl/25-usuarios/resultados.jtl",
+          "tests/results/fase6/jmeter/results/canonical/JM-ESC-01/jtl/5-usuarios/resultados.jtl"
+        ]
+      }
+    },
+    {
+      "id": "JM-ESC-02",
+      "status": "PASS",
+      "profile": "formal",
+      "executedAt": "2026-08-11T05:25:22.922Z",
+      "criterion": "Dataset de al menos 100 pedidos; 25 usuarios x 3; p95 <= 2 s",
+      "elapsedSeconds": 35.7,
+      "metrics": [
+        {
+          "label": "ESC02 GET 100 pedidos",
+          "samples": 75,
+          "p95Ms": 111.4,
+          "errorPct": 0,
+          "throughput": 15.77
+        }
+      ],
+      "oracle": {
+        "passed": true,
+        "details": "Pedidos sintéticos=100"
+      },
+      "evidenceFound": true,
+      "selection": {
+        "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+        "priority": 400,
+        "sourceRun": "2026-08-11T05-24-41-647Z",
+        "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T05-24-41-647Z/JM-ESC-02/resultado.json",
+        "jtlFiles": [
+          "tests/results/fase6/jmeter/results/canonical/JM-ESC-02/resultados.jtl"
+        ]
+      }
+    },
+    {
+      "id": "JM-CON-01",
+      "status": "PASS",
+      "profile": "smoke",
+      "executedAt": "2026-08-11T05:02:42.198Z",
+      "criterion": "10 solicitudes con la misma clave generan exactamente 1 pedido",
+      "elapsedSeconds": 30.35,
+      "metrics": [
+        {
+          "label": "CON01 POST misma clave",
+          "samples": 10,
+          "p95Ms": 467,
+          "errorPct": 0,
+          "throughput": 21.41
+        }
+      ],
+      "oracle": {
+        "passed": true,
+        "details": "Pedidos=1; stock=99; movimientos=1; auditorías=1"
+      },
+      "evidenceFound": true,
+      "selection": {
+        "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+        "priority": 300,
+        "sourceRun": "2026-08-11T05-00-47-072Z",
+        "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T05-00-47-072Z/JM-CON-01/resultado.json",
+        "jtlFiles": [
+          "tests/results/fase6/jmeter/results/canonical/JM-CON-01/resultados.jtl"
+        ]
+      }
+    },
+    {
+      "id": "JM-CON-02",
+      "status": "PASS",
+      "profile": "smoke",
+      "executedAt": "2026-08-11T05:03:18.280Z",
+      "criterion": "5 éxitos y 5 rechazos por stock; stock final 0, nunca negativo",
+      "elapsedSeconds": 30.9,
+      "metrics": [
+        {
+          "label": "CON02 POST stock limitado",
+          "samples": 10,
+          "p95Ms": 435,
+          "errorPct": 0,
+          "throughput": 22.94
+        }
+      ],
+      "oracle": {
+        "passed": true,
+        "details": "Stock=0; pedidos=5; movimientos=5; suma=-5"
+      },
+      "evidenceFound": true,
+      "selection": {
+        "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+        "priority": 300,
+        "sourceRun": "2026-08-11T05-00-47-072Z",
+        "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T05-00-47-072Z/JM-CON-02/resultado.json",
+        "jtlFiles": [
+          "tests/results/fase6/jmeter/results/canonical/JM-CON-02/resultados.jtl"
+        ]
+      }
+    },
+    {
+      "id": "JM-CON-03",
+      "status": "PASS",
+      "profile": "smoke",
+      "executedAt": "2026-08-11T04:57:57.135Z",
+      "criterion": "Fallo controlado posterior a escrituras no deja estado parcial",
+      "elapsedSeconds": 32.06,
+      "metrics": [
+        {
+          "label": "CON03 POST fallo controlado",
+          "samples": 1,
+          "p95Ms": 334,
+          "errorPct": 0,
+          "throughput": 2.99
+        }
+      ],
+      "oracle": {
+        "passed": true,
+        "details": "Stock=10; pedidos=0; movimientos=0; pagos/items=0"
+      },
+      "evidenceFound": true,
+      "selection": {
+        "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+        "priority": 300,
+        "sourceRun": "2026-08-11T04-47-44-008Z",
+        "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T04-47-44-008Z/JM-CON-03/resultado.json",
+        "jtlFiles": [
+          "tests/results/fase6/jmeter/results/canonical/JM-CON-03/resultados.jtl"
+        ]
+      }
+    },
+    {
+      "id": "JM-CON-04",
+      "status": "PASS",
+      "profile": "smoke",
+      "executedAt": "2026-08-11T05:03:55.515Z",
+      "criterion": "Duplicados/desordenados no duplican ni degradan una aprobación",
+      "elapsedSeconds": 31.95,
+      "metrics": [
+        {
+          "label": "CON04 webhook aprobado duplicado",
+          "samples": 10,
+          "p95Ms": 334,
+          "errorPct": 0,
+          "throughput": 29.85
+        },
+        {
+          "label": "CON04 webhook rechazado atrasado",
+          "samples": 1,
+          "p95Ms": 11,
+          "errorPct": 0,
+          "throughput": 90.91
+        }
+      ],
+      "oracle": {
+        "passed": true,
+        "details": "Pedido=CONFIRMED; pago=APPROVED; aprobaciones=1; rechazos=0; devoluciones=0"
+      },
+      "evidenceFound": true,
+      "selection": {
+        "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+        "priority": 300,
+        "sourceRun": "2026-08-11T05-00-47-072Z",
+        "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T05-00-47-072Z/JM-CON-04/resultado.json",
+        "jtlFiles": [
+          "tests/results/fase6/jmeter/results/canonical/JM-CON-04/resultados.jtl"
+        ]
+      }
+    },
+    {
+      "id": "JM-CON-05",
+      "status": "PASS",
+      "profile": "smoke",
+      "executedAt": "2026-08-11T04:58:56.957Z",
+      "criterion": "0 manipulaciones aceptadas; total calculado desde precio persistido",
+      "elapsedSeconds": 30.67,
+      "metrics": [
+        {
+          "label": "CON05 total raíz manipulado",
+          "samples": 1,
+          "p95Ms": 366,
+          "errorPct": 0,
+          "throughput": 2.73
+        },
+        {
+          "label": "CON05 unitPrice manipulado",
+          "samples": 1,
+          "p95Ms": 14,
+          "errorPct": 0,
+          "throughput": 71.43
+        }
+      ],
+      "oracle": {
+        "passed": true,
+        "details": "Total=20; pedido inválido=0; stock=8"
+      },
+      "evidenceFound": true,
+      "selection": {
+        "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+        "priority": 300,
+        "sourceRun": "2026-08-11T04-47-44-008Z",
+        "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T04-47-44-008Z/JM-CON-05/resultado.json",
+        "jtlFiles": [
+          "tests/results/fase6/jmeter/results/canonical/JM-CON-05/resultados.jtl"
+        ]
+      }
+    }
+  ]
+}

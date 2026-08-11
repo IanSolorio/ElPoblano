@@ -58,6 +58,15 @@ Para crear o recuperar la cuenta administrativa principal, configura las variabl
 - `npm run build`: genera el frontend de producción.
 - `npm run lint`: valida todos los workspaces.
 - `npm test`: ejecuta las pruebas disponibles.
+- `npm run test:phase5`: ejecuta y consolida las pruebas de la Fase 5.
+- `npm run test:selenium`: ejecuta los 32 RF y 12 RNF automatizados con Selenium.
+- `npm run test:jmeter`: ejecuta los 14 escenarios RNF definidos para JMeter.
+- `npm run sonar:analyze`: prepara la cobertura y envía el análisis a SonarQube Cloud.
+
+La estructura, los estados y las rutas canónicas de evidencia están descritos
+en [`tests/results/README.md`](tests/results/README.md). La fuente consolidada
+de los 32 RF y 42 RNF es
+[`tests/results/trazabilidad/matriz_final.csv`](tests/results/trazabilidad/matriz_final.csv).
 
 ## Base de datos MySQL
 

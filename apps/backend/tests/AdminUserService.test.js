@@ -10,7 +10,8 @@ class FakeAdminRepository {
   findAll(query) { return { data: this.users.slice((query.page - 1) * query.limit, query.page * query.limit), pagination: { ...query, total: this.users.length } }; }
   createAdmin(data, actorId) { const user = { id: "admin-new", role: "ADMIN", active: true, ...data }; delete user.passwordHash; this.users.push(user); this.audits.push({ actorId, action: "ADMIN_CREATED" }); return user; }
   update(id, data, actorId) { const user = this.findById(id); Object.assign(user, data); this.audits.push({ actorId, action: "USER_UPDATED" }); return user; }
-  setStatus(id, active, actorId) { const user = this.findById(id); user.active = active; user.deletedAt = active ? null : new Date(); if (!active) this.revokedUsers.push(id); this.audits.push({ actorId, action: active ? "USER_ACTIVATED" : "USER_DEACTIVATED" }); return user; }
+  setStatus(id, active, actorId) { const user = this.findById(id); user.active = active; if (!active) this.revokedUsers.push(id); this.audits.push({ actorId, action: active ? "USER_ACTIVATED" : "USER_DEACTIVATED" }); return user; }
+  remove(id, actorId) { const user = this.findById(id); user.active = false; user.deletedAt = new Date(); this.revokedUsers.push(id); this.audits.push({ actorId, action: "USER_DELETED" }); return user; }
 }
 
 const hasher = { hash: async (value) => `hash:${value}` };
@@ -58,8 +59,8 @@ test("UT-USR-08: desactivar cliente revoca sesiones y audita", async () => {
   assert.equal(result.active, false); assert.deepEqual(repository.revokedUsers, ["customer-1"]); assert.equal(repository.audits[0].action, "USER_DEACTIVATED");
 });
 
-test("UT-USR-09: reactivar cliente limpia el retiro y audita", async () => {
-  const repository = new FakeAdminRepository([customer({ active: false, deletedAt: new Date() })]); const result = await new AdminUserService(repository, hasher).setStatus("customer-1", true, admin());
+test("UT-USR-09: reactivar cliente conserva el registro y audita", async () => {
+  const repository = new FakeAdminRepository([customer({ active: false })]); const result = await new AdminUserService(repository, hasher).setStatus("customer-1", true, admin());
   assert.equal(result.active, true); assert.equal(result.deletedAt, null); assert.equal(repository.audits[0].action, "USER_ACTIVATED");
 });
 

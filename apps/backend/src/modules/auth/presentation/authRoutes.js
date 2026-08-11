@@ -2,6 +2,7 @@ import { Router } from "express";
 import { rateLimit } from "express-rate-limit";
 import { z } from "zod";
 import { validate } from "../../../shared/middleware/validate.js";
+import { env } from "../../../config/env.js";
 import { extractSessionToken } from "./authMiddleware.js";
 
 const registerSchema = z.object({
@@ -19,7 +20,7 @@ const registerSchema = z.object({
   }),
 });
 const loginSchema = z.object({ email: z.email().max(191), password: z.string().min(1).max(128) });
-const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 20, standardHeaders: "draft-8", legacyHeaders: false });
+const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: env.authRateLimit, standardHeaders: "draft-8", legacyHeaders: false });
 
 export const createAuthRouter = (authService, authenticate, cookieOptions) => {
   const router = Router();

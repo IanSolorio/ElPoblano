@@ -69,7 +69,8 @@ export class PrismaOrderRepository extends OrderRepository {
       throw new AppError("No repitas productos ni combos en el pedido.", 400, "DUPLICATE_ORDER_LINE");
     }
 
-    return this.prisma.$transaction(async (transaction) => {
+    try {
+      return await this.prisma.$transaction(async (transaction) => {
       const address = await transaction.address.findFirst({
         where: { id: input.addressId, userId: input.user.id },
       });
@@ -149,9 +150,19 @@ export class PrismaOrderRepository extends OrderRepository {
       await transaction.inventoryMovement.createMany({
         data: [...stockRequired].map(([productId, quantity]) => ({ productId, type: "SALE", quantity: -quantity, reference: order.id })),
       });
+      if (process.env.NODE_ENV === "test" && process.env.JMETER_INJECT_ORDER_FAILURE === "true" && input.notes === "[JM-CON-03]") {
+        throw new AppError("Fallo transaccional inyectado exclusivamente para JM-CON-03.", 503, "JMETER_INJECTED_FAILURE");
+      }
       await transaction.auditLog.create({ data: { userId: input.user.id, action: "ORDER_CREATED", entity: "Order", entityId: order.id } });
       return serializeOrder(order);
-    });
+      });
+    } catch (error) {
+      if (error?.code === "P2002") {
+        const concurrent = await this.prisma.order.findUnique({ where: { idempotencyKey: input.idempotencyKey }, include: orderInclude });
+        if (concurrent?.userId === input.user.id) return serializeOrder(concurrent);
+      }
+      throw error;
+    }
   }
 
   async findByUser(userId, { page, limit }) {
@@ -338,11 +349,13 @@ export class PrismaOrderRepository extends OrderRepository {
         },
       });
       if (approved && existing.status === "PENDING") {
-        await transaction.order.update({ where: { id: orderId }, data: { status: "CONFIRMED" } });
+        const confirmed = await transaction.order.updateMany({ where: { id: orderId, status: "PENDING" }, data: { status: "CONFIRMED" } });
+        if (confirmed.count !== 1) return serializeOrder(await transaction.order.findUnique({ where: { id: orderId }, include: orderInclude }));
         await transaction.auditLog.create({ data: { userId: existing.userId, action: "PAYMENT_APPROVED", entity: "Order", entityId: orderId, metadata: { providerPaymentId: providerPayment.id } } });
       }
       if (providerPayment.status === "REJECTED" && existing.status === "PENDING") {
-        await transaction.order.update({ where: { id: orderId }, data: { status: "CANCELLED" } });
+        const cancelled = await transaction.order.updateMany({ where: { id: orderId, status: "PENDING" }, data: { status: "CANCELLED" } });
+        if (cancelled.count !== 1) return serializeOrder(await transaction.order.findUnique({ where: { id: orderId }, include: orderInclude }));
         for (const item of existing.items) {
           await transaction.product.update({ where: { id: item.productId }, data: { stock: { increment: item.quantity } } });
         }

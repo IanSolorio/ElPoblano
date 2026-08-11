@@ -3,20 +3,38 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const root = process.cwd();
-const backendSource = resolve(root, "tests/results/fase5/cobertura-unitarias.lcov");
-const frontendSource = resolve(root, "tests/results/fase7/frontend-coverage/lcov.info");
-const destinationDirectory = resolve(root, "tests/results/fase7");
+const unitReports = resolve(root, "tests/results/fase5/unitarias/reports");
+const backendSource = resolve(unitReports, "backend-lcov.info");
+const frontendCoverageDirectory = resolve(unitReports, "frontend-coverage");
+const frontendSource = resolve(frontendCoverageDirectory, "lcov.info");
+const destinationDirectory = resolve(root, "tests/results/fase7/sonarqube/results");
 const destination = resolve(destinationDirectory, "cobertura.lcov");
 const npm = process.platform === "win32" ? "npm.cmd" : "npm";
 
-for (const args of [
-  ["run", "test:unit:evidence", "-w", "@elpoblano/backend"],
-  ["run", "test:coverage", "-w", "@elpoblano/frontend"],
+mkdirSync(unitReports, { recursive: true });
+for (const { command, args, cwd = root } of [
+  {
+    command: process.execPath,
+    cwd: resolve(root, "apps/backend"),
+    args: [
+      "--test", "--experimental-test-coverage",
+      "--test-coverage-include=src/**/*.js", "--test-coverage-include=../frontend/src/modules/cart/**/*.js",
+      "--test-coverage-exclude=src/server.js", "--test-reporter=lcov",
+      `--test-reporter-destination=${backendSource}`, "tests/*.test.js",
+    ],
+  },
+  {
+    command: npm,
+    args: [
+      "run", "test:coverage", "-w", "@elpoblano/frontend", "--",
+      "--coverage.reportsDirectory=../../tests/results/fase5/unitarias/reports/frontend-coverage",
+    ],
+  },
 ]) {
-  const result = spawnSync(npm, args, {
-    cwd: root,
+  const result = spawnSync(command, args, {
+    cwd,
     stdio: "inherit",
-    shell: process.platform === "win32",
+    shell: process.platform === "win32" && command.endsWith(".cmd"),
   });
   if (result.status !== 0) process.exit(result.status ?? 1);
 }

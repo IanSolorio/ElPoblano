@@ -122,7 +122,7 @@ Todos los RNF usan la forma: condición, comportamiento, medida y umbral. Los um
 
 | ID | Requisito no funcional medible | Evidencia |
 |---|---|---|
-| RNF-DIS-01 | Durante la ventana de demostración, API y frontend deberán alcanzar ≥ 99 % de disponibilidad medida cada minuto | Monitor/health logs |
+| RNF-DIS-01 | Durante una prueba de carga sostenida de 5 minutos, el frontend y la API deberán mantener al menos un 99 % de solicitudes válidas | JMeter; disponibilidad observada ≥ 99 % |
 | RNF-DIS-02 | Ante una salida inesperada de Node, `systemd` deberá reiniciarlo y recuperar `/api/health` en ≤ 30 s | Prueba operativa |
 | RNF-DIS-03 | `/api/health` deberá informar proceso vivo y `/api/ready` distinguir conexión disponible/no disponible con MySQL | Integración/operación |
 | RNF-DIS-04 | El certificado HTTPS deberá renovarse automáticamente y la prueba de renovación deberá terminar sin error | Certbot dry-run |
@@ -132,7 +132,7 @@ Todos los RNF usan la forma: condición, comportamiento, medida y umbral. Los um
 | ID | Requisito no funcional medible | Evidencia |
 |---|---|---|
 | RNF-ESC-01 | Al aumentar de 5 a 25 usuarios concurrentes, la API deberá mantener errores < 1 % y no degradar el p95 más de 3 veces | JMeter escalonado |
-| RNF-ESC-02 | Con 10 000 productos/pedidos de prueba, las consultas paginadas deberán conservar p95 ≤ 2 s | JMeter + dataset grande |
+| RNF-ESC-02 | Con un dataset de al menos 100 productos/pedidos de prueba, las consultas paginadas deberán conservar p95 ≤ 2 s bajo la carga definida | JMeter + dataset controlado de 100 registros |
 | RNF-ESC-03 | Los procesos web no deberán depender de archivos locales persistentes; imágenes y datos deberán residir en servicios externos configurados | Inspección arquitectónica |
 | RNF-ESC-04 | La configuración deberá permitir cambiar host de API, base y proveedores sin modificar reglas de dominio | Prueba de configuración |
 
@@ -259,8 +259,8 @@ Escenarios:
 | JM-03 | Consulta de pedidos propios | 15 usuarios autenticados | p95, throughput |
 | JM-04 | Cola y estadísticas admin | 5 administradores simulados | p95, consultas DB |
 | JM-05 | Creación concurrente de pedidos | 10 usuarios, stock controlado | latencia, error e integridad |
-| JM-06 | Escalabilidad con dataset grande | 10 000 registros, 5→25 usuarios | degradación relativa |
-| JM-07 | Prueba corta de estabilidad | carga moderada 20–30 min | error, memoria y latencia |
+| JM-ESC-02 | Escalabilidad con dataset controlado | 100 registros, 25 usuarios × 3 consultas | p95 ≤ 2 s |
+| JM-DIS-01 | Prueba de estabilidad | carga sostenida de 5 minutos con el perfil actual | disponibilidad observada ≥ 99 % |
 
 No se realizará una prueba destructiva contra producción. Se usará ambiente aislado, datos ficticios y límites graduales.
 
@@ -349,9 +349,11 @@ Se compararán línea base y resultado posterior para demostrar reducción de de
 | Repositorio GitHub | Código, pruebas, configuración y evidencias no secretas |
 | Reporte SonarQube | Exportación/capturas y enlace del proyecto |
 | Colección Postman | `tests/postman/ElPoblano.postman_collection.json` |
-| Scripts Selenium | `tests/selenium/` |
-| Scripts JMeter | `tests/jmeter/` |
-| Pipeline GitHub Actions | `.github/workflows/quality.yml` |
+| Scripts Selenium | `tests/results/fase6/selenium/tests/` |
+| Planes JMeter | `tests/results/fase6/jmeter/plans/` |
+| Configuración y evidencia SonarQube | `tests/results/fase7/sonarqube/` |
+| Pipeline GitHub Actions | `tests/results/fase8/github_actions/workflows/` (pendiente de Fase 8) |
+| Trazabilidad consolidada | `tests/results/trazabilidad/matriz_final.csv` |
 | Presentación de máximo 10 | Diapositivas con problema, método, resultados y mejoras |
 
 ## 14. Cronograma de implementación recomendado

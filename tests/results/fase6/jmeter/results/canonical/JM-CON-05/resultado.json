@@ -1,0 +1,38 @@
+{
+  "id": "JM-CON-05",
+  "status": "PASS",
+  "profile": "smoke",
+  "executedAt": "2026-08-11T04:58:56.957Z",
+  "criterion": "0 manipulaciones aceptadas; total calculado desde precio persistido",
+  "elapsedSeconds": 30.67,
+  "metrics": [
+    {
+      "label": "CON05 total raíz manipulado",
+      "samples": 1,
+      "p95Ms": 366,
+      "errorPct": 0,
+      "throughput": 2.73
+    },
+    {
+      "label": "CON05 unitPrice manipulado",
+      "samples": 1,
+      "p95Ms": 14,
+      "errorPct": 0,
+      "throughput": 71.43
+    }
+  ],
+  "oracle": {
+    "passed": true,
+    "details": "Total=20; pedido inválido=0; stock=8"
+  },
+  "evidenceFound": true,
+  "selection": {
+    "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+    "priority": 300,
+    "sourceRun": "2026-08-11T04-47-44-008Z",
+    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T04-47-44-008Z/JM-CON-05/resultado.json",
+    "jtlFiles": [
+      "tests/results/fase6/jmeter/results/canonical/JM-CON-05/resultados.jtl"
+    ]
+  }
+}

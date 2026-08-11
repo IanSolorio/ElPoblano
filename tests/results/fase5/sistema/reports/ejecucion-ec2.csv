@@ -1,0 +1,5 @@
+"ID","Fecha UTC","Resultado","Duración segundos","Detalle"
+"ST-NF-01","2026-08-11T01:03:22Z","APROBADO","1","Servicio activo y health HTTP 200 dentro del límite de 30 s"
+"ST-NF-04","2026-08-11T01:03:23Z","APROBADO","N/A","HTTP 301 redirige a HTTPS; API HTTPS 200; certificado vigente; HTML inicial sin recursos HTTP"
+"ST-NF-07","2026-08-11T01:03:23Z","APROBADO","N/A","JMeter aprobado: p95=23.8 ms; errores=0%"
+"ST-NF-02","2026-08-11T01:08:23Z","APROBADO","N/A","Boot ID cambió; backend y Nginx activos/habilitados; health público HTTPS 200"

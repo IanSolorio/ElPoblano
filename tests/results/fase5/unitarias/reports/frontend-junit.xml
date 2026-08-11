@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="20" failures="0" errors="0" time="3.706">
+    <testsuite name="tests/AdditionalFlows.test.jsx" timestamp="2026-08-11T04:47:15.940Z" hostname="DESKTOP-JKVKGVF" tests="4" failures="0" errors="0" skipped="0" time="0.6053057">
+        <testcase classname="tests/AdditionalFlows.test.jsx" name="flujos complementarios &gt; valida ubicación y registra una cuenta" time="0.4910902">
+        </testcase>
+        <testcase classname="tests/AdditionalFlows.test.jsx" name="flujos complementarios &gt; crea un pedido y presenta el medio de pago" time="0.0424921">
+        </testcase>
+        <testcase classname="tests/AdditionalFlows.test.jsx" name="flujos complementarios &gt; crea y desactiva categorías" time="0.0576175">
+        </testcase>
+        <testcase classname="tests/AdditionalFlows.test.jsx" name="flujos complementarios &gt; actualiza el contador del carrito" time="0.0120673">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/AdminPages.test.jsx" timestamp="2026-08-11T04:47:15.943Z" hostname="DESKTOP-JKVKGVF" tests="3" failures="0" errors="0" skipped="0" time="0.8257704">
+        <testcase classname="tests/AdminPages.test.jsx" name="panel administrativo &gt; crea y desactiva cuentas" time="0.4295653">
+        </testcase>
+        <testcase classname="tests/AdminPages.test.jsx" name="panel administrativo &gt; crea y retira una promoción individual" time="0.1146031">
+        </testcase>
+        <testcase classname="tests/AdminPages.test.jsx" name="panel administrativo &gt; lista, busca, abre y actualiza pedidos" time="0.2798621">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/AuthContext.test.jsx" timestamp="2026-08-11T04:47:15.944Z" hostname="DESKTOP-JKVKGVF" tests="1" failures="0" errors="0" skipped="0" time="0.3395922">
+        <testcase classname="tests/AuthContext.test.jsx" name="contexto de autenticación &gt; recupera sesión e implementa login, registro y logout" time="0.3381433">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/CurrentOrders.test.jsx" timestamp="2026-08-11T04:47:15.945Z" hostname="DESKTOP-JKVKGVF" tests="3" failures="0" errors="0" skipped="0" time="0.5721777">
+        <testcase classname="tests/CurrentOrders.test.jsx" name="seguimiento de pedidos &gt; muestra estado vacío" time="0.095132">
+        </testcase>
+        <testcase classname="tests/CurrentOrders.test.jsx" name="seguimiento de pedidos &gt; permite pagar y cancelar un pedido pendiente" time="0.4435308">
+        </testcase>
+        <testcase classname="tests/CurrentOrders.test.jsx" name="seguimiento de pedidos &gt; representa el avance de un pedido confirmado" time="0.0315534">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/NavigationCart.test.jsx" timestamp="2026-08-11T04:47:15.946Z" hostname="DESKTOP-JKVKGVF" tests="2" failures="0" errors="0" skipped="0" time="0.4711113">
+        <testcase classname="tests/NavigationCart.test.jsx" name="navegación y carrito &gt; abre el inicio de sesión y carrito desde la navegación" time="0.3725928">
+        </testcase>
+        <testcase classname="tests/NavigationCart.test.jsx" name="navegación y carrito &gt; actualiza y elimina productos del carrito" time="0.0966861">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/ProductCatalog.test.jsx" timestamp="2026-08-11T04:47:15.946Z" hostname="DESKTOP-JKVKGVF" tests="2" failures="0" errors="0" skipped="0" time="0.459787">
+        <testcase classname="tests/ProductCatalog.test.jsx" name="catálogo público &gt; carga, filtra, limpia y agrega productos" time="0.4298385">
+        </testcase>
+        <testcase classname="tests/ProductCatalog.test.jsx" name="catálogo público &gt; muestra un error controlado cuando falla la API" time="0.0283958">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/ProductManagement.test.jsx" timestamp="2026-08-11T04:47:15.947Z" hostname="DESKTOP-JKVKGVF" tests="2" failures="0" errors="0" skipped="0" time="0.4612069">
+        <testcase classname="tests/ProductManagement.test.jsx" name="gestión visual de productos &gt; carga categorías y envía el formulario" time="0.3653767">
+        </testcase>
+        <testcase classname="tests/ProductManagement.test.jsx" name="gestión visual de productos &gt; presenta carga, vacío, stock agotado y eliminación" time="0.0943015">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/Promotions.test.jsx" timestamp="2026-08-11T04:47:15.948Z" hostname="DESKTOP-JKVKGVF" tests="3" failures="0" errors="0" skipped="0" time="0.5022375">
+        <testcase classname="tests/Promotions.test.jsx" name="promociones públicas &gt; presenta estado vacío" time="0.1039791">
+        </testcase>
+        <testcase classname="tests/Promotions.test.jsx" name="promociones públicas &gt; convierte descuentos y combos en tarjetas comprables" time="0.3784448">
+        </testcase>
+        <testcase classname="tests/Promotions.test.jsx" name="promociones públicas &gt; controla fallos de carga" time="0.0179683">
+        </testcase>
+    </testsuite>
+</testsuites>

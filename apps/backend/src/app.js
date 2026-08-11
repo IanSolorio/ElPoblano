@@ -37,7 +37,7 @@ export const createApp = () => {
   const productService = new ProductService(new PrismaProductRepository(prisma));
   const categoryService = new CategoryService(new PrismaCategoryRepository(prisma));
   const orderService = new OrderService(new PrismaOrderRepository(prisma));
-  const paymentService = new PaymentService(orderService.repository, env.mercadoPagoAccessToken, env.mercadoPagoNotificationUrl);
+  const paymentService = new PaymentService(orderService.repository, env.mercadoPagoAccessToken, env.mercadoPagoNotificationUrl, env.paymentProviderMode);
   const promotionService = new PromotionService(new PrismaPromotionRepository(prisma));
   const adminUserService = new AdminUserService(new PrismaAdminUserRepository(prisma), passwordHasher);
   const cookieOptions = { httpOnly: true, secure: env.nodeEnv === "production", sameSite: "lax", path: "/" };
@@ -48,7 +48,7 @@ export const createApp = () => {
   app.use(helmet());
   app.use(cors({ origin: env.frontendOrigin, credentials: true }));
   app.use(express.json({ limit: "100kb" }));
-  app.use(rateLimit({ windowMs: 60_000, limit: 120, standardHeaders: "draft-8", legacyHeaders: false }));
+  app.use(rateLimit({ windowMs: 60_000, limit: env.globalRateLimit, standardHeaders: "draft-8", legacyHeaders: false }));
 
   app.get("/api/health", (_request, response) => response.json({ status: "ok" }));
   app.get("/api/ready", async (_request, response, next) => {

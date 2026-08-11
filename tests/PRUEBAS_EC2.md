@@ -1,6 +1,6 @@
 # Ejecución simplificada de pruebas bloqueadas en EC2
 
-Estas instrucciones completan `ST-NF-01`, `ST-NF-02`, `ST-NF-04` y `ST-NF-07` sin copiar bloques extensos en la consola. El script solicita `sudo` automáticamente y guarda los resultados en `tests/results/fase5/ec2/ejecucion-ec2.csv`.
+Estas instrucciones completan `ST-NF-01`, `ST-NF-02`, `ST-NF-04` y `ST-NF-07` sin copiar bloques extensos en la consola. El script solicita `sudo` automáticamente y guarda los resultados en `tests/results/fase5/sistema/reports/ejecucion-ec2.csv`.
 
 ## 1. Actualizar el proyecto
 
@@ -45,7 +45,7 @@ npm run test:ec2 -- verify-reboot
 ## 5. Consultar la evidencia
 
 ```bash
-cat tests/results/fase5/ec2/ejecucion-ec2.csv
+cat tests/results/fase5/sistema/reports/ejecucion-ec2.csv
 ```
 
 No se debe editar manualmente la matriz de Fase 5 antes de revisar este archivo. Si alguna prueba falla, el script registra `NO_APROBADO` y el detalle observado.

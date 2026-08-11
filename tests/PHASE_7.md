@@ -27,8 +27,10 @@ $env:SONAR_TOKEN = "TOKEN_GENERADO_EN_SONAR"
 npm.cmd run sonar:analyze
 ```
 
-El comando normaliza la cobertura de la Fase 5, ejecuta el escáner, espera el
-procesamiento y descarga las evidencias en `tests/results/fase7/`.
+El comando regenera las coberturas unitarias de backend y frontend en
+`tests/results/fase5/unitarias/reports/`, las combina para SonarQube, ejecuta
+el escáner, espera el procesamiento y descarga las evidencias en
+`tests/results/fase7/sonarqube/`.
 
 Si el análisis fue cargado correctamente pero falló temporalmente la descarga
 de evidencias, no es necesario repetir el escaneo. Conservando las mismas
@@ -40,8 +42,17 @@ npm.cmd run sonar:collect
 
 ## Evidencias
 
-- `cobertura.lcov`: cobertura importada.
-- `metricas.json`: métricas de calidad y deuda.
-- `quality-gate.json`: condiciones y resultado del Quality Gate.
-- `incidencias.json`: problemas abiertos detectados.
-- `RESUMEN.md`: resultado ejecutivo de la fase.
+La ubicación canónica es `tests/results/fase7/sonarqube/`:
+
+- `sonar-project.properties`: configuración del análisis.
+- `results/cobertura.lcov`: cobertura importada (generada, no versionada).
+- `results/metricas.json`: métricas de calidad y deuda.
+- `results/quality-gate.json`: condiciones del Quality Gate.
+- `results/incidencias.json`: problemas abiertos detectados.
+- `evidence/casos-sonarqube.csv`: resultado trazable de `SQ-MAN-01..06` y
+  `SQ-SEG-01/05`.
+- `evidence/RESUMEN.md`: interpretación ejecutiva sin ocultar métricas
+  pendientes.
+
+El estado consolidado de los 32 RF y 42 RNF se encuentra únicamente en
+`tests/results/trazabilidad/matriz_final.csv`.

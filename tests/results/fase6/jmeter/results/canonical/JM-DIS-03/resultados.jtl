@@ -1,0 +1,53 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1786423920350,77,DIS03 GET health,200,OK,Sondas 2-1,text,true,,1124,122,1,2,http://127.0.0.1:3301/api/health,71,0,28
+1786423920350,231,DIS03 carga productos,200,OK,Carga de fondo 1-1,text,true,,1347,125,1,2,http://127.0.0.1:3301/api/productos,231,0,28
+1786423921442,7,DIS03 GET ready,200,OK,Sondas 2-1,text,true,,1151,121,1,3,http://127.0.0.1:3301/api/ready,7,0,1
+1786423921596,9,DIS03 carga productos,200,OK,Carga de fondo 1-1,text,true,,1347,125,2,3,http://127.0.0.1:3301/api/productos,9,0,1
+1786423921929,8,DIS03 carga productos,200,OK,Carga de fondo 1-2,text,true,,1347,125,2,3,http://127.0.0.1:3301/api/productos,8,0,1
+1786423922464,4,DIS03 GET health,200,OK,Sondas 2-1,text,true,,1124,122,1,3,http://127.0.0.1:3301/api/health,4,0,1
+1786423922618,10,DIS03 carga productos,200,OK,Carga de fondo 1-1,text,true,,1347,125,3,4,http://127.0.0.1:3301/api/productos,10,0,1
+1786423922945,8,DIS03 carga productos,200,OK,Carga de fondo 1-2,text,true,,1347,125,3,4,http://127.0.0.1:3301/api/productos,8,0,1
+1786423923481,8,DIS03 GET ready,200,OK,Sondas 2-1,text,true,,1151,121,1,4,http://127.0.0.1:3301/api/ready,8,0,1
+1786423923602,11,DIS03 carga productos,200,OK,Carga de fondo 1-3,text,true,,1347,125,3,4,http://127.0.0.1:3301/api/productos,11,0,2
+1786423923633,8,DIS03 carga productos,200,OK,Carga de fondo 1-1,text,true,,1347,125,3,4,http://127.0.0.1:3301/api/productos,8,0,0
+1786423923956,7,DIS03 carga productos,200,OK,Carga de fondo 1-2,text,true,,1347,125,3,4,http://127.0.0.1:3301/api/productos,7,0,1
+1786423924499,5,DIS03 GET health,200,OK,Sondas 2-1,text,true,,1124,122,1,4,http://127.0.0.1:3301/api/health,5,0,1
+1786423924623,8,DIS03 carga productos,200,OK,Carga de fondo 1-3,text,true,,1347,125,3,4,http://127.0.0.1:3301/api/productos,8,0,2
+1786423924655,7,DIS03 carga productos,200,OK,Carga de fondo 1-1,text,true,,1347,125,3,4,http://127.0.0.1:3301/api/productos,7,0,1
+1786423924973,7,DIS03 carga productos,200,OK,Carga de fondo 1-2,text,true,,1347,125,3,4,http://127.0.0.1:3301/api/productos,7,0,1
+1786423925512,6,DIS03 GET ready,200,OK,Sondas 2-1,text,true,,1151,121,1,4,http://127.0.0.1:3301/api/ready,6,0,2
+1786423925637,8,DIS03 carga productos,200,OK,Carga de fondo 1-3,text,true,,1347,125,3,4,http://127.0.0.1:3301/api/productos,8,0,2
+1786423925668,8,DIS03 carga productos,200,OK,Carga de fondo 1-1,text,true,,1347,125,3,4,http://127.0.0.1:3301/api/productos,8,0,1
+1786423925994,6,DIS03 carga productos,200,OK,Carga de fondo 1-2,text,true,,1347,125,3,4,http://127.0.0.1:3301/api/productos,6,0,1
+1786423926525,4,DIS03 GET health,200,OK,Sondas 2-1,text,true,,1123,122,1,4,http://127.0.0.1:3301/api/health,4,0,1
+1786423926650,9,DIS03 carga productos,200,OK,Carga de fondo 1-3,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,9,0,1
+1786423926681,9,DIS03 carga productos,200,OK,Carga de fondo 1-1,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,9,0,1
+1786423927008,7,DIS03 carga productos,200,OK,Carga de fondo 1-2,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,7,0,1
+1786423927535,7,DIS03 GET ready,200,OK,Sondas 2-1,text,true,,1150,121,1,4,http://127.0.0.1:3301/api/ready,6,0,2
+1786423927674,7,DIS03 carga productos,200,OK,Carga de fondo 1-3,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,7,0,1
+1786423927705,6,DIS03 carga productos,200,OK,Carga de fondo 1-1,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,6,0,1
+1786423928016,8,DIS03 carga productos,200,OK,Carga de fondo 1-2,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,7,0,1
+1786423928549,5,DIS03 GET health,200,OK,Sondas 2-1,text,true,,1123,122,1,4,http://127.0.0.1:3301/api/health,5,0,1
+1786423928689,8,DIS03 carga productos,200,OK,Carga de fondo 1-3,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,8,0,1
+1786423928721,6,DIS03 carga productos,200,OK,Carga de fondo 1-1,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,6,0,1
+1786423929030,7,DIS03 carga productos,200,OK,Carga de fondo 1-2,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,7,0,1
+1786423929557,6,DIS03 GET ready,200,OK,Sondas 2-1,text,true,,1150,121,1,4,http://127.0.0.1:3301/api/ready,6,0,1
+1786423929710,7,DIS03 carga productos,200,OK,Carga de fondo 1-3,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,7,0,1
+1786423929742,7,DIS03 carga productos,200,OK,Carga de fondo 1-1,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,6,0,1
+1786423930050,7,DIS03 carga productos,200,OK,Carga de fondo 1-2,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,7,0,1
+1786423930578,4,DIS03 GET health,200,OK,Sondas 2-1,text,true,,1123,122,1,4,http://127.0.0.1:3301/api/health,4,0,1
+1786423930732,8,DIS03 carga productos,200,OK,Carga de fondo 1-3,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,8,0,1
+1786423930764,10,DIS03 carga productos,200,OK,Carga de fondo 1-1,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,10,0,1
+1786423931059,6,DIS03 carga productos,200,OK,Carga de fondo 1-2,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,6,0,1
+1786423931595,5,DIS03 GET ready,200,OK,Sondas 2-1,text,true,,1150,121,1,4,http://127.0.0.1:3301/api/ready,5,0,1
+1786423931752,9,DIS03 carga productos,200,OK,Carga de fondo 1-3,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,9,0,1
+1786423931783,8,DIS03 carga productos,200,OK,Carga de fondo 1-1,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,8,0,1
+1786423932070,8,DIS03 carga productos,200,OK,Carga de fondo 1-2,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,7,0,1
+1786423932608,4,DIS03 GET health,200,OK,Sondas 2-1,text,true,,1123,122,1,4,http://127.0.0.1:3301/api/health,4,0,1
+1786423932763,8,DIS03 carga productos,200,OK,Carga de fondo 1-3,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,8,0,1
+1786423932794,6,DIS03 carga productos,200,OK,Carga de fondo 1-1,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,6,0,0
+1786423933088,9,DIS03 carga productos,200,OK,Carga de fondo 1-2,text,true,,1346,125,3,4,http://127.0.0.1:3301/api/productos,9,0,2
+1786423933617,6,DIS03 GET ready,200,OK,Sondas 2-1,text,true,,1150,121,1,4,http://127.0.0.1:3301/api/ready,6,0,1
+1786423933787,6,DIS03 carga productos,200,OK,Carga de fondo 1-3,text,true,,1346,125,3,3,http://127.0.0.1:3301/api/productos,6,0,1
+1786423933802,8,DIS03 carga productos,200,OK,Carga de fondo 1-1,text,true,,1346,125,2,2,http://127.0.0.1:3301/api/productos,8,0,2
+1786423934112,8,DIS03 carga productos,200,OK,Carga de fondo 1-2,text,true,,1346,125,1,1,http://127.0.0.1:3301/api/productos,8,0,1

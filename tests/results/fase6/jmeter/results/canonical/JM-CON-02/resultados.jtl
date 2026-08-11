@@ -1,0 +1,11 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1786424590990,381,CON02 POST stock limitado,201,Created,10 compradores para 5 unidades 1-7,text,true,,2234,489,10,10,http://127.0.0.1:3301/api/pedidos,381,0,22
+1786424590991,411,CON02 POST stock limitado,201,Created,10 compradores para 5 unidades 1-10,text,true,,2236,489,10,10,http://127.0.0.1:3301/api/pedidos,411,0,21
+1786424590990,369,CON02 POST stock limitado,201,Created,10 compradores para 5 unidades 1-4,text,true,,2234,489,10,10,http://127.0.0.1:3301/api/pedidos,368,0,22
+1786424590990,397,CON02 POST stock limitado,201,Created,10 compradores para 5 unidades 1-1,text,true,,2234,489,10,10,http://127.0.0.1:3301/api/pedidos,396,0,22
+1786424590990,428,CON02 POST stock limitado,201,Created,10 compradores para 5 unidades 1-6,text,true,,2234,489,10,10,http://127.0.0.1:3301/api/pedidos,428,0,22
+1786424590991,431,CON02 POST stock limitado,409,Conflict,10 compradores para 5 unidades 1-3,text,true,,1274,489,10,10,http://127.0.0.1:3301/api/pedidos,431,0,21
+1786424590991,433,CON02 POST stock limitado,409,Conflict,10 compradores para 5 unidades 1-8,text,true,,1274,489,10,10,http://127.0.0.1:3301/api/pedidos,433,0,21
+1786424590991,435,CON02 POST stock limitado,409,Conflict,10 compradores para 5 unidades 1-9,text,true,,1274,489,10,10,http://127.0.0.1:3301/api/pedidos,434,0,21
+1786424590990,429,CON02 POST stock limitado,409,Conflict,10 compradores para 5 unidades 1-2,text,true,,1274,489,10,10,http://127.0.0.1:3301/api/pedidos,429,0,22
+1786424590990,431,CON02 POST stock limitado,409,Conflict,10 compradores para 5 unidades 1-5,text,true,,1274,489,10,10,http://127.0.0.1:3301/api/pedidos,431,0,22

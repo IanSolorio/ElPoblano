@@ -1,0 +1,2 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1786424261561,334,CON03 POST fallo controlado,503,Service Unavailable,Fallo inyectado 1-1,text,true,,1286,492,1,1,http://127.0.0.1:3301/api/pedidos,330,0,27

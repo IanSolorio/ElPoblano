@@ -24,7 +24,12 @@ export class AdminUserService {
     return this.repository.setStatus(id, active, actor.id);
   }
 
-  async remove(id, actor) { return this.setStatus(id, false, actor); }
+  async remove(id, actor) {
+    if (id === actor.id) throw new AppError("No puedes eliminar tu propia cuenta.", 409, "SELF_DELETION");
+    const target = await this.#target(id);
+    this.#canManage(target, actor);
+    return this.repository.remove(id, actor.id);
+  }
 
   async #target(id, allowInactive = false) {
     const user = await this.repository.findById(id);

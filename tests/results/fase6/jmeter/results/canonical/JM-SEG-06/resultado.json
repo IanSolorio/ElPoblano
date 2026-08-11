@@ -1,0 +1,38 @@
+{
+  "id": "JM-SEG-06",
+  "status": "PASS",
+  "profile": "smoke",
+  "executedAt": "2026-08-11T04:48:19.811Z",
+  "criterion": "120 solicitudes permitidas y 100 % de excesos con HTTP 429",
+  "elapsedSeconds": 30.55,
+  "metrics": [
+    {
+      "label": "SEG06 permitida",
+      "samples": 120,
+      "p95Ms": 4,
+      "errorPct": 0,
+      "throughput": 282.35
+    },
+    {
+      "label": "SEG06 exceso 429",
+      "samples": 10,
+      "p95Ms": 4,
+      "errorPct": 0,
+      "throughput": 19.53
+    }
+  ],
+  "oracle": {
+    "passed": true,
+    "details": "El escenario no requiere mutaciones persistentes."
+  },
+  "evidenceFound": true,
+  "selection": {
+    "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+    "priority": 300,
+    "sourceRun": "2026-08-11T04-47-44-008Z",
+    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T04-47-44-008Z/JM-SEG-06/resultado.json",
+    "jtlFiles": [
+      "tests/results/fase6/jmeter/results/canonical/JM-SEG-06/resultados.jtl"
+    ]
+  }
+}

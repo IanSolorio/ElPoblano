@@ -1,0 +1,38 @@
+{
+  "id": "JM-CON-04",
+  "status": "PASS",
+  "profile": "smoke",
+  "executedAt": "2026-08-11T05:03:55.515Z",
+  "criterion": "Duplicados/desordenados no duplican ni degradan una aprobación",
+  "elapsedSeconds": 31.95,
+  "metrics": [
+    {
+      "label": "CON04 webhook aprobado duplicado",
+      "samples": 10,
+      "p95Ms": 334,
+      "errorPct": 0,
+      "throughput": 29.85
+    },
+    {
+      "label": "CON04 webhook rechazado atrasado",
+      "samples": 1,
+      "p95Ms": 11,
+      "errorPct": 0,
+      "throughput": 90.91
+    }
+  ],
+  "oracle": {
+    "passed": true,
+    "details": "Pedido=CONFIRMED; pago=APPROVED; aprobaciones=1; rechazos=0; devoluciones=0"
+  },
+  "evidenceFound": true,
+  "selection": {
+    "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
+    "priority": 300,
+    "sourceRun": "2026-08-11T05-00-47-072Z",
+    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T05-00-47-072Z/JM-CON-04/resultado.json",
+    "jtlFiles": [
+      "tests/results/fase6/jmeter/results/canonical/JM-CON-04/resultados.jtl"
+    ]
+  }
+}

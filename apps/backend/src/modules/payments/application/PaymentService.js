@@ -4,10 +4,20 @@ import { AppError } from "../../../shared/errors/AppError.js";
 const statusMap = { approved: "APPROVED", rejected: "REJECTED", refunded: "REFUNDED" };
 
 export class PaymentService {
-  constructor(orderRepository, accessToken, notificationUrl) {
+  constructor(orderRepository, accessToken, notificationUrl, providerMode) {
     this.orderRepository = orderRepository;
     this.notificationUrl = notificationUrl;
-    this.paymentClient = accessToken
+    this.providerMode = providerMode;
+    this.paymentClient = providerMode === "stub"
+      ? {
+        create: async ({ body }) => ({
+          id: `e2e-${crypto.randomUUID()}`,
+          status: body.token === "e2e-rejected" ? "rejected" : "approved",
+          payment_method_id: body.payment_method_id,
+          payment_type_id: body.payment_method_id === "yape" ? "bank_transfer" : "credit_card",
+        }),
+      }
+      : accessToken
       ? new Payment(new MercadoPagoConfig({ accessToken, options: { timeout: 10000 } }))
       : null;
   }
@@ -64,6 +74,15 @@ export class PaymentService {
 
   async synchronize(providerPaymentId) {
     this.ensureConfigured();
+    if (this.providerMode === "stub") {
+      const match = String(providerPaymentId).match(/^stub-(approved|rejected)-([0-9a-f-]{36})$/i);
+      if (!match) return null;
+      return this.orderRepository.updatePaymentFromProvider(match[2], {
+        id: String(providerPaymentId),
+        status: match[1].toUpperCase(),
+        method: "CREDIT_CARD",
+      });
+    }
     const providerPayment = await this.paymentClient.get({ id: providerPaymentId });
     if (!providerPayment.external_reference) return null;
     return this.orderRepository.updatePaymentFromProvider(providerPayment.external_reference, {

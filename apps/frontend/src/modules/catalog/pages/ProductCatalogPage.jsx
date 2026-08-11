@@ -100,6 +100,7 @@ export default function ProductCatalogPage() {
             <FaMagnifyingGlass aria-hidden="true" />
             <input
               type="search"
+              aria-label="Buscar productos"
               placeholder="Buscar tacos, bebidas, quesadillas..."
               value={searchText}
               onChange={(event) => setSearchText(event.target.value)}
@@ -116,10 +117,11 @@ export default function ProductCatalogPage() {
               <FaSliders aria-hidden="true" /><h2>Filtrar carta</h2>
             </div>
             <div className="catalog-filter-group">
-              <div className="catalog-filter-label">
+              <label className="catalog-filter-label" htmlFor="catalog-max-price">
                 <span>Precio máximo</span><strong>S/ {selectedPrice}</strong>
-              </div>
+              </label>
               <input
+                id="catalog-max-price"
                 className="catalog-range"
                 type="range"
                 min="0"

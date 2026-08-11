@@ -1,0 +1,11 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1786424547289,411,CON01 POST misma clave,201,Created,10 repeticiones simultáneas 1-3,text,true,,2237,492,10,10,http://127.0.0.1:3301/api/pedidos,407,0,25
+1786424547289,422,CON01 POST misma clave,201,Created,10 repeticiones simultáneas 1-9,text,true,,2237,492,9,9,http://127.0.0.1:3301/api/pedidos,422,0,25
+1786424547289,429,CON01 POST misma clave,201,Created,10 repeticiones simultáneas 1-5,text,true,,2237,492,8,8,http://127.0.0.1:3301/api/pedidos,429,0,25
+1786424547290,433,CON01 POST misma clave,201,Created,10 repeticiones simultáneas 1-10,text,true,,2237,492,7,7,http://127.0.0.1:3301/api/pedidos,433,0,24
+1786424547289,441,CON01 POST misma clave,201,Created,10 repeticiones simultáneas 1-4,text,true,,2237,492,6,6,http://127.0.0.1:3301/api/pedidos,441,0,25
+1786424547289,450,CON01 POST misma clave,201,Created,10 repeticiones simultáneas 1-7,text,true,,2237,492,5,5,http://127.0.0.1:3301/api/pedidos,450,0,25
+1786424547290,456,CON01 POST misma clave,201,Created,10 repeticiones simultáneas 1-6,text,true,,2237,492,4,4,http://127.0.0.1:3301/api/pedidos,456,0,24
+1786424547289,458,CON01 POST misma clave,201,Created,10 repeticiones simultáneas 1-8,text,true,,2237,492,3,3,http://127.0.0.1:3301/api/pedidos,458,0,25
+1786424547290,463,CON01 POST misma clave,201,Created,10 repeticiones simultáneas 1-2,text,true,,2237,492,2,2,http://127.0.0.1:3301/api/pedidos,463,0,24
+1786424547289,467,CON01 POST misma clave,201,Created,10 repeticiones simultáneas 1-1,text,true,,2237,492,1,1,http://127.0.0.1:3301/api/pedidos,467,0,25
