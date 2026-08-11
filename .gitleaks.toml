@@ -4,7 +4,7 @@ useDefault = true
 [[allowlists]]
 description = "Identificadores públicos de incidencias devueltos por la API de SonarQube"
 paths = [
-  '''^tests/results/fase7/sonarqube/results/incidencias\.json$''',
+  '''(^|.*/)tests/results/fase7/sonarqube/results/incidencias\.json$''',
 ]
 
 [[allowlists]]
