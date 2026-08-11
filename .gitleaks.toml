@@ -1,0 +1,15 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Identificadores públicos de incidencias devueltos por la API de SonarQube"
+paths = [
+  '''^tests/results/fase7/sonarqube/results/incidencias\.json$''',
+]
+
+[[allowlists]]
+description = "Contraseñas ficticias y aisladas de las pruebas de integración"
+regexTarget = "secret"
+regexes = [
+  '''^Clave-segura-(123|456)$''',
+]

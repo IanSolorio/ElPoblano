@@ -68,6 +68,7 @@ jobs:
             dir /repo \
             --no-banner \
             --redact \
+            --config /repo/.gitleaks.toml \
             --report-format json \
             --report-path /repo/tests/results/fase8/github_actions/evidence/gitleaks-report.json
 
