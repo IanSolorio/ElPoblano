@@ -291,11 +291,11 @@ FIREBASE_PROJECT_ID=
 FIREBASE_CLIENT_EMAIL=
 FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
 
-MERCADO_PAGO_ACCESS_TOKEN=
 MERCADO_PAGO_NOTIFICATION_URL=
 ```
 
 La clave privada se guarda en una sola variable con saltos representados por `\n`. Nunca debe enviarse al frontend ni versionarse.
+`MERCADO_PAGO_ACCESS_TOKEN` es obligatoria, pero debe configurarse directamente en el gestor de secretos del entorno y nunca escribirse en archivos versionados.
 
 ### 7.4 Variables del frontend
 
