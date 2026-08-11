@@ -101,7 +101,7 @@ test_https() {
   local html
   html="$(curl --silent --show-error --fail --max-time 15 "${FRONTEND_URL}" || true)"
   local insecure_initial_resources="false"
-  if printf '%s' "${html}" | grep -Eiq '(src|href)=["'"'][[:space:]]*http://'; then
+  if printf '%s' "${html}" | grep -Eiq "(src|href)=[\"'][[:space:]]*http://"; then
     insecure_initial_resources="true"
   fi
 
