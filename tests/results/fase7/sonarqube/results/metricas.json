@@ -7,7 +7,7 @@
     "measures": [
       {
         "metric": "coverage",
-        "value": "58.6",
+        "value": "73.8",
         "bestValue": false
       },
       {
@@ -66,8 +66,8 @@
       },
       {
         "metric": "vulnerabilities",
-        "value": "0",
-        "bestValue": true
+        "value": "1",
+        "bestValue": false
       }
     ]
   }

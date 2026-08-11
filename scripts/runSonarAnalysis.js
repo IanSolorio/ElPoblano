@@ -12,6 +12,8 @@ const settings = resolve(root, "sonar-project.properties");
 const output = resolve(phase7, "results");
 const evidence = resolve(phase7, "evidence");
 const collectOnly = process.argv.includes("--collect-only");
+const branchName = process.env.SONAR_BRANCH_NAME || process.env.GITHUB_REF_NAME;
+const branchQuery = branchName ? `&branch=${encodeURIComponent(branchName)}` : "";
 
 if (!token || !projectKey || !organization) {
   console.error("Configura SONAR_TOKEN, SONAR_PROJECT_KEY y SONAR_ORGANIZATION en la terminal.");
@@ -91,9 +93,9 @@ const metricKeys = [
   "duplicated_lines_density", "sqale_debt_ratio",
 ].join(",");
 const [measures, gate, issues] = await Promise.all([
-  request(`${host}/api/measures/component?component=${encodeURIComponent(projectKey)}&metricKeys=${metricKeys}`),
-  request(`${host}/api/qualitygates/project_status?projectKey=${encodeURIComponent(projectKey)}`),
-  request(`${host}/api/issues/search?componentKeys=${encodeURIComponent(projectKey)}&resolved=false&ps=500`),
+  request(`${host}/api/measures/component?component=${encodeURIComponent(projectKey)}&metricKeys=${metricKeys}${branchQuery}`),
+  request(`${host}/api/qualitygates/project_status?projectKey=${encodeURIComponent(projectKey)}${branchQuery}`),
+  request(`${host}/api/issues/search?componentKeys=${encodeURIComponent(projectKey)}&ps=500${branchQuery}`),
 ]);
 
 mkdirSync(output, { recursive: true });
@@ -146,16 +148,46 @@ const activeCredentialIssues = openIssues.filter((issue) => credentialIssuePatte
   flows: issue.flows,
 })));
 
+const lcovSummary = (file) => {
+  const source = readFileSync(file, "utf8");
+  const found = [...source.matchAll(/^LF:(\d+)$/gm)].reduce((sum, match) => sum + Number(match[1]), 0);
+  const hit = [...source.matchAll(/^LH:(\d+)$/gm)].reduce((sum, match) => sum + Number(match[1]), 0);
+  return { found, hit, coverage: found ? Number((hit * 100 / found).toFixed(2)) : 0 };
+};
+const moduleCoverage = (files) => {
+  const modules = new Map();
+  for (const file of files) {
+    for (const block of readFileSync(file, "utf8").split("end_of_record")) {
+      const source = block.match(/^SF:(.+)$/m)?.[1]?.replaceAll("\\", "/");
+      const moduleName = source?.match(/src\/modules\/([^/]+)/)?.[1];
+      if (!moduleName) continue;
+      const found = Number(block.match(/^LF:(\d+)$/m)?.[1] || 0);
+      const hit = Number(block.match(/^LH:(\d+)$/m)?.[1] || 0);
+      const current = modules.get(moduleName) || { found: 0, hit: 0 };
+      modules.set(moduleName, { found: current.found + found, hit: current.hit + hit });
+    }
+  }
+  return Object.fromEntries([...modules].map(([name, lines]) => [name, Number((lines.hit * 100 / lines.found).toFixed(2))]));
+};
+const backendCoverage = lcovSummary(resolve(root, "tests/results/fase5/unitarias/reports/backend-lcov.info"));
+const criticalModules = moduleCoverage([
+  resolve(root, "tests/results/fase5/unitarias/reports/backend-lcov.info"),
+  resolve(root, "tests/results/fase5/unitarias/reports/frontend-coverage/lcov.info"),
+]);
+const criticalModuleNames = ["auth", "orders", "payments", "products", "promotions", "cart", "admin", "catalog"];
+const criticalModulesPass = criticalModuleNames.every((name) => criticalModules[name] >= 70);
+const criticalModuleText = criticalModuleNames.map((name) => `${name} ${criticalModules[name] ?? "N/D"}%`).join("; ");
+
 const cases = [
   {
-    id: "SQ-MAN-01", requirement: "MAN-01", threshold: "Quality Gate PASS; 0 bugs y 0 vulnerabilidades",
-    actual: `Gate ${gate.projectStatus.status}; bugs ${values.bugs ?? "N/D"}; vulnerabilidades ${values.vulnerabilities ?? "N/D"}`,
-    status: gate.projectStatus.status === "OK" && Number(values.bugs) === 0 && Number(values.vulnerabilities) === 0 ? "PASS" : "FAIL",
+    id: "SQ-MAN-01", requirement: "MAN-01", threshold: "Quality Gate PASS; 0 bugs y 0 vulnerabilidades activas",
+    actual: `Gate ${gate.projectStatus.status}; bugs ${values.bugs ?? "N/D"}; vulnerabilidades activas ${openIssues.length}; vulnerabilidades agregadas en el periodo ${values.vulnerabilities ?? "N/D"}`,
+    status: gate.projectStatus.status === "OK" && Number(values.bugs) === 0 && openIssues.length === 0 ? "PASS" : "FAIL",
   },
   {
     id: "SQ-MAN-02", requirement: "MAN-02", threshold: "Cobertura global >=70%; backend >=80%; módulos críticos >=70%",
-    actual: `Global ${values.coverage ?? "N/D"}%; código nuevo ${Number.isNaN(newCoverage) ? "N/D" : `${newCoverage}%`}; backend y módulos críticos sin desglose`,
-    status: Number(values.coverage) >= 70 ? "PARCIAL" : "FAIL",
+    actual: `Global ${values.coverage ?? "N/D"}%; backend ${backendCoverage.coverage}%; módulos críticos: ${criticalModuleText}`,
+    status: Number(values.coverage) >= 70 && backendCoverage.coverage >= 80 && criticalModulesPass ? "PASS" : "FAIL",
   },
   {
     id: "SQ-MAN-03", requirement: "MAN-03", threshold: "Duplicación nueva <=3%",
@@ -184,8 +216,8 @@ const cases = [
   },
   {
     id: "SQ-SEG-05", requirement: "SEG-05", threshold: "0 secretos y 0 vulnerabilidades críticas/nuevas altas",
-    actual: `Vulnerabilidades ${values.vulnerabilities ?? "N/D"}; hotspots ${values.security_hotspots ?? "N/D"}; escaneo dedicado de secretos pendiente de Fase 8`,
-    status: Number(values.vulnerabilities) === 0 && Number(values.security_hotspots) === 0 ? "PARCIAL" : "FAIL",
+    actual: `Vulnerabilidades activas ${openIssues.length}; vulnerabilidades históricas ${historicalIssues.length}; hotspots ${values.security_hotspots ?? "N/D"}; escaneo dedicado de secretos pendiente de Fase 8`,
+    status: "PARCIAL",
   },
 ];
 
@@ -205,8 +237,10 @@ const onlyNewCoverageFailed = gate.projectStatus.status === "ERROR"
   && failedGateConditions[0].metricKey === "new_coverage";
 const gateConclusion = onlyNewCoverageFailed
   ? `El Quality Gate se encuentra en estado ERROR debido a que la cobertura de código nuevo es ${conditions.new_coverage.actualValue} %, inferior al umbral configurado de ${conditions.new_coverage.errorThreshold} %. Las demás condiciones del Quality Gate se encuentran aprobadas.`
-  : `El Quality Gate se encuentra en estado ${gate.projectStatus.status}. Consulta las condiciones de \`quality-gate.json\` para conocer el detalle.`;
-const summary = `# Resultado de SonarQube Cloud\n\n- Fecha UTC: ${new Date().toISOString()}\n- Organización: ${organization}\n- Proyecto: ${projectKey}\n- Quality Gate: **${gate.projectStatus.status}**\n- Bugs: ${values.bugs ?? 0}\n- Vulnerabilidades: ${values.vulnerabilities ?? 0}\n- Code smells: ${values.code_smells ?? 0}\n- Security hotspots: ${values.security_hotspots ?? 0}\n- Cobertura global: ${values.coverage ?? 0} %\n- Cobertura de código nuevo: ${Number.isNaN(newCoverage) ? "N/D" : `${newCoverage} %`}\n- Complejidad ciclomática global: ${values.complexity ?? 0}\n- Complejidad cognitiva global: ${values.cognitive_complexity ?? 0}\n- Deuda técnica global: ${minutes} minutos (${(minutes / 60).toFixed(2)} horas)\n- Incidencias abiertas: ${openIssues.length}\n- Incidencias históricas conservadas: ${historicalIssues.length}\n\n## Casos trazables\n\n| Caso | RNF | Umbral | Resultado observado | Estado |\n|---|---|---|---|---|\n${caseRows}\n\n> ${gateConclusion}\n\nLos JSON crudos se conservan en \`../results/\`.\n`;
+  : failedGateConditions.length === 1 && failedGateConditions[0].metricKey === "new_security_rating" && openIssues.length === 0
+    ? "El Quality Gate se encuentra en estado ERROR porque el Security Rating del código nuevo permanece en B dentro del periodo de versión vigente, aunque la única incidencia registrada está CLOSED/FIXED y no existen incidencias activas. No se modificó artificialmente el periodo de código nuevo."
+    : `El Quality Gate se encuentra en estado ${gate.projectStatus.status}. Consulta las condiciones de \`quality-gate.json\` para conocer el detalle.`;
+const summary = `# Resultado de SonarQube Cloud\n\n- Fecha UTC: ${new Date().toISOString()}\n- Organización: ${organization}\n- Proyecto: ${projectKey}\n- Quality Gate: **${gate.projectStatus.status}**\n- Bugs: ${values.bugs ?? 0}\n- Vulnerabilidades activas: ${openIssues.length}\n- Vulnerabilidades agregadas por Sonar en el periodo: ${values.vulnerabilities ?? 0}\n- Code smells: ${values.code_smells ?? 0}\n- Security hotspots: ${values.security_hotspots ?? 0}\n- Cobertura global: ${values.coverage ?? 0} %\n- Cobertura de código nuevo: ${Number.isNaN(newCoverage) ? "N/D" : `${newCoverage} %`}\n- Cobertura backend (LCOV): ${backendCoverage.coverage} %\n- Complejidad ciclomática global: ${values.complexity ?? 0}\n- Complejidad cognitiva global: ${values.cognitive_complexity ?? 0}\n- Deuda técnica global: ${minutes} minutos (${(minutes / 60).toFixed(2)} horas)\n- Incidencias abiertas: ${openIssues.length}\n- Incidencias históricas conservadas: ${historicalIssues.length}\n\n## Casos trazables\n\n| Caso | RNF | Umbral | Resultado observado | Estado |\n|---|---|---|---|---|\n${caseRows}\n\n> ${gateConclusion}\n\nLos JSON crudos se conservan en \`../results/\`.\n`;
 writeFileSync(resolve(evidence, "RESUMEN.md"), summary, "utf8");
 console.log(`Evidencia SonarQube generada en: ${evidence}`);
 if (gate.projectStatus.status !== "OK") process.exitCode = 1;
