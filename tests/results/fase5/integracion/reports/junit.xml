@@ -1,66 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <testsuites>
-	<testcase name="IT-API-01: health responde sin depender de una consulta de negocio" time="0.347301" classname="test"/>
-	<testcase name="IT-API-02: ready confirma conectividad MySQL" time="0.497472" classname="test"/>
-	<testcase name="IT-API-03: ruta inexistente devuelve JSON uniforme" time="0.132778" classname="test"/>
-	<testcase name="IT-API-04: CORS permite origen configurado y no autoriza otro" time="0.129297" classname="test"/>
-	<testcase name="IT-API-06: payload superior a 100 KiB es rechazado" time="0.132045" classname="test"/>
-	<testcase name="IT-API-07: Helmet está presente y x-powered-by ausente" time="0.130766" classname="test"/>
-	<testcase name="IT-AUTH-01: registro crea usuario, dirección, sesión, auditoría y cookie" time="0.250151" classname="test"/>
-	<testcase name="IT-AUTH-02: registro rechaza correo, clave y coordenadas inválidas" time="0.162644" classname="test"/>
-	<testcase name="IT-AUTH-03: registro duplicado concurrente crea una sola cuenta" time="0.231788" classname="test"/>
-	<testcase name="IT-AUTH-04: login válido crea cookie, sesión y auditoría" time="0.205230" classname="test"/>
-	<testcase name="IT-AUTH-05: login inválido o inactivo responde 401 sin cookie" time="0.190619" classname="test"/>
-	<testcase name="IT-AUTH-06: me devuelve usuario y dirección sin secretos" time="0.204946" classname="test"/>
-	<testcase name="IT-AUTH-07: cookie revocada o expirada deja de autenticar" time="0.208227" classname="test"/>
-	<testcase name="IT-AUTH-08: logout revoca sesión, borra cookie y bloquea me" time="0.208113" classname="test"/>
-	<testcase name="IT-AUTH-09: configuración productiva emite cookie HttpOnly, Secure, SameSite y Path" time="0.136258" classname="test"/>
-	<testcase name="IT-API-05: rate limiter responde 429 al superar 120 solicitudes" time="0.423597" classname="test"/>
-	<testcase name="IT-USR-01: ADMIN lista, edita y desactiva clientes revocando sesiones y auditando" time="0.510385" classname="test"/>
-	<testcase name="IT-USR-02: SUPER_ADMIN crea y administra una cuenta administrativa" time="0.258111" classname="test"/>
-	<testcase name="IT-USR-03: ADMIN no gestiona administradores ni se desactiva a sí mismo" time="0.179534" classname="test"/>
-	<testcase name="IT-ORD-01: crear pedido persiste cabecera, detalle, pago, movimiento, auditoría y descuenta stock atómicamente" time="0.191215" classname="test"/>
-	<testcase name="IT-ORD-02: repetir Idempotency-Key devuelve el mismo pedido sin duplicar efectos" time="0.207384" classname="test"/>
-	<testcase name="IT-ORD-03: dos compras concurrentes por la última unidad solo permiten una" time="0.210861" classname="test"/>
-	<testcase name="IT-ORD-04: producto inexistente o no disponible revierte toda la operación" time="0.189787" classname="test"/>
-	<testcase name="IT-ORD-05: comprar combo distribuye precio y descuenta cantidades de sus componentes" time="0.196811" classname="test"/>
-	<testcase name="IT-ORD-06: cliente no puede entregar a una dirección perteneciente a otro usuario" time="0.298266" classname="test"/>
-	<testcase name="IT-ORD-07: el servidor ignora totales del cliente y calcula precios desde MySQL" time="0.166787" classname="test"/>
-	<testcase name="IT-ORD-08: historial y detalle están aislados por propietario" time="0.220003" classname="test"/>
-	<testcase name="IT-ORD-09: pedidos actuales e historial mensual separan activos y entregados" time="0.256872" classname="test"/>
-	<testcase name="IT-ORD-10: panel administrativo pagina, filtra, busca y entrega resumen" time="0.211654" classname="test"/>
-	<testcase name="IT-ORD-11: flujo operativo exige pago y respeta CONFIRMED→PREPARING→READY→OUT_FOR_DELIVERY→DELIVERED" time="0.277887" classname="test"/>
-	<testcase name="IT-ORD-12: estadísticas mensuales incluyen ventas, ticket y productos pagados" time="0.206762" classname="test"/>
-	<testcase name="IT-ORD-13: cancelar pedido pendiente propio devuelve stock una vez, audita y protege la propiedad" time="0.234901" classname="test"/>
-	<testcase name="IT-PAY-01: aprobación persiste proveedor, confirma pedido y registra auditoría" time="0.198023" classname="test"/>
-	<testcase name="IT-PAY-02: rechazo cancela, devuelve stock y solo genera una devolución" time="0.213270" classname="test"/>
-	<testcase name="IT-PAY-03: mapeo de métodos reconoce Yape, débito, prepago y crédito" time="0.165146" classname="test"/>
-	<testcase name="IT-PAY-04: sincronización de webhook consulta al proveedor y actualiza el pedido" time="0.173347" classname="test"/>
-	<testcase name="IT-PAY-05: notificaciones repetidas o fuera de orden no duplican efectos ni degradan un pago aprobado" time="0.208751" classname="test"/>
-	<testcase name="IT-PAY-06: webhook sin identificador responde 200 y no modifica pagos" time="0.197248" classname="test"/>
-	<testcase name="IT-PAY-07: reintentar pago pendiente confirma el mismo pedido y bloquea otro intento" time="0.205085" classname="test"/>
-	<testcase name="IT-DB-01: las ocho migraciones de Prisma están aplicadas en la base de prueba" time="0.161770" classname="test"/>
-	<testcase name="IT-DB-02: MySQL aplica restricciones UNIQUE y claves foráneas" time="0.155678" classname="test"/>
-	<testcase name="IT-DB-03: bootstrap lógico del superadministrador es idempotente" time="0.197293" classname="test"/>
-	<testcase name="IT-PRD-01: catálogo anónimo devuelve solo productos vendibles" time="0.367698" classname="test"/>
-	<testcase name="IT-PRD-02: detalle de producto válido e inexistente responde 200 y 404" time="0.169323" classname="test"/>
-	<testcase name="IT-PRD-03: ADMIN crea, edita y retira producto con inventario y auditoría" time="0.242857" classname="test"/>
-	<testcase name="IT-PRD-04: cliente y anónimo no modifican productos" time="0.165724" classname="test"/>
-	<testcase name="IT-PRD-05: stock cero oculta y reposición vuelve a publicar" time="0.208563" classname="test"/>
-	<testcase name="IT-PRD-06: retiro conserva el registro y lo excluye de venta" time="0.176192" classname="test"/>
-	<testcase name="IT-CAT-01: público ve activas y superadmin ve también inactivas" time="0.161123" classname="test"/>
-	<testcase name="IT-CAT-02: SUPER_ADMIN crea y edita categoría con auditoría" time="0.175539" classname="test"/>
-	<testcase name="IT-CAT-03: ADMIN y cliente no administran categorías" time="0.161808" classname="test"/>
-	<testcase name="IT-CAT-04: nombre o slug duplicado produce conflicto" time="0.154478" classname="test"/>
-	<testcase name="IT-FILE-01: subida autorizada usa carpeta y devuelve URL" time="0.154208" classname="test"/>
-	<testcase name="IT-FILE-02: subida sin rol, tipo inválido o tamaño excesivo es rechazada" time="0.186825" classname="test"/>
-	<testcase name="IT-FILE-03: fallo de almacenamiento devuelve error y no crea recursos" time="0.147016" classname="test"/>
-	<testcase name="IT-PRO-01: listado público filtra promociones por vigencia y estado" time="0.159131" classname="test"/>
-	<testcase name="IT-PRO-02: ADMIN crea promoción individual y auditoría" time="0.178994" classname="test"/>
-	<testcase name="IT-PRO-03: ADMIN crea combo con varios productos, cantidades, precio e imagen" time="0.179032" classname="test"/>
-	<testcase name="IT-PRO-04: editar y retirar promoción actualiza relaciones y auditoría" time="0.216289" classname="test"/>
-	<testcase name="IT-PRO-05: datos inválidos no producen escritura parcial" time="0.160336" classname="test"/>
-	<testcase name="IT-PRO-06: cliente no administra promociones" time="0.147179" classname="test"/>
+	<testcase name="IT-API-01: health responde sin depender de una consulta de negocio" time="0.833028" classname="test"/>
+	<testcase name="IT-API-02: ready confirma conectividad MySQL" time="0.136932" classname="test"/>
+	<testcase name="IT-API-03: ruta inexistente devuelve JSON uniforme" time="0.131819" classname="test"/>
+	<testcase name="IT-API-04: CORS permite origen configurado y no autoriza otro" time="0.128684" classname="test"/>
+	<testcase name="IT-API-06: payload superior a 100 KiB es rechazado" time="0.132887" classname="test"/>
+	<testcase name="IT-API-07: Helmet está presente y x-powered-by ausente" time="0.124100" classname="test"/>
+	<testcase name="IT-AUTH-01: registro crea usuario, dirección, sesión, auditoría y cookie" time="0.231539" classname="test"/>
+	<testcase name="IT-AUTH-02: registro rechaza correo, clave y coordenadas inválidas" time="0.143635" classname="test"/>
+	<testcase name="IT-AUTH-03: registro duplicado concurrente crea una sola cuenta" time="0.241993" classname="test"/>
+	<testcase name="IT-AUTH-04: login válido crea cookie, sesión y auditoría" time="0.200426" classname="test"/>
+	<testcase name="IT-AUTH-05: login inválido o inactivo responde 401 sin cookie" time="0.186136" classname="test"/>
+	<testcase name="IT-AUTH-06: me devuelve usuario y dirección sin secretos" time="0.198719" classname="test"/>
+	<testcase name="IT-AUTH-07: cookie revocada o expirada deja de autenticar" time="0.201821" classname="test"/>
+	<testcase name="IT-AUTH-08: logout revoca sesión, borra cookie y bloquea me" time="0.202177" classname="test"/>
+	<testcase name="IT-AUTH-09: configuración productiva emite cookie HttpOnly, Secure, SameSite y Path" time="0.140269" classname="test"/>
+	<testcase name="IT-API-05: rate limiter responde 429 al superar 120 solicitudes" time="0.368783" classname="test"/>
+	<testcase name="IT-USR-01: ADMIN lista, edita y desactiva clientes revocando sesiones y auditando" time="0.486982" classname="test"/>
+	<testcase name="IT-USR-02: SUPER_ADMIN crea y administra una cuenta administrativa" time="0.253353" classname="test"/>
+	<testcase name="IT-USR-03: ADMIN no gestiona administradores ni se desactiva a sí mismo" time="0.174836" classname="test"/>
+	<testcase name="IT-ORD-01: crear pedido persiste cabecera, detalle, pago, movimiento, auditoría y descuenta stock atómicamente" time="0.193645" classname="test"/>
+	<testcase name="IT-ORD-02: repetir Idempotency-Key devuelve el mismo pedido sin duplicar efectos" time="0.213005" classname="test"/>
+	<testcase name="IT-ORD-03: dos compras concurrentes por la última unidad solo permiten una" time="0.213175" classname="test"/>
+	<testcase name="IT-ORD-04: producto inexistente o no disponible revierte toda la operación" time="0.189249" classname="test"/>
+	<testcase name="IT-ORD-05: comprar combo distribuye precio y descuenta cantidades de sus componentes" time="0.499362" classname="test"/>
+	<testcase name="IT-ORD-06: cliente no puede entregar a una dirección perteneciente a otro usuario" time="0.194437" classname="test"/>
+	<testcase name="IT-ORD-07: el servidor ignora totales del cliente y calcula precios desde MySQL" time="0.167871" classname="test"/>
+	<testcase name="IT-ORD-08: historial y detalle están aislados por propietario" time="0.231379" classname="test"/>
+	<testcase name="IT-ORD-09: pedidos actuales e historial mensual separan activos y entregados" time="0.251615" classname="test"/>
+	<testcase name="IT-ORD-10: panel administrativo pagina, filtra, busca y entrega resumen" time="0.224769" classname="test"/>
+	<testcase name="IT-ORD-11: flujo operativo exige pago y respeta CONFIRMED→PREPARING→READY→OUT_FOR_DELIVERY→DELIVERED" time="0.277277" classname="test"/>
+	<testcase name="IT-ORD-12: estadísticas mensuales incluyen ventas, ticket y productos pagados" time="0.211744" classname="test"/>
+	<testcase name="IT-ORD-13: cancelar pedido pendiente propio devuelve stock una vez, audita y protege la propiedad" time="0.232988" classname="test"/>
+	<testcase name="IT-PAY-01: aprobación persiste proveedor, confirma pedido y registra auditoría" time="0.203472" classname="test"/>
+	<testcase name="IT-PAY-02: rechazo cancela, devuelve stock y solo genera una devolución" time="0.213214" classname="test"/>
+	<testcase name="IT-PAY-03: mapeo de métodos reconoce Yape, débito, prepago y crédito" time="0.162317" classname="test"/>
+	<testcase name="IT-PAY-04: sincronización de webhook consulta al proveedor y actualiza el pedido" time="0.173285" classname="test"/>
+	<testcase name="IT-PAY-05: notificaciones repetidas o fuera de orden no duplican efectos ni degradan un pago aprobado" time="0.205582" classname="test"/>
+	<testcase name="IT-PAY-06: webhook sin identificador responde 200 y no modifica pagos" time="0.196860" classname="test"/>
+	<testcase name="IT-PAY-07: reintentar pago pendiente confirma el mismo pedido y bloquea otro intento" time="0.201828" classname="test"/>
+	<testcase name="IT-DB-01: las ocho migraciones de Prisma están aplicadas en la base de prueba" time="0.170097" classname="test"/>
+	<testcase name="IT-DB-02: MySQL aplica restricciones UNIQUE y claves foráneas" time="0.156610" classname="test"/>
+	<testcase name="IT-DB-03: bootstrap lógico del superadministrador es idempotente" time="0.198690" classname="test"/>
+	<testcase name="IT-PRD-01: catálogo anónimo devuelve solo productos vendibles" time="0.369777" classname="test"/>
+	<testcase name="IT-PRD-02: detalle de producto válido e inexistente responde 200 y 404" time="0.171890" classname="test"/>
+	<testcase name="IT-PRD-03: ADMIN crea, edita y retira producto con inventario y auditoría" time="0.241568" classname="test"/>
+	<testcase name="IT-PRD-04: cliente y anónimo no modifican productos" time="0.172698" classname="test"/>
+	<testcase name="IT-PRD-05: stock cero oculta y reposición vuelve a publicar" time="0.213574" classname="test"/>
+	<testcase name="IT-PRD-06: retiro conserva el registro y lo excluye de venta" time="0.183655" classname="test"/>
+	<testcase name="IT-CAT-01: público ve activas y superadmin ve también inactivas" time="0.160523" classname="test"/>
+	<testcase name="IT-CAT-02: SUPER_ADMIN crea y edita categoría con auditoría" time="0.172908" classname="test"/>
+	<testcase name="IT-CAT-03: ADMIN y cliente no administran categorías" time="0.161655" classname="test"/>
+	<testcase name="IT-CAT-04: nombre o slug duplicado produce conflicto" time="0.156802" classname="test"/>
+	<testcase name="IT-FILE-01: subida autorizada usa carpeta y devuelve URL" time="0.158894" classname="test"/>
+	<testcase name="IT-FILE-02: subida sin rol, tipo inválido o tamaño excesivo es rechazada" time="0.203872" classname="test"/>
+	<testcase name="IT-FILE-03: fallo de almacenamiento devuelve error y no crea recursos" time="0.166317" classname="test"/>
+	<testcase name="IT-PRO-01: listado público filtra promociones por vigencia y estado" time="0.174266" classname="test"/>
+	<testcase name="IT-PRO-02: ADMIN crea promoción individual y auditoría" time="0.185475" classname="test"/>
+	<testcase name="IT-PRO-03: ADMIN crea combo con varios productos, cantidades, precio e imagen" time="0.186200" classname="test"/>
+	<testcase name="IT-PRO-04: editar y retirar promoción actualiza relaciones y auditoría" time="0.215632" classname="test"/>
+	<testcase name="IT-PRO-05: datos inválidos no producen escritura parcial" time="0.169808" classname="test"/>
+	<testcase name="IT-PRO-06: cliente no administra promociones" time="0.149289" classname="test"/>
 	<!-- tests 61 -->
 	<!-- suites 0 -->
 	<!-- pass 61 -->
@@ -68,5 +68,5 @@
 	<!-- cancelled 0 -->
 	<!-- skipped 0 -->
 	<!-- todo 0 -->
-	<!-- duration_ms 14401.9699 -->
+	<!-- duration_ms 14704.4773 -->
 </testsuites>

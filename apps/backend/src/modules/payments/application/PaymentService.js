@@ -8,18 +8,19 @@ export class PaymentService {
     this.orderRepository = orderRepository;
     this.notificationUrl = notificationUrl;
     this.providerMode = providerMode;
-    this.paymentClient = providerMode === "stub"
-      ? {
+    this.paymentClient = null;
+    if (providerMode === "stub") {
+      this.paymentClient = {
         create: async ({ body }) => ({
           id: `e2e-${crypto.randomUUID()}`,
           status: body.token === "e2e-rejected" ? "rejected" : "approved",
           payment_method_id: body.payment_method_id,
           payment_type_id: body.payment_method_id === "yape" ? "bank_transfer" : "credit_card",
         }),
-      }
-      : accessToken
-      ? new Payment(new MercadoPagoConfig({ accessToken, options: { timeout: 10000 } }))
-      : null;
+      };
+    } else if (accessToken) {
+      this.paymentClient = new Payment(new MercadoPagoConfig({ accessToken, options: { timeout: 10000 } }));
+    }
   }
 
   ensureConfigured() {
@@ -75,7 +76,7 @@ export class PaymentService {
   async synchronize(providerPaymentId) {
     this.ensureConfigured();
     if (this.providerMode === "stub") {
-      const match = String(providerPaymentId).match(/^stub-(approved|rejected)-([0-9a-f-]{36})$/i);
+      const match = /^stub-(approved|rejected)-([0-9a-f-]{36})$/i.exec(String(providerPaymentId));
       if (!match) return null;
       return this.orderRepository.updatePaymentFromProvider(match[2], {
         id: String(providerPaymentId),

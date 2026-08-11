@@ -8,6 +8,6 @@
 | Aceptación | 32 | 32 | ACEPTADO |
 
 - Total formal de Fase 5: 269 comprobaciones (128 unitarias, 61 integración, 48 sistema y 32 aceptación). Las 21 unitarias frontend se contabilizan explícitamente.
-- Fecha UTC: 2026-08-11T04:47:36.418Z.
+- Fecha UTC: 2026-08-11T06:44:08.568Z.
 - Resultado general: **APROBADO**.
 - Trazabilidad: `trazabilidad-fase5.csv`.
