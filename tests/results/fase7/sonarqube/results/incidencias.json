@@ -11075,5 +11075,7 @@
   "facets": [],
   "apiTotal": 188,
   "historicalTotal": 188,
-  "openTotal": 1
+  "openTotal": 1,
+  "activeSecurityTotal": 1,
+  "activeHighCriticalSecurityTotal": 1
 }
