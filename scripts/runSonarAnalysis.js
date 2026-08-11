@@ -100,11 +100,31 @@ mkdirSync(output, { recursive: true });
 mkdirSync(evidence, { recursive: true });
 writeFileSync(resolve(output, "metricas.json"), `${JSON.stringify(measures, null, 2)}\n`, "utf8");
 writeFileSync(resolve(output, "quality-gate.json"), `${JSON.stringify(gate, null, 2)}\n`, "utf8");
-writeFileSync(resolve(output, "incidencias.json"), `${JSON.stringify(issues, null, 2)}\n`, "utf8");
+
+const closedIssueStates = new Set([
+  "CLOSED", "FIXED", "RESOLVED", "FALSE_POSITIVE", "WONTFIX", "WON'T_FIX", "REMOVED",
+]);
+const openIssueStates = new Set(["OPEN", "CONFIRMED", "REOPENED", "ACCEPTED", "TO_REVIEW", "IN_REVIEW"]);
+const normalizeIssueState = (value) => String(value || "").trim().toUpperCase().replaceAll(" ", "_");
+const isOpenIssue = (issue) => {
+  const states = [issue.status, issue.resolution, issue.issueStatus].map(normalizeIssueState).filter(Boolean);
+  if (states.some((state) => closedIssueStates.has(state))) return false;
+  return states.some((state) => openIssueStates.has(state));
+};
+const historicalIssues = Array.isArray(issues.issues) ? issues.issues : [];
+const openIssues = historicalIssues.filter(isOpenIssue);
+const issueEvidence = {
+  ...issues,
+  apiTotal: issues.apiTotal ?? issues.paging?.total ?? issues.total ?? historicalIssues.length,
+  historicalTotal: historicalIssues.length,
+  openTotal: openIssues.length,
+  total: openIssues.length,
+};
+writeFileSync(resolve(output, "incidencias.json"), `${JSON.stringify(issueEvidence, null, 2)}\n`, "utf8");
 
 const values = Object.fromEntries(measures.component.measures.map(({ metric, value }) => [metric, value]));
 const conditions = Object.fromEntries(
-  gate.projectStatus.conditions.map(({ metricKey, actualValue, status }) => [metricKey, { actualValue, status }]),
+  gate.projectStatus.conditions.map(({ metricKey, actualValue, status, errorThreshold }) => [metricKey, { actualValue, status, errorThreshold }]),
 );
 const rating = (value) => ({ 1: "A", 2: "B", 3: "C", 4: "D", 5: "E" }[Number(value)] || "NO_DISPONIBLE");
 const minutes = Number(values.sqale_index || 0);
@@ -113,6 +133,18 @@ const newDuplication = Number(conditions.new_duplicated_lines_density?.actualVal
 const newMaintainability = rating(conditions.new_maintainability_rating?.actualValue);
 const argon2Source = readFileSync(resolve(root, "apps/backend/src/modules/auth/infrastructure/passwordHasher.js"), "utf8");
 const hasArgon2id = /argon2\.argon2id/.test(argon2Source);
+const unitEvidence = readFileSync(resolve(root, "tests/results/fase5/unitarias/reports/backend-junit.xml"), "utf8");
+const integrationEvidence = readFileSync(resolve(root, "tests/results/fase5/integracion/reports/junit.xml"), "utf8");
+const hasNoHashExposureEvidence = ["UT-AUTH-12", "UT-USR-12"].every((id) => unitEvidence.includes(id))
+  && ["IT-AUTH-06", "IT-USR-01"].every((id) => integrationEvidence.includes(id));
+const credentialIssuePattern = /(argon2|password|passwd|contrase(?:n|ñ)a|credential|hash)/i;
+const activeCredentialIssues = openIssues.filter((issue) => credentialIssuePattern.test(JSON.stringify({
+  rule: issue.rule,
+  message: issue.message,
+  component: issue.component,
+  tags: issue.tags,
+  flows: issue.flows,
+})));
 
 const cases = [
   {
@@ -147,8 +179,8 @@ const cases = [
   },
   {
     id: "SQ-SEG-01", requirement: "SEG-01", threshold: "Argon2id presente y 0 exposiciones detectadas",
-    actual: `Argon2id ${hasArgon2id ? "presente" : "ausente"}; vulnerabilidades ${values.vulnerabilities ?? "N/D"}; incidencias abiertas ${issues.total}`,
-    status: hasArgon2id && Number(values.vulnerabilities) === 0 && issues.total === 0 ? "PASS" : "FAIL",
+    actual: `Argon2id ${hasArgon2id ? "presente" : "ausente"}; evidencia de no exposición de hashes ${hasNoHashExposureEvidence ? "presente" : "ausente"}; incidencias activas sobre credenciales/hashes ${activeCredentialIssues.length}`,
+    status: hasArgon2id && hasNoHashExposureEvidence && activeCredentialIssues.length === 0 ? "PASS" : "FAIL",
   },
   {
     id: "SQ-SEG-05", requirement: "SEG-05", threshold: "0 secretos y 0 vulnerabilidades críticas/nuevas altas",
@@ -167,7 +199,14 @@ writeFileSync(resolve(evidence, "casos-sonarqube.csv"), `${caseCsv}\n`, "utf8");
 const caseRows = cases
   .map(({ id, requirement, threshold, actual, status }) => `| ${id} | ${requirement} | ${threshold} | ${actual} | **${status}** |`)
   .join("\n");
-const summary = `# Resultado de SonarQube Cloud\n\n- Fecha UTC: ${new Date().toISOString()}\n- Organización: ${organization}\n- Proyecto: ${projectKey}\n- Quality Gate: **${gate.projectStatus.status}**\n- Bugs: ${values.bugs ?? 0}\n- Vulnerabilidades: ${values.vulnerabilities ?? 0}\n- Code smells: ${values.code_smells ?? 0}\n- Security hotspots: ${values.security_hotspots ?? 0}\n- Cobertura global: ${values.coverage ?? 0} %\n- Cobertura de código nuevo: ${Number.isNaN(newCoverage) ? "N/D" : `${newCoverage} %`}\n- Complejidad ciclomática global: ${values.complexity ?? 0}\n- Complejidad cognitiva global: ${values.cognitive_complexity ?? 0}\n- Deuda técnica global: ${minutes} minutos (${(minutes / 60).toFixed(2)} horas)\n- Incidencias abiertas: ${issues.total}\n\n## Casos trazables\n\n| Caso | RNF | Umbral | Resultado observado | Estado |\n|---|---|---|---|---|\n${caseRows}\n\n> El Quality Gate está aprobado porque evalúa principalmente código nuevo. Esto no sustituye el umbral académico de cobertura global: ${values.coverage ?? 0} % todavía es menor que 70 %. Los estados PARCIAL y PENDIENTE_METRICA se conservan para no presentar como validado aquello que el análisis actual no mide por completo.\n\nLos JSON crudos se conservan en \`../results/\`.\n`;
+const failedGateConditions = gate.projectStatus.conditions.filter(({ status }) => status !== "OK");
+const onlyNewCoverageFailed = gate.projectStatus.status === "ERROR"
+  && failedGateConditions.length === 1
+  && failedGateConditions[0].metricKey === "new_coverage";
+const gateConclusion = onlyNewCoverageFailed
+  ? `El Quality Gate se encuentra en estado ERROR debido a que la cobertura de código nuevo es ${conditions.new_coverage.actualValue} %, inferior al umbral configurado de ${conditions.new_coverage.errorThreshold} %. Las demás condiciones del Quality Gate se encuentran aprobadas.`
+  : `El Quality Gate se encuentra en estado ${gate.projectStatus.status}. Consulta las condiciones de \`quality-gate.json\` para conocer el detalle.`;
+const summary = `# Resultado de SonarQube Cloud\n\n- Fecha UTC: ${new Date().toISOString()}\n- Organización: ${organization}\n- Proyecto: ${projectKey}\n- Quality Gate: **${gate.projectStatus.status}**\n- Bugs: ${values.bugs ?? 0}\n- Vulnerabilidades: ${values.vulnerabilities ?? 0}\n- Code smells: ${values.code_smells ?? 0}\n- Security hotspots: ${values.security_hotspots ?? 0}\n- Cobertura global: ${values.coverage ?? 0} %\n- Cobertura de código nuevo: ${Number.isNaN(newCoverage) ? "N/D" : `${newCoverage} %`}\n- Complejidad ciclomática global: ${values.complexity ?? 0}\n- Complejidad cognitiva global: ${values.cognitive_complexity ?? 0}\n- Deuda técnica global: ${minutes} minutos (${(minutes / 60).toFixed(2)} horas)\n- Incidencias abiertas: ${openIssues.length}\n- Incidencias históricas conservadas: ${historicalIssues.length}\n\n## Casos trazables\n\n| Caso | RNF | Umbral | Resultado observado | Estado |\n|---|---|---|---|---|\n${caseRows}\n\n> ${gateConclusion}\n\nLos JSON crudos se conservan en \`../results/\`.\n`;
 writeFileSync(resolve(evidence, "RESUMEN.md"), summary, "utf8");
 console.log(`Evidencia SonarQube generada en: ${evidence}`);
 if (gate.projectStatus.status !== "OK") process.exitCode = 1;

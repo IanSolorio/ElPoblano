@@ -1,6 +1,7 @@
 const API_URL = import.meta.env.VITE_ENDPOINT_BASE || "/api";
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const INTEGER_ID_PATTERN = /^[1-9]\d*$/;
+const SAFE_API_PATH_PATTERN = /^\/[a-z0-9/_?=&.%+-]+$/i;
 
 const validatedRouteId = (id, pattern) => {
   const value = String(id);
@@ -11,7 +12,11 @@ const validatedRouteId = (id, pattern) => {
 const uuidRouteId = (id) => validatedRouteId(id, UUID_PATTERN);
 const integerRouteId = (id) => validatedRouteId(id, INTEGER_ID_PATTERN);
 const request = async (path, options = {}) => {
-  const response = await fetch(`${API_URL}${path}`, { credentials: "include", headers: { "Content-Type": "application/json", ...options.headers }, ...options });
+  const safePath = String(path);
+  if (!SAFE_API_PATH_PATTERN.test(safePath) || safePath.includes("..") || safePath.includes("//")) {
+    throw new TypeError("Ruta administrativa inválida.");
+  }
+  const response = await fetch(`${API_URL}${safePath}`, { credentials: "include", headers: { "Content-Type": "application/json", ...options.headers }, ...options });
   const data = response.status === 204 ? null : await response.json();
   if (!response.ok) {
     if (response.status === 401) throw new Error("Tu sesión expiró. Inicia sesión nuevamente antes de continuar.");

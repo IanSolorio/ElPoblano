@@ -5,12 +5,249 @@
   "paging": {
     "pageIndex": 1,
     "pageSize": 500,
-    "total": 0
+    "total": 1
   },
-  "effortTotal": 0,
-  "debtTotal": 0,
-  "issues": [],
-  "components": [],
-  "organizations": [],
-  "facets": []
+  "effortTotal": 20,
+  "debtTotal": 20,
+  "issues": [
+    {
+      "key": "AZ_tDSkiue9n_h9ADkPl",
+      "rule": "jssecurity:S8476",
+      "severity": "MINOR",
+      "component": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/infrastructure/adminApi.js",
+      "project": "IanSolorio_ElPoblano",
+      "hash": "6386ff6a1ba64bad70f6149d04e460f8",
+      "textRange": {
+        "startLine": 14,
+        "endLine": 14,
+        "startOffset": 25,
+        "endOffset": 30
+      },
+      "flows": [
+        {
+          "locations": [
+            {
+              "component": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/infrastructure/adminApi.js",
+              "textRange": {
+                "startLine": 14,
+                "endLine": 14,
+                "startOffset": 25,
+                "endOffset": 30
+              },
+              "msg": "Sink: this invocation is not safe; a malicious value can be used as argument"
+            },
+            {
+              "component": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/infrastructure/adminApi.js",
+              "textRange": {
+                "startLine": 14,
+                "endLine": 14,
+                "startOffset": 31,
+                "endOffset": 50
+              },
+              "msg": "This concatenation can propagate malicious content to the newly created string"
+            },
+            {
+              "component": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/infrastructure/adminApi.js",
+              "textRange": {
+                "startLine": 14,
+                "endLine": 14,
+                "startOffset": 44,
+                "endOffset": 48
+              },
+              "msg": "A malicious value was previously assigned to field ‘path’"
+            },
+            {
+              "component": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/infrastructure/adminApi.js",
+              "textRange": {
+                "startLine": 13,
+                "endLine": 13,
+                "startOffset": 23,
+                "endOffset": 27
+              },
+              "msg": "A malicious value can be assigned to field ‘path’"
+            },
+            {
+              "component": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/infrastructure/adminApi.js",
+              "textRange": {
+                "startLine": 40,
+                "endLine": 40,
+                "startOffset": 50,
+                "endOffset": 57
+              },
+              "msg": "Function call: Control is passed to this function, which is on the path to a security sink"
+            },
+            {
+              "component": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/infrastructure/adminApi.js",
+              "textRange": {
+                "startLine": 40,
+                "endLine": 40,
+                "startOffset": 58,
+                "endOffset": 122
+              },
+              "msg": "This concatenation can propagate malicious content to the newly created string"
+            },
+            {
+              "component": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/infrastructure/adminApi.js",
+              "textRange": {
+                "startLine": 40,
+                "endLine": 40,
+                "startOffset": 114,
+                "endOffset": 119
+              },
+              "msg": "A malicious value was previously assigned to field ‘month’"
+            },
+            {
+              "component": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/infrastructure/adminApi.js",
+              "textRange": {
+                "startLine": 40,
+                "endLine": 40,
+                "startOffset": 40,
+                "endOffset": 45
+              },
+              "msg": "A malicious value can be assigned to field ‘month’"
+            },
+            {
+              "component": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/pages/StatisticsAdminPage.jsx",
+              "textRange": {
+                "startLine": 22,
+                "endLine": 22,
+                "startOffset": 38,
+                "endOffset": 61
+              },
+              "msg": "Function call: Control is passed to this function, which is on the path to a security sink"
+            },
+            {
+              "component": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/pages/StatisticsAdminPage.jsx",
+              "textRange": {
+                "startLine": 22,
+                "endLine": 22,
+                "startOffset": 62,
+                "endOffset": 67
+              },
+              "msg": "A malicious value was previously assigned to field ‘month’"
+            },
+            {
+              "component": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/pages/StatisticsAdminPage.jsx",
+              "textRange": {
+                "startLine": 18,
+                "endLine": 18,
+                "startOffset": 9,
+                "endOffset": 14
+              },
+              "msg": "A malicious value can be assigned to field ‘month’"
+            },
+            {
+              "component": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/pages/StatisticsAdminPage.jsx",
+              "textRange": {
+                "startLine": 18,
+                "endLine": 18,
+                "startOffset": 9,
+                "endOffset": 14
+              },
+              "msg": "A malicious value was previously assigned to field"
+            },
+            {
+              "component": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/pages/StatisticsAdminPage.jsx",
+              "textRange": {
+                "startLine": 25,
+                "endLine": 25,
+                "startOffset": 320,
+                "endOffset": 325
+              },
+              "msg": "A malicious value was previously assigned to field ‘value’"
+            },
+            {
+              "component": "IanSolorio_ElPoblano:apps/frontend/src/main.jsx",
+              "textRange": {
+                "startLine": 25,
+                "endLine": 25,
+                "startOffset": 53,
+                "endOffset": 59
+              },
+              "msg": "Enters the application through a browser UI event"
+            }
+          ]
+        }
+      ],
+      "resolution": "FIXED",
+      "status": "CLOSED",
+      "message": "Ensure that tainted data is validated before being used to construct a client-side request URL.",
+      "effort": "20min",
+      "debt": "20min",
+      "assignee": "IanSolorio-D1ygV@github",
+      "author": "isolorio22@unamad.edu.pe",
+      "tags": [
+        "cwe"
+      ],
+      "creationDate": "2026-08-09T05:07:37+0000",
+      "updateDate": "2026-08-11T16:34:55+0000",
+      "closeDate": "2026-08-11T16:34:55+0000",
+      "type": "VULNERABILITY",
+      "organization": "iansolorio",
+      "cleanCodeAttribute": "TRUSTWORTHY",
+      "cleanCodeAttributeCategory": "RESPONSIBLE",
+      "impacts": [
+        {
+          "softwareQuality": "SECURITY",
+          "severity": "HIGH"
+        }
+      ],
+      "issueStatus": "FIXED",
+      "projectName": "El Poblano",
+      "internalTags": [],
+      "lastChangeAnalysisUuid": "b2616438-9840-4326-ae62-440e7f22db2c",
+      "lastChangeSource": "ANALYSIS"
+    }
+  ],
+  "components": [
+    {
+      "organization": "iansolorio",
+      "key": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/pages/StatisticsAdminPage.jsx",
+      "uuid": "AZ_tDSHAue9n_h9ADkM4",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "StatisticsAdminPage.jsx",
+      "longName": "apps/frontend/src/modules/admin/pages/StatisticsAdminPage.jsx",
+      "path": "apps/frontend/src/modules/admin/pages/StatisticsAdminPage.jsx"
+    },
+    {
+      "organization": "iansolorio",
+      "key": "IanSolorio_ElPoblano:apps/frontend/src/modules/admin/infrastructure/adminApi.js",
+      "uuid": "AZ_tDSHAue9n_h9ADkNF",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "adminApi.js",
+      "longName": "apps/frontend/src/modules/admin/infrastructure/adminApi.js",
+      "path": "apps/frontend/src/modules/admin/infrastructure/adminApi.js"
+    },
+    {
+      "organization": "iansolorio",
+      "key": "IanSolorio_ElPoblano",
+      "uuid": "AZ_tCSLzrFhPSwDuus-Q",
+      "enabled": true,
+      "qualifier": "TRK",
+      "name": "El Poblano",
+      "longName": "El Poblano"
+    },
+    {
+      "organization": "iansolorio",
+      "key": "IanSolorio_ElPoblano:apps/frontend/src/main.jsx",
+      "uuid": "AZ_tDSHAue9n_h9ADkOA",
+      "enabled": true,
+      "qualifier": "FIL",
+      "name": "main.jsx",
+      "longName": "apps/frontend/src/main.jsx",
+      "path": "apps/frontend/src/main.jsx"
+    }
+  ],
+  "organizations": [
+    {
+      "key": "iansolorio",
+      "name": "IanDev"
+    }
+  ],
+  "facets": [],
+  "apiTotal": 1,
+  "historicalTotal": 1,
+  "openTotal": 0
 }

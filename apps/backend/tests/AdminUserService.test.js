@@ -79,3 +79,35 @@ test("UT-USR-12: listado pagina y no expone contraseñas", async () => {
   const result = await new PrismaAdminUserRepository(prisma).findAll({ page: 1, limit: 1 });
   assert.equal(result.pagination.pages, 2); assert.equal(result.data[0].passwordHash, undefined);
 });
+
+test("UT-USR-13: repositorio Prisma persiste administradores y cambios con auditoría sin exponer hashes", async () => {
+  const audits = [];
+  const revokedUsers = [];
+  const transaction = {
+    user: {
+      create: async ({ data }) => ({ id: "admin-new", active: true, createdAt: new Date(), ...data }),
+      update: async ({ where, data }) => ({ id: where.id, email: "cliente@example.com", passwordHash: "hash-secreto", role: "CUSTOMER", ...data }),
+    },
+    session: { updateMany: async ({ where }) => revokedUsers.push(where.userId) },
+    auditLog: { create: async ({ data }) => audits.push(data) },
+  };
+  const repository = new PrismaAdminUserRepository({ $transaction: async (callback) => callback(transaction) });
+
+  const created = await repository.createAdmin({
+    email: "nuevo@example.com", passwordHash: "hash-secreto", firstName: "Nuevo", lastName: "Admin", phone: "999111222",
+  }, "super-1");
+  const updated = await repository.update("customer-1", { firstName: "Ana", lastName: "Pérez", phone: "999222333" }, "admin-1");
+  const deactivated = await repository.setStatus("customer-1", false, "admin-1");
+  const activated = await repository.setStatus("customer-1", true, "admin-1");
+  const removed = await repository.remove("customer-1", "admin-1");
+
+  assert.equal(created.passwordHash, undefined);
+  assert.equal(updated.passwordHash, undefined);
+  assert.equal(deactivated.active, false);
+  assert.equal(activated.active, true);
+  assert.equal(removed.active, false);
+  assert.deepEqual(revokedUsers, ["customer-1", "customer-1"]);
+  assert.deepEqual(audits.map(({ action }) => action), [
+    "ADMIN_CREATED", "USER_UPDATED", "USER_DEACTIVATED", "USER_ACTIVATED", "USER_DELETED",
+  ]);
+});

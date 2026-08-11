@@ -1,34 +1,34 @@
 # Resultado de SonarQube Cloud
 
-- Fecha del análisis conservado: 2026-08-10.
-- Organización: `iansolorio`.
-- Proyecto: `IanSolorio_ElPoblano`.
-- Quality Gate: **OK**.
-- Bugs: **0**.
-- Vulnerabilidades: **0**.
-- Code smells: **0**.
-- Security hotspots: **0**.
-- Cobertura global: **51.9 %**.
-- Cobertura de código nuevo: **81.7 %**.
-- Duplicación de código nuevo: **0.0 %**.
-- Complejidad ciclomática global: **1151**.
-- Complejidad cognitiva global: **477**.
-- Deuda técnica global: **0 minutos**.
-- Incidencias abiertas: **0**.
+- Fecha UTC: 2026-08-11T17:14:48.803Z
+- Organización: iansolorio
+- Proyecto: IanSolorio_ElPoblano
+- Quality Gate: **ERROR**
+- Bugs: 0
+- Vulnerabilidades: 0
+- Code smells: 0
+- Security hotspots: 0
+- Cobertura global: 54.6 %
+- Cobertura de código nuevo: 79.7 %
+- Complejidad ciclomática global: 1182
+- Complejidad cognitiva global: 508
+- Deuda técnica global: 0 minutos (0.00 horas)
+- Incidencias abiertas: 0
+- Incidencias históricas conservadas: 1
 
 ## Casos trazables
 
 | Caso | RNF | Umbral | Resultado observado | Estado |
 |---|---|---|---|---|
-| SQ-MAN-01 | MAN-01 | Gate PASS; 0 bugs/vulnerabilidades | Gate OK; 0/0 | **PASS** |
-| SQ-MAN-02 | MAN-02 | Cobertura 70/80/70 % | Global 51.9 %; nuevo 81.7 %; faltan desgloses | **FAIL** |
-| SQ-MAN-03 | MAN-03 | Duplicación nueva ≤3 % | 0.0 % | **PASS** |
-| SQ-MAN-04 | MAN-04 | Complejidad por función nueva ≤10 | Solo se dispone del total global 1151 | **PENDIENTE_METRICA** |
-| SQ-MAN-05 | MAN-05 | Rating nuevo A | A | **PASS** |
-| SQ-MAN-06 | MAN-06 | Deuda nueva ≤5 % y rating A | Deuda global 0 min y A; falta ratio nuevo | **PARCIAL** |
-| SQ-SEG-01 | SEG-01 | Argon2id y 0 exposiciones | Argon2id presente; 0 vulnerabilidades/incidencias | **PASS** |
-| SQ-SEG-05 | SEG-05 | 0 secretos y vulnerabilidades críticas | 0 vulnerabilidades/hotspots; secret scan pendiente | **PARCIAL** |
+| SQ-MAN-01 | MAN-01 | Quality Gate PASS; 0 bugs y 0 vulnerabilidades | Gate ERROR; bugs 0; vulnerabilidades 0 | **FAIL** |
+| SQ-MAN-02 | MAN-02 | Cobertura global >=70%; backend >=80%; módulos críticos >=70% | Global 54.6%; código nuevo 79.7%; backend y módulos críticos sin desglose | **FAIL** |
+| SQ-MAN-03 | MAN-03 | Duplicación nueva <=3% | Duplicación nueva 0% | **PASS** |
+| SQ-MAN-04 | MAN-04 | Complejidad ciclomática por función nueva <=10 | Complejidad global 1182; cognitiva global 508; sin desglose por función nueva | **PENDIENTE_METRICA** |
+| SQ-MAN-05 | MAN-05 | Maintainability Rating de código nuevo = A | Rating de código nuevo A | **PASS** |
+| SQ-MAN-06 | MAN-06 | Deuda técnica nueva <=5% y rating A | Deuda global 0 min; ratio global 0.0%; rating global A | **PASS** |
+| SQ-SEG-01 | SEG-01 | Argon2id presente y 0 exposiciones detectadas | Argon2id presente; evidencia de no exposición de hashes presente; incidencias activas sobre credenciales/hashes 0 | **PASS** |
+| SQ-SEG-05 | SEG-05 | 0 secretos y 0 vulnerabilidades críticas/nuevas altas | Vulnerabilidades 0; hotspots 0; escaneo dedicado de secretos pendiente de Fase 8 | **PARCIAL** |
 
-> El Quality Gate está aprobado porque evalúa principalmente el código nuevo. Esto no sustituye el umbral académico de cobertura global: **51.9 % todavía es menor que 70 %**. Los estados parciales y pendientes se conservan para no presentar como validado aquello que el análisis actual no mide completamente.
+> El Quality Gate se encuentra en estado ERROR debido a que la cobertura de código nuevo es 79.7 %, inferior al umbral configurado de 80 %. Las demás condiciones del Quality Gate se encuentran aprobadas.
 
-Los resultados crudos se encuentran en `../results/`.
+Los JSON crudos se conservan en `../results/`.

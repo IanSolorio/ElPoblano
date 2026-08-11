@@ -90,8 +90,8 @@ const frontendCoverage = run(npm, ["run", "test:coverage", "-w", "@elpoblano/fro
 
 const backend = countJUnit(backendJUnit);
 const frontend = countJUnit(frontendJUnit);
-const unitPassed = backend.failures === 0 && backend.skipped === 0 && backend.executed === 107
-  && frontend.failures === 0 && frontend.skipped === 0 && frontend.executed === 21
+const unitPassed = backend.failures === 0 && backend.skipped === 0 && backend.executed === 110
+  && frontend.failures === 0 && frontend.skipped === 0 && frontend.executed === 22
   && [backendUnit, backendJUnitRun, backendCoverageRun, frontendUnit, frontendCoverage].every(({ status }) => status === 0)
   && existsSync(frontendLcov);
 writeFileSync(resolve(paths.unit, "resumen.md"), `# Resumen — pruebas unitarias
@@ -238,7 +238,7 @@ writeFileSync(resolve(paths.report, "resumen.md"), `# Resultado consolidado — 
 | Sistema | ${systemObjects.length} | ${systemApproved} | ${systemPassed ? "APROBADO" : "NO APROBADO"} |
 | Aceptación | ${acceptanceObjects.length} | ${acceptanceApproved} | ${acceptancePassed ? "ACEPTADO" : "NO ACEPTADO"} |
 
-- Total formal de Fase 5: 269 comprobaciones (128 unitarias, 61 integración, 48 sistema y 32 aceptación). Las 21 unitarias frontend se contabilizan explícitamente.
+- Total formal de Fase 5: 273 comprobaciones (132 unitarias, 61 integración, 48 sistema y 32 aceptación). Las 22 unitarias frontend se contabilizan explícitamente.
 - Fecha UTC: ${new Date().toISOString()}.
 - Resultado general: **${allPassed ? "APROBADO" : "NO APROBADO"}**.
 - Trazabilidad: \`trazabilidad-fase5.csv\`.

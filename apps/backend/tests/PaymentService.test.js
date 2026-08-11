@@ -68,6 +68,17 @@ test("UT-PAY-12: webhook sin referencia externa no altera pedidos", async () => 
 test("UT-PAY-13: webhook repetido conserva actualización idempotente", async () => {
   const repository = new FakeOrderRepository(); const provider = { id: 1, status: "approved", external_reference: repository.value.id, payment_type_id: "credit_card" }; const service = configuredService(repository, provider);
   await service.synchronize(1); await service.synchronize(1); assert.equal(repository.updates.every((update) => update.id === repository.value.id && update.data.id === "1"), true);
+
+  const stubRepository = new FakeOrderRepository();
+  const stubService = new PaymentService(stubRepository, undefined, "", "stub");
+  const approved = await stubService.process(user, {
+    orderId: stubRepository.value.id,
+    paymentData: { ...paymentData, token: "e2e-approved" },
+  }, "stub-approved-key");
+  assert.equal(approved.payment.status, "APPROVED");
+  assert.equal(await stubService.synchronize("stub-invalid"), null);
+  const synchronized = await stubService.synchronize("stub-rejected-123e4567-e89b-42d3-a456-426614174000");
+  assert.equal(synchronized.payment.status, "REJECTED");
 });
 
 test("UT-PAY-14: impide cobrar dos veces mientras Mercado Pago procesa el primer intento", async () => {
@@ -76,4 +87,56 @@ test("UT-PAY-14: impide cobrar dos veces mientras Mercado Pago procesa el primer
     configuredService(repository).process(user, { orderId: repository.value.id, paymentData }, "new-key"),
     { code: "PAYMENT_ALREADY_PROCESSING", status: 409 },
   );
+});
+
+test("UT-PAY-15: una notificación atrasada no degrada un pago aprobado", async () => {
+  const existing = order({ status: "CONFIRMED", subtotal: 20, deliveryFee: 0, items: [], payment: { status: "APPROVED", amount: 20 } });
+  let paymentUpdates = 0;
+  const transaction = {
+    order: { findUnique: async () => existing },
+    payment: { update: async () => { paymentUpdates += 1; } },
+  };
+  const repository = new PrismaOrderRepository({ $transaction: async (callback) => callback(transaction) });
+  const result = await repository.updatePaymentFromProvider(existing.id, { id: "mp-late", status: "REJECTED", method: "CREDIT_CARD" });
+  assert.equal(result.status, "CONFIRMED");
+  assert.equal(result.payment.status, "APPROVED");
+  assert.equal(paymentUpdates, 0);
+});
+
+test("UT-PAY-16: aprobación concurrente confirma y audita el pedido una sola vez", async () => {
+  const existing = order({ subtotal: 20, deliveryFee: 0, items: [], payment: { status: "PENDING", amount: 20 } });
+  const audits = [];
+  const paymentUpdates = [];
+  let status = "PENDING";
+  const transaction = {
+    order: {
+      findUnique: async () => ({ ...existing, status, payment: { ...existing.payment, status: status === "CONFIRMED" ? "APPROVED" : "PENDING" } }),
+      updateMany: async () => { status = "CONFIRMED"; return { count: 1 }; },
+    },
+    payment: { update: async ({ data }) => paymentUpdates.push(data) },
+    auditLog: { create: async ({ data }) => audits.push(data) },
+  };
+  const repository = new PrismaOrderRepository({ $transaction: async (callback) => callback(transaction) });
+  const result = await repository.updatePaymentFromProvider(existing.id, { id: "mp-approved", status: "APPROVED", method: "CREDIT_CARD" });
+  assert.equal(result.status, "CONFIRMED");
+  assert.equal(paymentUpdates[0].status, "APPROVED");
+  assert.ok(paymentUpdates[0].paidAt instanceof Date);
+  assert.equal(audits.length, 1);
+  assert.equal(audits[0].action, "PAYMENT_APPROVED");
+
+  let concurrentReads = 0;
+  const concurrentTransaction = {
+    order: {
+      findUnique: async () => {
+        concurrentReads += 1;
+        return concurrentReads === 1 ? existing : { ...existing, status: "CONFIRMED", payment: { status: "APPROVED", amount: 20 } };
+      },
+      updateMany: async () => ({ count: 0 }),
+    },
+    payment: { update: async () => {} },
+    auditLog: { create: async () => assert.fail("Una carrera perdida no debe duplicar la auditoría") },
+  };
+  const concurrentResult = await new PrismaOrderRepository({ $transaction: async (callback) => callback(concurrentTransaction) })
+    .updatePaymentFromProvider(existing.id, { id: "mp-approved-2", status: "APPROVED", method: "CREDIT_CARD" });
+  assert.equal(concurrentResult.status, "CONFIRMED");
 });
