@@ -56,3 +56,38 @@ test("UT-ORD-18: cancelar un pedido pendiente restituye stock exactamente una ve
   await assert.rejects(repository.cancelPendingByUser("order-1", "user-1"), { code: "ORDER_CANNOT_BE_CANCELLED" });
   assert.equal(returned, 1);
 });
+
+test("UT-ORD-19: repositorio pagina y serializa consultas de cliente y administrador", async () => {
+  const stored = {
+    id: "order-1", userId: "user-1", status: "DELIVERED", createdAt: new Date("2026-08-10T12:00:00Z"),
+    subtotal: "20", deliveryFee: "0", total: "20",
+    items: [{ id: 1, productId: "p1", productName: "Taco", quantity: 2, unitPrice: "10", subtotal: "20" }],
+    payment: { status: "APPROVED", amount: "20" },
+  };
+  const orderModel = {
+    findMany: async () => [stored],
+    count: async () => 1,
+    findFirst: async ({ where }) => where.id === "missing" ? null : stored,
+    findUnique: async ({ where }) => where.id === "missing" ? null : stored,
+    groupBy: async () => [{ status: "DELIVERED", _count: { _all: 1 } }],
+  };
+  const prisma = {
+    order: orderModel,
+    $transaction: async (operations) => Promise.all(operations),
+  };
+  const repository = new PrismaOrderRepository(prisma);
+  const own = await repository.findByUser("user-1", { page: 1, limit: 10 });
+  assert.equal(own.data[0].total, 20);
+  assert.deepEqual(own.pagination, { page: 1, limit: 10, total: 1, pages: 1 });
+  assert.equal((await repository.findByIdAndUser("order-1", "user-1")).payment.amount, 20);
+  assert.equal(await repository.findByIdAndUser("missing", "user-1"), null);
+  assert.equal((await repository.findActiveByUser("user-1"))[0].items[0].unitPrice, 10);
+  const history = await repository.findMonthlyHistoryByUser("user-1");
+  assert.deepEqual({ month: history[0].month, count: history[0].orderCount, spent: history[0].totalSpent }, { month: "2026-08", count: 1, spent: 20 });
+  const admin = await repository.findAllForAdmin({ page: 1, limit: 12, status: "DELIVERED", search: "cliente" });
+  assert.equal(admin.summary.delivered, 1);
+  assert.equal(admin.summary.pending, 0);
+  assert.equal(admin.data[0].subtotal, 20);
+  assert.equal((await repository.findByIdForAdmin("order-1")).id, "order-1");
+  assert.equal(await repository.findByIdForAdmin("missing"), null);
+});

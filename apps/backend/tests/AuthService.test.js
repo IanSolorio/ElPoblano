@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { AuthService } from "../src/modules/auth/application/AuthService.js";
-import { extractSessionToken, requireAdmin, requireSuperAdmin } from "../src/modules/auth/presentation/authMiddleware.js";
+import { createAuthenticationMiddleware, extractSessionToken, requireAdmin, requireSuperAdmin } from "../src/modules/auth/presentation/authMiddleware.js";
 import { passwordHasher } from "../src/modules/auth/infrastructure/passwordHasher.js";
 import { createSessionToken, hashSessionToken } from "../src/shared/security/sessionToken.js";
 
@@ -107,4 +107,15 @@ test("UT-AUTH-16: ADMIN no puede usar rutas de SUPER_ADMIN", async () => {
 test("UT-AUTH-17: ADMIN y SUPER_ADMIN son autorizados correctamente", async () => {
   assert.equal(await authorizationResult(requireAdmin, "ADMIN"), undefined); assert.equal(await authorizationResult(requireAdmin, "SUPER_ADMIN"), undefined); assert.equal(await authorizationResult(requireSuperAdmin, "SUPER_ADMIN"), undefined);
   assert.equal(extractSessionToken({ headers: { authorization: "Bearer abc", cookie: "elpoblano_session=xyz" } }), "abc");
+});
+
+test("UT-AUTH-18: middleware autentica cookies y entrega errores al manejador", async () => {
+  assert.equal(extractSessionToken({ headers: { cookie: "tema=oscuro; elpoblano_session=sesion-cookie" } }), "sesion-cookie");
+  const request = { headers: { cookie: "elpoblano_session=sesion-cookie" } };
+  const next = (error) => { request.error = error; };
+  await createAuthenticationMiddleware({ authenticate: async (token) => ({ id: "u1", token }) })(request, {}, next);
+  assert.deepEqual(request.user, { id: "u1", token: "sesion-cookie" });
+  assert.equal(request.error, undefined);
+  await createAuthenticationMiddleware({ authenticate: async () => { throw new Error("sesión inválida"); } })(request, {}, next);
+  assert.equal(request.error.message, "sesión inválida");
 });
