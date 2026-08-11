@@ -27,6 +27,10 @@ Realiza, en orden:
 8. Análisis de SonarQube Cloud y verificación del Quality Gate.
 9. Publicación del build y de los reportes como artefactos descargables.
 
+La configuración operativa del scanner está en `sonar-project.properties`, en
+la raíz del repositorio. La copia bajo `fase7/sonarqube` conserva el mismo
+alcance como parte de la estructura documental y de evidencia académica.
+
 Las pruebas usan exclusivamente `elpoblano_test`; el workflow no recibe ni
 utiliza `DATABASE_URL` de producción.
 

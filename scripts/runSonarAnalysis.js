@@ -8,13 +8,18 @@ const token = process.env.SONAR_TOKEN;
 const projectKey = process.env.SONAR_PROJECT_KEY;
 const organization = process.env.SONAR_ORGANIZATION;
 const phase7 = resolve(root, "tests/results/fase7/sonarqube");
-const settings = resolve(phase7, "sonar-project.properties");
+const settings = resolve(root, "sonar-project.properties");
 const output = resolve(phase7, "results");
 const evidence = resolve(phase7, "evidence");
 const collectOnly = process.argv.includes("--collect-only");
 
 if (!token || !projectKey || !organization) {
   console.error("Configura SONAR_TOKEN, SONAR_PROJECT_KEY y SONAR_ORGANIZATION en la terminal.");
+  process.exit(1);
+}
+
+if (!existsSync(settings)) {
+  console.error("Falta sonar-project.properties en la raíz del repositorio.");
   process.exit(1);
 }
 
@@ -32,7 +37,6 @@ if (!collectOnly) {
     `-Dsonar.token=${token}`,
     `-Dsonar.projectKey=${projectKey}`,
     `-Dsonar.organization=${organization}`,
-    `-Dproject.settings=${settings}`,
   ], {
     cwd: root,
     stdio: "inherit",
