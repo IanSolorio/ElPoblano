@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites name="vitest tests" tests="43" failures="0" errors="0" time="6.745">
-    <testsuite name="tests/AdditionalFlows.test.jsx" timestamp="2026-08-11T18:27:07.320Z" hostname="DESKTOP-JKVKGVF" tests="4" failures="0" errors="0" skipped="0" time="0.6407426">
-        <testcase classname="tests/AdditionalFlows.test.jsx" name="flujos complementarios &gt; valida ubicación y registra una cuenta" time="0.459094">
+<testsuites name="vitest tests" tests="43" failures="0" errors="0" time="8.931">
+    <testsuite name="tests/AdditionalFlows.test.jsx" timestamp="2026-08-11T18:39:33.612Z" hostname="DESKTOP-JKVKGVF" tests="4" failures="0" errors="0" skipped="0" time="1.3334589">
+        <testcase classname="tests/AdditionalFlows.test.jsx" name="flujos complementarios &gt; valida ubicación y registra una cuenta" time="1.0935042">
         </testcase>
-        <testcase classname="tests/AdditionalFlows.test.jsx" name="flujos complementarios &gt; crea un pedido y presenta el medio de pago" time="0.083045">
+        <testcase classname="tests/AdditionalFlows.test.jsx" name="flujos complementarios &gt; crea un pedido y presenta el medio de pago" time="0.1013371">
         </testcase>
-        <testcase classname="tests/AdditionalFlows.test.jsx" name="flujos complementarios &gt; crea y desactiva categorías" time="0.0817698">
+        <testcase classname="tests/AdditionalFlows.test.jsx" name="flujos complementarios &gt; crea y desactiva categorías" time="0.1229715">
         </testcase>
-        <testcase classname="tests/AdditionalFlows.test.jsx" name="flujos complementarios &gt; actualiza el contador del carrito" time="0.0149891">
-        </testcase>
-    </testsuite>
-    <testsuite name="tests/AdminApi.test.js" timestamp="2026-08-11T18:27:07.323Z" hostname="DESKTOP-JKVKGVF" tests="1" failures="0" errors="0" skipped="0" time="0.0105466">
-        <testcase classname="tests/AdminApi.test.js" name="API administrativa &gt; UT-FE-21: valida rutas administrativas y procesa sus respuestas" time="0.0088692">
+        <testcase classname="tests/AdditionalFlows.test.jsx" name="flujos complementarios &gt; actualiza el contador del carrito" time="0.0134942">
         </testcase>
     </testsuite>
-    <testsuite name="tests/AdminPages.test.jsx" timestamp="2026-08-11T18:27:07.323Z" hostname="DESKTOP-JKVKGVF" tests="3" failures="0" errors="0" skipped="0" time="1.0070499">
-        <testcase classname="tests/AdminPages.test.jsx" name="panel administrativo &gt; crea y desactiva cuentas" time="0.4837676">
-        </testcase>
-        <testcase classname="tests/AdminPages.test.jsx" name="panel administrativo &gt; crea y retira una promoción individual" time="0.1666357">
-        </testcase>
-        <testcase classname="tests/AdminPages.test.jsx" name="panel administrativo &gt; lista, busca, abre y actualiza pedidos" time="0.3546016">
+    <testsuite name="tests/AdminApi.test.js" timestamp="2026-08-11T18:39:33.615Z" hostname="DESKTOP-JKVKGVF" tests="1" failures="0" errors="0" skipped="0" time="0.0212067">
+        <testcase classname="tests/AdminApi.test.js" name="API administrativa &gt; UT-FE-21: valida rutas administrativas y procesa sus respuestas" time="0.0188199">
         </testcase>
     </testsuite>
-    <testsuite name="tests/AdminShell.test.jsx" timestamp="2026-08-11T18:27:07.324Z" hostname="DESKTOP-JKVKGVF" tests="3" failures="0" errors="0" skipped="0" time="0.5835139">
-        <testcase classname="tests/AdminShell.test.jsx" name="estructura y autorización administrativa &gt; UT-FE-41: presenta identidad, navegación y cierre de sesión del administrador" time="0.4124263">
+    <testsuite name="tests/AdminPages.test.jsx" timestamp="2026-08-11T18:39:33.616Z" hostname="DESKTOP-JKVKGVF" tests="3" failures="0" errors="0" skipped="0" time="1.8113632">
+        <testcase classname="tests/AdminPages.test.jsx" name="panel administrativo &gt; crea y desactiva cuentas" time="0.8823246">
         </testcase>
-        <testcase classname="tests/AdminShell.test.jsx" name="estructura y autorización administrativa &gt; UT-FE-42: habilita categorías exclusivamente para SUPER_ADMIN" time="0.1528033">
+        <testcase classname="tests/AdminPages.test.jsx" name="panel administrativo &gt; crea y retira una promoción individual" time="0.411626">
         </testcase>
-        <testcase classname="tests/AdminShell.test.jsx" name="estructura y autorización administrativa &gt; UT-FE-43: espera autenticación, autoriza roles permitidos y redirige accesos inválidos" time="0.0162214">
-        </testcase>
-    </testsuite>
-    <testsuite name="tests/AppRoutes.test.jsx" timestamp="2026-08-11T18:27:07.325Z" hostname="DESKTOP-JKVKGVF" tests="2" failures="0" errors="0" skipped="0" time="0.1625959">
-        <testcase classname="tests/AppRoutes.test.jsx" name="contrato de rutas de la aplicación &gt; UT-FE-32: expone las páginas públicas y redirige rutas desconocidas" time="0.1266978">
-        </testcase>
-        <testcase classname="tests/AppRoutes.test.jsx" name="contrato de rutas de la aplicación &gt; UT-FE-33: protege todas las páginas administrativas y restringe categorías" time="0.0334947">
+        <testcase classname="tests/AdminPages.test.jsx" name="panel administrativo &gt; lista, busca, abre y actualiza pedidos" time="0.5153936">
         </testcase>
     </testsuite>
-    <testsuite name="tests/AuthContext.test.jsx" timestamp="2026-08-11T18:27:07.326Z" hostname="DESKTOP-JKVKGVF" tests="1" failures="0" errors="0" skipped="0" time="0.2185168">
-        <testcase classname="tests/AuthContext.test.jsx" name="contexto de autenticación &gt; recupera sesión e implementa login, registro y logout" time="0.2171198">
+    <testsuite name="tests/AdminShell.test.jsx" timestamp="2026-08-11T18:39:33.617Z" hostname="DESKTOP-JKVKGVF" tests="3" failures="0" errors="0" skipped="0" time="1.1503309">
+        <testcase classname="tests/AdminShell.test.jsx" name="estructura y autorización administrativa &gt; UT-FE-41: presenta identidad, navegación y cierre de sesión del administrador" time="0.7804095">
+        </testcase>
+        <testcase classname="tests/AdminShell.test.jsx" name="estructura y autorización administrativa &gt; UT-FE-42: habilita categorías exclusivamente para SUPER_ADMIN" time="0.3226629">
+        </testcase>
+        <testcase classname="tests/AdminShell.test.jsx" name="estructura y autorización administrativa &gt; UT-FE-43: espera autenticación, autoriza roles permitidos y redirige accesos inválidos" time="0.0442032">
         </testcase>
     </testsuite>
-    <testsuite name="tests/CriticalPages.test.jsx" timestamp="2026-08-11T18:27:07.326Z" hostname="DESKTOP-JKVKGVF" tests="5" failures="0" errors="0" skipped="0" time="0.7893608">
-        <testcase classname="tests/CriticalPages.test.jsx" name="páginas críticas pendientes de cobertura &gt; UT-FE-27: valida importes insuficientes y suficientes en el formulario de pago" time="0.4357059">
+    <testsuite name="tests/AppRoutes.test.jsx" timestamp="2026-08-11T18:39:33.618Z" hostname="DESKTOP-JKVKGVF" tests="2" failures="0" errors="0" skipped="0" time="0.2230152">
+        <testcase classname="tests/AppRoutes.test.jsx" name="contrato de rutas de la aplicación &gt; UT-FE-32: expone las páginas públicas y redirige rutas desconocidas" time="0.1720914">
         </testcase>
-        <testcase classname="tests/CriticalPages.test.jsx" name="páginas críticas pendientes de cobertura &gt; UT-FE-28: carga el inventario y retira únicamente con confirmación" time="0.1128356">
+        <testcase classname="tests/AppRoutes.test.jsx" name="contrato de rutas de la aplicación &gt; UT-FE-33: protege todas las páginas administrativas y restringe categorías" time="0.0489565">
         </testcase>
-        <testcase classname="tests/CriticalPages.test.jsx" name="páginas críticas pendientes de cobertura &gt; UT-FE-29: informa fallos al cargar y retirar productos" time="0.1300501">
+    </testsuite>
+    <testsuite name="tests/AuthContext.test.jsx" timestamp="2026-08-11T18:39:33.619Z" hostname="DESKTOP-JKVKGVF" tests="1" failures="0" errors="0" skipped="0" time="0.3329839">
+        <testcase classname="tests/AuthContext.test.jsx" name="contexto de autenticación &gt; recupera sesión e implementa login, registro y logout" time="0.3303203">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/CriticalPages.test.jsx" timestamp="2026-08-11T18:39:33.620Z" hostname="DESKTOP-JKVKGVF" tests="5" failures="0" errors="0" skipped="0" time="1.2585917">
+        <testcase classname="tests/CriticalPages.test.jsx" name="páginas críticas pendientes de cobertura &gt; UT-FE-27: valida importes insuficientes y suficientes en el formulario de pago" time="0.8627331">
+        </testcase>
+        <testcase classname="tests/CriticalPages.test.jsx" name="páginas críticas pendientes de cobertura &gt; UT-FE-28: carga el inventario y retira únicamente con confirmación" time="0.0968076">
+        </testcase>
+        <testcase classname="tests/CriticalPages.test.jsx" name="páginas críticas pendientes de cobertura &gt; UT-FE-29: informa fallos al cargar y retirar productos" time="0.1165284">
             <system-err>
 Error al retirar producto: Error: protegido
     at [90mD:\9NO SEMESTRE\CALIDAD DE SOFTWARE\ElPoblano\apps\frontend\[39mtests\CriticalPages.test.jsx:73:41
@@ -61,17 +61,17 @@ Error al retirar producto: Error: protegido
 
             </system-err>
         </testcase>
-        <testcase classname="tests/CriticalPages.test.jsx" name="páginas críticas pendientes de cobertura &gt; UT-FE-30: presenta estadísticas, rankings y cambio de periodo" time="0.0785433">
+        <testcase classname="tests/CriticalPages.test.jsx" name="páginas críticas pendientes de cobertura &gt; UT-FE-30: presenta estadísticas, rankings y cambio de periodo" time="0.13631">
         </testcase>
-        <testcase classname="tests/CriticalPages.test.jsx" name="páginas críticas pendientes de cobertura &gt; UT-FE-31: muestra estados vacíos y errores de estadísticas" time="0.0304019">
+        <testcase classname="tests/CriticalPages.test.jsx" name="páginas críticas pendientes de cobertura &gt; UT-FE-31: muestra estados vacíos y errores de estadísticas" time="0.043726">
         </testcase>
     </testsuite>
-    <testsuite name="tests/CriticalServices.test.js" timestamp="2026-08-11T18:27:07.328Z" hostname="DESKTOP-JKVKGVF" tests="4" failures="0" errors="0" skipped="0" time="0.0362518">
-        <testcase classname="tests/CriticalServices.test.js" name="servicios críticos del frontend &gt; UT-FE-23: conserva las reglas del carrito y sincroniza su almacenamiento" time="0.0096498">
+    <testsuite name="tests/CriticalServices.test.js" timestamp="2026-08-11T18:39:33.626Z" hostname="DESKTOP-JKVKGVF" tests="4" failures="0" errors="0" skipped="0" time="0.0790588">
+        <testcase classname="tests/CriticalServices.test.js" name="servicios críticos del frontend &gt; UT-FE-23: conserva las reglas del carrito y sincroniza su almacenamiento" time="0.0268917">
         </testcase>
-        <testcase classname="tests/CriticalServices.test.js" name="servicios críticos del frontend &gt; UT-FE-24: construye correctamente las solicitudes de autenticación y pedidos" time="0.0044657">
+        <testcase classname="tests/CriticalServices.test.js" name="servicios críticos del frontend &gt; UT-FE-24: construye correctamente las solicitudes de autenticación y pedidos" time="0.0076216">
         </testcase>
-        <testcase classname="tests/CriticalServices.test.js" name="servicios críticos del frontend &gt; UT-FE-25: normaliza y ejecuta el ciclo completo de productos y promociones" time="0.0067684">
+        <testcase classname="tests/CriticalServices.test.js" name="servicios críticos del frontend &gt; UT-FE-25: normaliza y ejecuta el ciclo completo de productos y promociones" time="0.0112749">
             <system-out>
 {
   status: [33m200[39m,
@@ -87,7 +87,7 @@ Producto eliminado correctamente: p1
 
             </system-out>
         </testcase>
-        <testcase classname="tests/CriticalServices.test.js" name="servicios críticos del frontend &gt; UT-FE-26: propaga respuestas inesperadas y protege el borrado de productos" time="0.0133641">
+        <testcase classname="tests/CriticalServices.test.js" name="servicios críticos del frontend &gt; UT-FE-26: propaga respuestas inesperadas y protege el borrado de productos" time="0.0296319">
             <system-out>
 { status: [33m202[39m, data: [] }
 
@@ -120,60 +120,60 @@ Error en deleteProductoId para el ID: p2 Error: No se pudo eliminar el producto.
             </system-err>
         </testcase>
     </testsuite>
-    <testsuite name="tests/CurrentOrders.test.jsx" timestamp="2026-08-11T18:27:07.329Z" hostname="DESKTOP-JKVKGVF" tests="3" failures="0" errors="0" skipped="0" time="0.6376722">
-        <testcase classname="tests/CurrentOrders.test.jsx" name="seguimiento de pedidos &gt; muestra estado vacío" time="0.0960163">
+    <testsuite name="tests/CurrentOrders.test.jsx" timestamp="2026-08-11T18:39:33.628Z" hostname="DESKTOP-JKVKGVF" tests="3" failures="0" errors="0" skipped="0" time="1.2057399">
+        <testcase classname="tests/CurrentOrders.test.jsx" name="seguimiento de pedidos &gt; muestra estado vacío" time="0.134143">
         </testcase>
-        <testcase classname="tests/CurrentOrders.test.jsx" name="seguimiento de pedidos &gt; permite pagar y cancelar un pedido pendiente" time="0.4868189">
+        <testcase classname="tests/CurrentOrders.test.jsx" name="seguimiento de pedidos &gt; permite pagar y cancelar un pedido pendiente" time="1.0044533">
         </testcase>
-        <testcase classname="tests/CurrentOrders.test.jsx" name="seguimiento de pedidos &gt; representa el avance de un pedido confirmado" time="0.0529963">
-        </testcase>
-    </testsuite>
-    <testsuite name="tests/ImageAndFile.test.js" timestamp="2026-08-11T18:27:07.330Z" hostname="DESKTOP-JKVKGVF" tests="4" failures="0" errors="0" skipped="0" time="0.0111777">
-        <testcase classname="tests/ImageAndFile.test.js" name="archivos de productos &gt; UT-FE-34: sube archivos conservando recursos no optimizables y reporta progreso" time="0.005345">
-        </testcase>
-        <testcase classname="tests/ImageAndFile.test.js" name="archivos de productos &gt; UT-FE-35: reduce imágenes grandes a WebP antes de enviarlas" time="0.0019556">
-        </testcase>
-        <testcase classname="tests/ImageAndFile.test.js" name="archivos de productos &gt; UT-FE-36: informa expiración de sesión y errores del almacenamiento" time="0.0017536">
-        </testcase>
-        <testcase classname="tests/ImageAndFile.test.js" name="archivos de productos &gt; UT-FE-37: genera nombres únicos conservando la extensión" time="0.0008278">
+        <testcase classname="tests/CurrentOrders.test.jsx" name="seguimiento de pedidos &gt; representa el avance de un pedido confirmado" time="0.065373">
         </testcase>
     </testsuite>
-    <testsuite name="tests/MercadoPagoPayment.test.jsx" timestamp="2026-08-11T18:27:07.331Z" hostname="DESKTOP-JKVKGVF" tests="1" failures="0" errors="0" skipped="0" time="0.7439145">
-        <testcase classname="tests/MercadoPagoPayment.test.jsx" name="pago mediante Mercado Pago &gt; UT-FE-22: procesa el modo E2E, configuración faltante y respuestas del Brick" time="0.7422803">
+    <testsuite name="tests/ImageAndFile.test.js" timestamp="2026-08-11T18:39:33.629Z" hostname="DESKTOP-JKVKGVF" tests="4" failures="0" errors="0" skipped="0" time="0.016912">
+        <testcase classname="tests/ImageAndFile.test.js" name="archivos de productos &gt; UT-FE-34: sube archivos conservando recursos no optimizables y reporta progreso" time="0.0074798">
+        </testcase>
+        <testcase classname="tests/ImageAndFile.test.js" name="archivos de productos &gt; UT-FE-35: reduce imágenes grandes a WebP antes de enviarlas" time="0.0035649">
+        </testcase>
+        <testcase classname="tests/ImageAndFile.test.js" name="archivos de productos &gt; UT-FE-36: informa expiración de sesión y errores del almacenamiento" time="0.0030615">
+        </testcase>
+        <testcase classname="tests/ImageAndFile.test.js" name="archivos de productos &gt; UT-FE-37: genera nombres únicos conservando la extensión" time="0.0011812">
         </testcase>
     </testsuite>
-    <testsuite name="tests/NavigationCart.test.jsx" timestamp="2026-08-11T18:27:07.331Z" hostname="DESKTOP-JKVKGVF" tests="2" failures="0" errors="0" skipped="0" time="0.2752112">
-        <testcase classname="tests/NavigationCart.test.jsx" name="navegación y carrito &gt; abre el inicio de sesión y carrito desde la navegación" time="0.218863">
-        </testcase>
-        <testcase classname="tests/NavigationCart.test.jsx" name="navegación y carrito &gt; actualiza y elimina productos del carrito" time="0.0551133">
+    <testsuite name="tests/MercadoPagoPayment.test.jsx" timestamp="2026-08-11T18:39:33.630Z" hostname="DESKTOP-JKVKGVF" tests="1" failures="0" errors="0" skipped="0" time="1.2791358">
+        <testcase classname="tests/MercadoPagoPayment.test.jsx" name="pago mediante Mercado Pago &gt; UT-FE-22: procesa el modo E2E, configuración faltante y respuestas del Brick" time="1.2731743">
         </testcase>
     </testsuite>
-    <testsuite name="tests/OrderHistory.test.jsx" timestamp="2026-08-11T18:27:07.331Z" hostname="DESKTOP-JKVKGVF" tests="3" failures="0" errors="0" skipped="0" time="0.1529842">
-        <testcase classname="tests/OrderHistory.test.jsx" name="historial mensual de compras &gt; UT-FE-38: agrupa pedidos entregados y conserva sus importes y promociones" time="0.1148118">
+    <testsuite name="tests/NavigationCart.test.jsx" timestamp="2026-08-11T18:39:33.631Z" hostname="DESKTOP-JKVKGVF" tests="2" failures="0" errors="0" skipped="0" time="0.464312">
+        <testcase classname="tests/NavigationCart.test.jsx" name="navegación y carrito &gt; abre el inicio de sesión y carrito desde la navegación" time="0.3365252">
         </testcase>
-        <testcase classname="tests/OrderHistory.test.jsx" name="historial mensual de compras &gt; UT-FE-39: representa historial vacío y errores de consulta" time="0.0302118">
-        </testcase>
-        <testcase classname="tests/OrderHistory.test.jsx" name="historial mensual de compras &gt; UT-FE-40: espera la sesión y redirige visitantes" time="0.0065956">
+        <testcase classname="tests/NavigationCart.test.jsx" name="navegación y carrito &gt; actualiza y elimina productos del carrito" time="0.1263582">
         </testcase>
     </testsuite>
-    <testsuite name="tests/ProductCatalog.test.jsx" timestamp="2026-08-11T18:27:07.332Z" hostname="DESKTOP-JKVKGVF" tests="2" failures="0" errors="0" skipped="0" time="0.4855869">
-        <testcase classname="tests/ProductCatalog.test.jsx" name="catálogo público &gt; carga, filtra, limpia y agrega productos" time="0.4394813">
+    <testsuite name="tests/OrderHistory.test.jsx" timestamp="2026-08-11T18:39:33.632Z" hostname="DESKTOP-JKVKGVF" tests="3" failures="0" errors="0" skipped="0" time="0.1835213">
+        <testcase classname="tests/OrderHistory.test.jsx" name="historial mensual de compras &gt; UT-FE-38: agrupa pedidos entregados y conserva sus importes y promociones" time="0.1374628">
         </testcase>
-        <testcase classname="tests/ProductCatalog.test.jsx" name="catálogo público &gt; muestra un error controlado cuando falla la API" time="0.0441966">
+        <testcase classname="tests/OrderHistory.test.jsx" name="historial mensual de compras &gt; UT-FE-39: representa historial vacío y errores de consulta" time="0.0359909">
         </testcase>
-    </testsuite>
-    <testsuite name="tests/ProductManagement.test.jsx" timestamp="2026-08-11T18:27:07.333Z" hostname="DESKTOP-JKVKGVF" tests="2" failures="0" errors="0" skipped="0" time="0.2888261">
-        <testcase classname="tests/ProductManagement.test.jsx" name="gestión visual de productos &gt; carga categorías y envía el formulario" time="0.2331696">
-        </testcase>
-        <testcase classname="tests/ProductManagement.test.jsx" name="gestión visual de productos &gt; presenta carga, vacío, stock agotado y eliminación" time="0.0544855">
+        <testcase classname="tests/OrderHistory.test.jsx" name="historial mensual de compras &gt; UT-FE-40: espera la sesión y redirige visitantes" time="0.0082846">
         </testcase>
     </testsuite>
-    <testsuite name="tests/Promotions.test.jsx" timestamp="2026-08-11T18:27:07.334Z" hostname="DESKTOP-JKVKGVF" tests="3" failures="0" errors="0" skipped="0" time="0.3146391">
-        <testcase classname="tests/Promotions.test.jsx" name="promociones públicas &gt; presenta estado vacío" time="0.0803189">
+    <testsuite name="tests/ProductCatalog.test.jsx" timestamp="2026-08-11T18:39:33.633Z" hostname="DESKTOP-JKVKGVF" tests="2" failures="0" errors="0" skipped="0" time="0.7472223">
+        <testcase classname="tests/ProductCatalog.test.jsx" name="catálogo público &gt; carga, filtra, limpia y agrega productos" time="0.7153135">
         </testcase>
-        <testcase classname="tests/Promotions.test.jsx" name="promociones públicas &gt; convierte descuentos y combos en tarjetas comprables" time="0.222041">
+        <testcase classname="tests/ProductCatalog.test.jsx" name="catálogo público &gt; muestra un error controlado cuando falla la API" time="0.030055">
         </testcase>
-        <testcase classname="tests/Promotions.test.jsx" name="promociones públicas &gt; controla fallos de carga" time="0.0108743">
+    </testsuite>
+    <testsuite name="tests/ProductManagement.test.jsx" timestamp="2026-08-11T18:39:33.633Z" hostname="DESKTOP-JKVKGVF" tests="2" failures="0" errors="0" skipped="0" time="0.4651813">
+        <testcase classname="tests/ProductManagement.test.jsx" name="gestión visual de productos &gt; carga categorías y envía el formulario" time="0.3528766">
+        </testcase>
+        <testcase classname="tests/ProductManagement.test.jsx" name="gestión visual de productos &gt; presenta carga, vacío, stock agotado y eliminación" time="0.1105134">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/Promotions.test.jsx" timestamp="2026-08-11T18:39:33.634Z" hostname="DESKTOP-JKVKGVF" tests="3" failures="0" errors="0" skipped="0" time="0.487964">
+        <testcase classname="tests/Promotions.test.jsx" name="promociones públicas &gt; presenta estado vacío" time="0.1160652">
+        </testcase>
+        <testcase classname="tests/Promotions.test.jsx" name="promociones públicas &gt; convierte descuentos y combos en tarjetas comprables" time="0.3453104">
+        </testcase>
+        <testcase classname="tests/Promotions.test.jsx" name="promociones públicas &gt; controla fallos de carga" time="0.0245952">
         </testcase>
     </testsuite>
 </testsuites>

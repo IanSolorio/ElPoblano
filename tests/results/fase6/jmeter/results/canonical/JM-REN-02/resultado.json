@@ -1,17 +1,17 @@
 {
   "id": "JM-REN-02",
   "status": "PASS",
-  "profile": "smoke",
-  "executedAt": "2026-08-11T04:49:41.726Z",
+  "profile": "formal",
+  "executedAt": "2026-08-11T16:07:21.125Z",
   "criterion": "15 usuarios distintos; p95 <= 1.5 s; errores < 1 %",
-  "elapsedSeconds": 36.52,
+  "elapsedSeconds": 24.95,
   "metrics": [
     {
       "label": "REN02 POST login",
       "samples": 15,
-      "p95Ms": 259,
+      "p95Ms": 307,
       "errorPct": 0,
-      "throughput": 3.23
+      "throughput": 3.24
     }
   ],
   "oracle": {
@@ -21,9 +21,9 @@
   "evidenceFound": true,
   "selection": {
     "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
-    "priority": 300,
-    "sourceRun": "2026-08-11T04-47-44-008Z",
-    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T04-47-44-008Z/JM-REN-02/resultado.json",
+    "priority": 400,
+    "sourceRun": "2026-08-11T16-06-04-593Z",
+    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T16-06-04-593Z/JM-REN-02/resultado.json",
     "jtlFiles": [
       "tests/results/fase6/jmeter/results/canonical/JM-REN-02/resultados.jtl"
     ]

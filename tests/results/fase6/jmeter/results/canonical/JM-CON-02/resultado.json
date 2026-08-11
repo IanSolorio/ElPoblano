@@ -1,17 +1,17 @@
 {
   "id": "JM-CON-02",
   "status": "PASS",
-  "profile": "smoke",
-  "executedAt": "2026-08-11T05:03:18.280Z",
+  "profile": "formal",
+  "executedAt": "2026-08-11T16:22:47.562Z",
   "criterion": "5 éxitos y 5 rechazos por stock; stock final 0, nunca negativo",
-  "elapsedSeconds": 30.9,
+  "elapsedSeconds": 26.46,
   "metrics": [
     {
       "label": "CON02 POST stock limitado",
       "samples": 10,
-      "p95Ms": 435,
+      "p95Ms": 427,
       "errorPct": 0,
-      "throughput": 22.94
+      "throughput": 23.42
     }
   ],
   "oracle": {
@@ -21,9 +21,9 @@
   "evidenceFound": true,
   "selection": {
     "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
-    "priority": 300,
-    "sourceRun": "2026-08-11T05-00-47-072Z",
-    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T05-00-47-072Z/JM-CON-02/resultado.json",
+    "priority": 400,
+    "sourceRun": "2026-08-11T16-06-04-593Z",
+    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T16-06-04-593Z/JM-CON-02/resultado.json",
     "jtlFiles": [
       "tests/results/fase6/jmeter/results/canonical/JM-CON-02/resultados.jtl"
     ]

@@ -31,8 +31,8 @@
       },
       {
         "metric": "security_rating",
-        "value": "1.0",
-        "bestValue": true
+        "value": "2.0",
+        "bestValue": false
       },
       {
         "metric": "sqale_debt_ratio",

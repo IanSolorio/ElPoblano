@@ -1,24 +1,24 @@
 {
   "id": "JM-CON-04",
   "status": "PASS",
-  "profile": "smoke",
-  "executedAt": "2026-08-11T05:03:55.515Z",
+  "profile": "formal",
+  "executedAt": "2026-08-11T16:23:29.857Z",
   "criterion": "Duplicados/desordenados no duplican ni degradan una aprobación",
-  "elapsedSeconds": 31.95,
+  "elapsedSeconds": 11.5,
   "metrics": [
     {
       "label": "CON04 webhook aprobado duplicado",
       "samples": 10,
-      "p95Ms": 334,
+      "p95Ms": 305,
       "errorPct": 0,
-      "throughput": 29.85
+      "throughput": 32.79
     },
     {
       "label": "CON04 webhook rechazado atrasado",
       "samples": 1,
-      "p95Ms": 11,
+      "p95Ms": 7,
       "errorPct": 0,
-      "throughput": 90.91
+      "throughput": 142.86
     }
   ],
   "oracle": {
@@ -28,9 +28,9 @@
   "evidenceFound": true,
   "selection": {
     "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
-    "priority": 300,
-    "sourceRun": "2026-08-11T05-00-47-072Z",
-    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T05-00-47-072Z/JM-CON-04/resultado.json",
+    "priority": 400,
+    "sourceRun": "2026-08-11T16-06-04-593Z",
+    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T16-06-04-593Z/JM-CON-04/resultado.json",
     "jtlFiles": [
       "tests/results/fase6/jmeter/results/canonical/JM-CON-04/resultados.jtl"
     ]

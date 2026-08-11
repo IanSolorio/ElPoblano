@@ -1,31 +1,31 @@
 {
   "id": "JM-DIS-03",
-  "status": "PENDIENTE_FORMAL",
-  "profile": "smoke",
-  "executedAt": "2026-08-11T04:52:28.691Z",
+  "status": "PASS",
+  "profile": "formal",
+  "executedAt": "2026-08-11T16:19:15.837Z",
   "criterion": "/health y /ready responden 100 % correctamente bajo carga",
-  "elapsedSeconds": 47.16,
+  "elapsedSeconds": 315.03,
   "metrics": [
     {
       "label": "DIS03 carga productos",
-      "samples": 38,
-      "p95Ms": 22,
+      "samples": 435,
+      "p95Ms": 9,
       "errorPct": 0,
-      "throughput": 2.76
+      "throughput": 1.53
     },
     {
       "label": "DIS03 GET health",
-      "samples": 7,
-      "p95Ms": 77,
+      "samples": 15,
+      "p95Ms": 49,
       "errorPct": 0,
-      "throughput": 0.57
+      "throughput": 0.05
     },
     {
       "label": "DIS03 GET ready",
-      "samples": 7,
-      "p95Ms": 8,
+      "samples": 14,
+      "p95Ms": 15,
       "errorPct": 0,
-      "throughput": 0.57
+      "throughput": 0.05
     }
   ],
   "oracle": {
@@ -35,9 +35,9 @@
   "evidenceFound": true,
   "selection": {
     "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
-    "priority": 200,
-    "sourceRun": "2026-08-11T04-47-44-008Z",
-    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T04-47-44-008Z/JM-DIS-03/resultado.json",
+    "priority": 400,
+    "sourceRun": "2026-08-11T16-06-04-593Z",
+    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T16-06-04-593Z/JM-DIS-03/resultado.json",
     "jtlFiles": [
       "tests/results/fase6/jmeter/results/canonical/JM-DIS-03/resultados.jtl"
     ]

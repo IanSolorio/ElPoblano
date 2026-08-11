@@ -1,17 +1,17 @@
 {
   "id": "JM-REN-01",
   "status": "PASS",
-  "profile": "smoke",
-  "executedAt": "2026-08-11T04:48:59.939Z",
+  "profile": "formal",
+  "executedAt": "2026-08-11T16:06:50.929Z",
   "criterion": "25 usuarios; p95 <= 800 ms; errores < 1 %",
-  "elapsedSeconds": 35.28,
+  "elapsedSeconds": 13.98,
   "metrics": [
     {
       "label": "REN01 GET productos",
       "samples": 25,
-      "p95Ms": 170.7,
+      "p95Ms": 161,
       "errorPct": 0,
-      "throughput": 5.28
+      "throughput": 5.32
     }
   ],
   "oracle": {
@@ -21,9 +21,9 @@
   "evidenceFound": true,
   "selection": {
     "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
-    "priority": 300,
-    "sourceRun": "2026-08-11T04-47-44-008Z",
-    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T04-47-44-008Z/JM-REN-01/resultado.json",
+    "priority": 400,
+    "sourceRun": "2026-08-11T16-06-04-593Z",
+    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T16-06-04-593Z/JM-REN-01/resultado.json",
     "jtlFiles": [
       "tests/results/fase6/jmeter/results/canonical/JM-REN-01/resultados.jtl"
     ]

@@ -35,19 +35,54 @@ const cachedChromeDriver = () => {
   return versions.map((version) => resolve(cacheRoot, version, "chromedriver.exe")).find(existsSync);
 };
 
+import { randomUUID } from "node:crypto";
+
 export const createDriver = async () => {
   const options = new chrome.Options();
-  if (process.env.E2E_HEADLESS !== "false") options.addArguments("--headless=new");
-  const profileDirectory = resolve(tmpdir(), `elpoblano-chrome-${crypto.randomUUID()}`);
+
+  // Reducir salida innecesaria de Chrome.
+  options.excludeSwitches("enable-logging");
+
+  options.addArguments(
+    "--log-level=3",
+    "--disable-logging"
+  );
+
+  if (process.env.E2E_HEADLESS !== "false") {
+    options.addArguments("--headless=new");
+  }
+
+  const profileDirectory = resolve(
+    tmpdir(),
+    `elpoblano-chrome-${randomUUID()}`
+  );
+
   mkdirSync(profileDirectory, { recursive: true });
-  options.addArguments("--window-size=1440,1000", "--disable-dev-shm-usage", "--no-sandbox", `--user-data-dir=${profileDirectory}`);
-  // Selenium Manager resuelve una versión compatible con el Chrome presente.
-  // Solo se fuerza un binario cuando el ejecutor lo declara explícitamente.
-  const driverPath = process.env.CHROMEDRIVER_PATH || cachedChromeDriver();
-  const builder = new Builder().forBrowser(Browser.CHROME).setChromeOptions(options);
-  if (driverPath) builder.setChromeService(new chrome.ServiceBuilder(driverPath));
+
+  options.addArguments(
+    "--window-size=1440,1000",
+    "--disable-dev-shm-usage",
+    "--no-sandbox",
+    `--user-data-dir=${profileDirectory}`
+  );
+
+  const builder = new Builder()
+    .forBrowser(Browser.CHROME)
+    .setChromeOptions(options);
+
+  // Solo usar ChromeDriver manual cuando se haya indicado expresamente.
+  const driverPath = process.env.CHROMEDRIVER_PATH;
+
+  if (driverPath) {
+    builder.setChromeService(
+      new chrome.ServiceBuilder(driverPath)
+    );
+  }
+
   const driver = await builder.build();
+
   driver.testProfileDirectory = profileDirectory;
+
   return driver;
 };
 

@@ -2,21 +2,21 @@
   "id": "JM-DIS-01",
   "status": "PASS",
   "profile": "formal",
-  "executedAt": "2026-08-11T05:44:22.580Z",
+  "executedAt": "2026-08-11T16:13:55.791Z",
   "criterion": "5 minutos de carga sostenida y disponibilidad observada >= 99 %",
-  "elapsedSeconds": 328.44,
+  "elapsedSeconds": 321.37,
   "metrics": [
     {
       "label": "DIS01 GET frontend",
       "samples": 246,
-      "p95Ms": 5,
+      "p95Ms": 6,
       "errorPct": 0,
       "throughput": 0.84
     },
     {
       "label": "DIS01 GET productos",
       "samples": 240,
-      "p95Ms": 8,
+      "p95Ms": 9,
       "errorPct": 0,
       "throughput": 0.84
     }
@@ -29,8 +29,8 @@
   "selection": {
     "rule": "formal PASS > smoke PASS > PENDIENTE_FORMAL > FAIL; empate: ejecución más reciente",
     "priority": 400,
-    "sourceRun": "2026-08-11T05-38-39-174Z",
-    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T05-38-39-174Z/JM-DIS-01/resultado.json",
+    "sourceRun": "2026-08-11T16-06-04-593Z",
+    "sourceFile": "tests/results/fase6/jmeter/results/2026-08-11T16-06-04-593Z/JM-DIS-01/resultado.json",
     "jtlFiles": [
       "tests/results/fase6/jmeter/results/canonical/JM-DIS-01/resultados.jtl"
     ]

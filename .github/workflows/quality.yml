@@ -5,10 +5,12 @@ on:
     branches:
       - main
       - developer
+
   pull_request:
     branches:
       - main
       - developer
+
   workflow_dispatch:
 
 permissions:
@@ -27,13 +29,16 @@ jobs:
     services:
       mysql:
         image: mysql:8.4
+
         env:
           MYSQL_ROOT_PASSWORD: root_test_password
           MYSQL_DATABASE: elpoblano_test
           MYSQL_USER: elpoblano_test
           MYSQL_PASSWORD: elpoblano_test_password
+
         ports:
           - 3306:3306
+
         options: >-
           --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot_test_password"
           --health-interval=10s
@@ -42,11 +47,16 @@ jobs:
 
     env:
       NODE_ENV: test
+
       DATABASE_URL: mysql://elpoblano_test:elpoblano_test_password@127.0.0.1:3306/elpoblano_test
       TEST_DATABASE_URL: mysql://elpoblano_test:elpoblano_test_password@127.0.0.1:3306/elpoblano_test
+
       FRONTEND_ORIGIN: http://integration.test
+
       PAYMENT_PROVIDER_MODE: stub
+
       VITE_ENDPOINT_BASE: /api
+
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
       SONAR_ORGANIZATION: ${{ vars.SONAR_ORGANIZATION }}
@@ -55,13 +65,18 @@ jobs:
     steps:
       - name: Descargar el repositorio
         uses: actions/checkout@v6
+
         with:
           fetch-depth: 0
 
       - name: Escanear secretos con Gitleaks
+        id: gitleaks
+        continue-on-error: true
         shell: bash
+
         run: |
           mkdir -p tests/results/fase8/github_actions/evidence
+
           docker run --rm \
             -v "$PWD:/repo" \
             ghcr.io/gitleaks/gitleaks:v8.30.1 \
@@ -72,8 +87,30 @@ jobs:
             --report-format json \
             --report-path /repo/tests/results/fase8/github_actions/evidence/gitleaks-report.json
 
+      - name: Consolidar evidencia de Gitleaks
+        if: always()
+        shell: bash
+
+        run: |
+          mkdir -p tests/results/fase8/github_actions/evidence
+
+          REPORT="tests/results/fase8/github_actions/evidence/gitleaks-report.json"
+          STATUS="tests/results/fase8/github_actions/evidence/gitleaks-status.json"
+
+          if [ ! -s "$REPORT" ]; then
+            printf '[]\n' > "$REPORT"
+          fi
+
+          printf '{"outcome":"%s"}\n' \
+            "${{ steps.gitleaks.outcome }}" \
+            > "$STATUS"
+
+          echo "Gitleaks outcome: ${{ steps.gitleaks.outcome }}"
+          echo "Reporte: $REPORT"
+
       - name: Configurar Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
+
         with:
           node-version: 22.x
           cache: npm
@@ -98,18 +135,47 @@ jobs:
 
       - name: Verificar configuración de SonarQube
         shell: bash
+
         run: |
-          test -n "$SONAR_TOKEN" || { echo "Falta el secret SONAR_TOKEN"; exit 1; }
-          test -n "$SONAR_HOST_URL" || { echo "Falta la variable SONAR_HOST_URL"; exit 1; }
-          test -n "$SONAR_ORGANIZATION" || { echo "Falta la variable SONAR_ORGANIZATION"; exit 1; }
-          test -n "$SONAR_PROJECT_KEY" || { echo "Falta la variable SONAR_PROJECT_KEY"; exit 1; }
+          test -n "$SONAR_TOKEN" || {
+            echo "Falta el secret SONAR_TOKEN"
+            exit 1
+          }
+
+          test -n "$SONAR_HOST_URL" || {
+            echo "Falta la variable SONAR_HOST_URL"
+            exit 1
+          }
+
+          test -n "$SONAR_ORGANIZATION" || {
+            echo "Falta la variable SONAR_ORGANIZATION"
+            exit 1
+          }
+
+          test -n "$SONAR_PROJECT_KEY" || {
+            echo "Falta la variable SONAR_PROJECT_KEY"
+            exit 1
+          }
 
       - name: Analizar y verificar Quality Gate en SonarQube Cloud
         run: npm run sonar:analyze
 
+      - name: Validar SEG-05
+        if: always()
+        shell: bash
+
+        run: |
+          if [ "${{ steps.gitleaks.outcome }}" != "success" ]; then
+            echo "Gitleaks detectó secretos o no pudo completar el análisis."
+            exit 1
+          fi
+
+          echo "Gitleaks completado sin secretos detectados."
+
       - name: Publicar build del frontend
         if: success()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
+
         with:
           name: frontend-build-${{ github.run_number }}
           path: apps/frontend/dist/
@@ -118,21 +184,25 @@ jobs:
 
       - name: Publicar reportes de calidad
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
+
         with:
           name: reportes-calidad-${{ github.run_number }}
+
           path: |
             tests/results/fase5/
             tests/results/fase7/sonarqube/evidence/
             tests/results/fase7/sonarqube/results/*.json
             tests/results/fase8/github_actions/evidence/
             tests/results/trazabilidad/
+
           if-no-files-found: warn
           retention-days: 30
 
       - name: Resumen de la ejecución
         if: always()
         shell: bash
+
         run: |
           {
             echo "# Pipeline de calidad — El Poblano"
@@ -140,5 +210,6 @@ jobs:
             echo "- Commit: \`${GITHUB_SHA}\`"
             echo "- Rama o referencia: \`${GITHUB_REF_NAME}\`"
             echo "- Resultado del job: **${{ job.status }}**"
+            echo "- Gitleaks: **${{ steps.gitleaks.outcome }}**"
             echo "- Evidencias: artefacto \`reportes-calidad-${{ github.run_number }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
