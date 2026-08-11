@@ -7,17 +7,12 @@
     "measures": [
       {
         "metric": "coverage",
-        "value": "51.9",
+        "value": "58.6",
         "bestValue": false
       },
       {
-        "metric": "bugs",
-        "value": "0",
-        "bestValue": true
-      },
-      {
         "metric": "complexity",
-        "value": "1151"
+        "value": "1182"
       },
       {
         "metric": "reliability_rating",
@@ -30,9 +25,9 @@
         "bestValue": true
       },
       {
-        "metric": "cognitive_complexity",
-        "value": "477",
-        "bestValue": false
+        "metric": "duplicated_lines_density",
+        "value": "0.0",
+        "bestValue": true
       },
       {
         "metric": "security_rating",
@@ -40,8 +35,8 @@
         "bestValue": true
       },
       {
-        "metric": "vulnerabilities",
-        "value": "0",
+        "metric": "sqale_debt_ratio",
+        "value": "0.0",
         "bestValue": true
       },
       {
@@ -57,6 +52,21 @@
       {
         "metric": "sqale_rating",
         "value": "1.0",
+        "bestValue": true
+      },
+      {
+        "metric": "bugs",
+        "value": "0",
+        "bestValue": true
+      },
+      {
+        "metric": "cognitive_complexity",
+        "value": "508",
+        "bestValue": false
+      },
+      {
+        "metric": "vulnerabilities",
+        "value": "0",
         "bestValue": true
       }
     ]

@@ -8,8 +8,8 @@
 - Vulnerabilidades: 0
 - Code smells: 0
 - Security hotspots: 0
-- Cobertura global: 54.6 %
-- Cobertura de código nuevo: 79.7 %
+- Cobertura global: 58.6 %
+- Cobertura de código nuevo: 81.9 %
 - Complejidad ciclomática global: 1182
 - Complejidad cognitiva global: 508
 - Deuda técnica global: 0 minutos (0.00 horas)
@@ -21,7 +21,7 @@
 | Caso | RNF | Umbral | Resultado observado | Estado |
 |---|---|---|---|---|
 | SQ-MAN-01 | MAN-01 | Quality Gate PASS; 0 bugs y 0 vulnerabilidades | Gate ERROR; bugs 0; vulnerabilidades 0 | **FAIL** |
-| SQ-MAN-02 | MAN-02 | Cobertura global >=70%; backend >=80%; módulos críticos >=70% | Global 54.6%; código nuevo 79.7%; backend y módulos críticos sin desglose | **FAIL** |
+| SQ-MAN-02 | MAN-02 | Cobertura global >=70%; backend >=80%; módulos críticos >=70% | Global 58.6%; código nuevo 81.9%; backend y módulos críticos sin desglose | **FAIL** |
 | SQ-MAN-03 | MAN-03 | Duplicación nueva <=3% | Duplicación nueva 0% | **PASS** |
 | SQ-MAN-04 | MAN-04 | Complejidad ciclomática por función nueva <=10 | Complejidad global 1182; cognitiva global 508; sin desglose por función nueva | **PENDIENTE_METRICA** |
 | SQ-MAN-05 | MAN-05 | Maintainability Rating de código nuevo = A | Rating de código nuevo A | **PASS** |
@@ -29,6 +29,6 @@
 | SQ-SEG-01 | SEG-01 | Argon2id presente y 0 exposiciones detectadas | Argon2id presente; evidencia de no exposición de hashes presente; incidencias activas sobre credenciales/hashes 0 | **PASS** |
 | SQ-SEG-05 | SEG-05 | 0 secretos y 0 vulnerabilidades críticas/nuevas altas | Vulnerabilidades 0; hotspots 0; escaneo dedicado de secretos pendiente de Fase 8 | **PARCIAL** |
 
-> El Quality Gate se encuentra en estado ERROR debido a que la cobertura de código nuevo es 79.7 %, inferior al umbral configurado de 80 %. Las demás condiciones del Quality Gate se encuentran aprobadas.
+> La cobertura de código nuevo es 81.9 % y supera el umbral configurado de 80 %. El Quality Gate permanece en estado ERROR porque el Security Rating del código nuevo es B; las condiciones de cobertura, fiabilidad, mantenibilidad, duplicación y hotspots revisados se encuentran aprobadas.
 
 Los JSON crudos se conservan en `../results/`.

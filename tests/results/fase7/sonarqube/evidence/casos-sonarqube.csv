@@ -1,6 +1,6 @@
 "Caso","Requisito","Umbral","Resultado observado","Estado"
 "SQ-MAN-01","MAN-01","Quality Gate PASS; 0 bugs y 0 vulnerabilidades","Gate ERROR; bugs 0; vulnerabilidades 0","FAIL"
-"SQ-MAN-02","MAN-02","Cobertura global >=70%; backend >=80%; módulos críticos >=70%","Global 54.6%; código nuevo 79.7%; backend y módulos críticos sin desglose","FAIL"
+"SQ-MAN-02","MAN-02","Cobertura global >=70%; backend >=80%; módulos críticos >=70%","Global 58.6%; código nuevo 81.9%; backend y módulos críticos sin desglose","FAIL"
 "SQ-MAN-03","MAN-03","Duplicación nueva <=3%","Duplicación nueva 0%","PASS"
 "SQ-MAN-04","MAN-04","Complejidad ciclomática por función nueva <=10","Complejidad global 1182; cognitiva global 508; sin desglose por función nueva","PENDIENTE_METRICA"
 "SQ-MAN-05","MAN-05","Maintainability Rating de código nuevo = A","Rating de código nuevo A","PASS"
