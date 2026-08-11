@@ -90,7 +90,7 @@ Herramientas principales:
 | SEG-02 | 100 % de rutas privadas/por rol rechazan accesos inválidos | Seguridad / Autenticidad | Selenium | SEL-SEG-02 | 100 % correctas |
 | SEG-03 | Cookie de sesión contiene HttpOnly, Secure, SameSite=Lax y Path=/ | Seguridad | Selenium | SEL-SEG-03 | 4/4 atributos |
 | SEG-04 | Logout/expiración/revocación invalida siguiente acceso privado | Seguridad | Selenium | SEL-SEG-04 | 100 % rechazados |
-| SEG-05 | CI detecta secretos y Sonar no reporta vulnerabilidades críticas/nuevas altas | Seguridad / Confidencialidad | GitHub Actions + SonarQube | CI-SEG-05 | 0 secretos; 0 críticas |
+| SEG-05 | Las credenciales críticas no deben estar expuestas y GitHub Actions debe bloquear cualquier hallazgo | Seguridad / Confidencialidad | GitHub Actions + SonarQube | SQ-SEG-05 + CI-SEG-05 | 0 secretos; 0 vulnerabilidades activas |
 | SEG-06 | API bloquea >120 req/min por cliente | Seguridad | JMeter | JM-SEG-06 | HTTP 429 en 100 % de excesos |
 | SEG-07 | Toda acción admin crítica produce registro de auditoría verificable | Seguridad / Responsabilidad | Selenium | SEL-SEG-07 | 100 % registradas |
 | SEG-08 | Smoke test opera por HTTPS válido sin recursos críticos inseguros | Seguridad | Selenium + GitHub Actions | SEL-SEG-08 + CI-SEG-08 | HTTPS válido; 0 errores críticos |
