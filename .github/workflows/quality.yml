@@ -20,13 +20,109 @@ concurrency:
   group: quality-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+  SONAR_ORGANIZATION: ${{ vars.SONAR_ORGANIZATION }}
+  SONAR_PROJECT_KEY: ${{ vars.SONAR_PROJECT_KEY }}
+
+
+# ============================================================
+# JOB 1 — SEGURIDAD
+# ============================================================
+
 jobs:
-  build-test-sonar:
-    name: Build, pruebas y SonarQube
+
+  security_scan:
+    name: 1. Seguridad - Gitleaks
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
+
+    steps:
+
+      - name: Descargar repositorio
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+
+      - name: Crear directorio de evidencia
+        shell: bash
+        run: |
+          mkdir -p tests/results/fase8/github_actions/evidence
+
+
+      - name: Escanear secretos con Gitleaks
+        id: gitleaks
+        continue-on-error: true
+        shell: bash
+
+        run: |
+          docker run --rm \
+            -v "$PWD:/repo" \
+            ghcr.io/gitleaks/gitleaks:v8.30.1 \
+            dir /repo \
+            --no-banner \
+            --redact \
+            --config /repo/.gitleaks.toml \
+            --report-format json \
+            --report-path /repo/tests/results/fase8/github_actions/evidence/gitleaks-report.json
+
+
+      - name: Consolidar resultado Gitleaks
+        if: always()
+        shell: bash
+
+        run: |
+          REPORT="tests/results/fase8/github_actions/evidence/gitleaks-report.json"
+          STATUS="tests/results/fase8/github_actions/evidence/gitleaks-status.json"
+
+          if [ ! -s "$REPORT" ]; then
+            printf '[]\n' > "$REPORT"
+          fi
+
+          printf '{"outcome":"%s"}\n' \
+            "${{ steps.gitleaks.outcome }}" \
+            > "$STATUS"
+
+
+      - name: Publicar evidencia Gitleaks
+        if: always()
+        uses: actions/upload-artifact@v4
+
+        with:
+          name: gitleaks-evidence
+
+          path: |
+            tests/results/fase8/github_actions/evidence/
+
+          retention-days: 30
+
+
+      - name: Validar resultado Gitleaks
+        if: always()
+        shell: bash
+
+        run: |
+          if [ "${{ steps.gitleaks.outcome }}" != "success" ]; then
+            echo "Gitleaks detectó secretos o no pudo completar el análisis."
+            exit 1
+          fi
+
+          echo "Gitleaks aprobado: no se detectaron secretos."
+
+
+# ============================================================
+# JOB 2 — BUILD + PRUEBAS
+# ============================================================
+
+  build_tests:
+    name: 2. Build y pruebas
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
 
     services:
+
       mysql:
         image: mysql:8.4
 
@@ -45,10 +141,13 @@ jobs:
           --health-timeout=5s
           --health-retries=10
 
+
     env:
+
       NODE_ENV: test
 
       DATABASE_URL: mysql://elpoblano_test:elpoblano_test_password@127.0.0.1:3306/elpoblano_test
+
       TEST_DATABASE_URL: mysql://elpoblano_test:elpoblano_test_password@127.0.0.1:3306/elpoblano_test
 
       FRONTEND_ORIGIN: http://integration.test
@@ -57,56 +156,14 @@ jobs:
 
       VITE_ENDPOINT_BASE: /api
 
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
-      SONAR_ORGANIZATION: ${{ vars.SONAR_ORGANIZATION }}
-      SONAR_PROJECT_KEY: ${{ vars.SONAR_PROJECT_KEY }}
 
     steps:
-      - name: Descargar el repositorio
-        uses: actions/checkout@v6
 
+      - name: Descargar repositorio
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Escanear secretos con Gitleaks
-        id: gitleaks
-        continue-on-error: true
-        shell: bash
-
-        run: |
-          mkdir -p tests/results/fase8/github_actions/evidence
-
-          docker run --rm \
-            -v "$PWD:/repo" \
-            ghcr.io/gitleaks/gitleaks:v8.30.1 \
-            dir /repo \
-            --no-banner \
-            --redact \
-            --config /repo/.gitleaks.toml \
-            --report-format json \
-            --report-path /repo/tests/results/fase8/github_actions/evidence/gitleaks-report.json
-
-      - name: Consolidar evidencia de Gitleaks
-        if: always()
-        shell: bash
-
-        run: |
-          mkdir -p tests/results/fase8/github_actions/evidence
-
-          REPORT="tests/results/fase8/github_actions/evidence/gitleaks-report.json"
-          STATUS="tests/results/fase8/github_actions/evidence/gitleaks-status.json"
-
-          if [ ! -s "$REPORT" ]; then
-            printf '[]\n' > "$REPORT"
-          fi
-
-          printf '{"outcome":"%s"}\n' \
-            "${{ steps.gitleaks.outcome }}" \
-            > "$STATUS"
-
-          echo "Gitleaks outcome: ${{ steps.gitleaks.outcome }}"
-          echo "Reporte: $REPORT"
 
       - name: Configurar Node.js
         uses: actions/setup-node@v7
@@ -115,101 +172,253 @@ jobs:
           node-version: 22.x
           cache: npm
 
-      - name: Instalar dependencias reproducibles
+
+      - name: Instalar dependencias
         run: npm ci
+
 
       - name: Generar Prisma Client
         run: npm run db:generate -w @elpoblano/backend
 
-      - name: Inicializar MySQL mediante migraciones
+
+      - name: Inicializar base de datos de pruebas
         run: npm run db:deploy -w @elpoblano/backend
 
-      - name: Analizar estilo y errores estáticos
+
+      - name: Ejecutar ESLint
         run: npm run lint
+
 
       - name: Compilar frontend
         run: npm run build
 
-      - name: Ejecutar y consolidar Fase 5
+
+      - name: Ejecutar Fase 5
         run: npm run test:phase5
 
-      - name: Verificar configuración de SonarQube
-        shell: bash
 
-        run: |
-          test -n "$SONAR_TOKEN" || {
-            echo "Falta el secret SONAR_TOKEN"
-            exit 1
-          }
-
-          test -n "$SONAR_HOST_URL" || {
-            echo "Falta la variable SONAR_HOST_URL"
-            exit 1
-          }
-
-          test -n "$SONAR_ORGANIZATION" || {
-            echo "Falta la variable SONAR_ORGANIZATION"
-            exit 1
-          }
-
-          test -n "$SONAR_PROJECT_KEY" || {
-            echo "Falta la variable SONAR_PROJECT_KEY"
-            exit 1
-          }
-
-      - name: Analizar y verificar Quality Gate en SonarQube Cloud
-        run: npm run sonar:analyze
-
-      - name: Validar SEG-05
+      - name: Publicar resultados Fase 5
         if: always()
-        shell: bash
+        uses: actions/upload-artifact@v4
 
-        run: |
-          if [ "${{ steps.gitleaks.outcome }}" != "success" ]; then
-            echo "Gitleaks detectó secretos o no pudo completar el análisis."
-            exit 1
-          fi
+        with:
+          name: phase5-results
 
-          echo "Gitleaks completado sin secretos detectados."
+          path: |
+            tests/results/fase5/
 
-      - name: Publicar build del frontend
+          retention-days: 30
+
+
+      - name: Publicar build frontend
         if: success()
         uses: actions/upload-artifact@v4
 
         with:
-          name: frontend-build-${{ github.run_number }}
-          path: apps/frontend/dist/
-          if-no-files-found: warn
+          name: frontend-build
+
+          path: |
+            apps/frontend/dist/
+
           retention-days: 14
 
-      - name: Publicar reportes de calidad
+
+# ============================================================
+# JOB 3 — SONARQUBE
+# Depende de Seguridad + Build/Tests
+# ============================================================
+
+  sonar_quality:
+    name: 3. SonarQube y Quality Gate
+
+    needs:
+      - security_scan
+      - build_tests
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+
+    steps:
+
+      - name: Descargar repositorio
+        uses: actions/checkout@v6
+
+        with:
+          fetch-depth: 0
+
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v7
+
+        with:
+          node-version: 22.x
+          cache: npm
+
+
+      - name: Instalar dependencias
+        run: npm ci
+
+
+      # Recuperamos cobertura y evidencia producida
+      # por el job build_tests.
+
+      - name: Descargar resultados Fase 5
+        uses: actions/download-artifact@v4
+
+        with:
+          name: phase5-results
+          path: tests/results/fase5/
+
+
+      # Recuperamos evidencia de Gitleaks para que
+      # SQ-SEG-05 pueda ser evaluado.
+
+      - name: Descargar evidencia Gitleaks
+        uses: actions/download-artifact@v4
+
+        with:
+          name: gitleaks-evidence
+          path: tests/results/fase8/github_actions/evidence/
+
+
+      - name: Verificar configuración SonarQube
+        shell: bash
+
+        run: |
+
+          test -n "$SONAR_TOKEN" || {
+            echo "Falta SONAR_TOKEN"
+            exit 1
+          }
+
+          test -n "$SONAR_HOST_URL" || {
+            echo "Falta SONAR_HOST_URL"
+            exit 1
+          }
+
+          test -n "$SONAR_ORGANIZATION" || {
+            echo "Falta SONAR_ORGANIZATION"
+            exit 1
+          }
+
+          test -n "$SONAR_PROJECT_KEY" || {
+            echo "Falta SONAR_PROJECT_KEY"
+            exit 1
+          }
+
+
+      - name: Ejecutar análisis SonarQube
+        run: npm run sonar:analyze
+
+
+      - name: Publicar evidencia SonarQube
         if: always()
         uses: actions/upload-artifact@v4
 
         with:
-          name: reportes-calidad-${{ github.run_number }}
+
+          name: sonar-evidence
 
           path: |
-            tests/results/fase5/
             tests/results/fase7/sonarqube/evidence/
-            tests/results/fase7/sonarqube/results/*.json
-            tests/results/fase8/github_actions/evidence/
-            tests/results/trazabilidad/
+            tests/results/fase7/sonarqube/results/
 
-          if-no-files-found: warn
           retention-days: 30
 
-      - name: Resumen de la ejecución
-        if: always()
+
+# ============================================================
+# JOB 4 — PUBLICAR EVIDENCIAS
+# ============================================================
+
+  publish_evidence:
+    name: 4. Publicar evidencias
+
+    needs:
+      - sonar_quality
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+
+    steps:
+
+      - name: Crear estructura final
         shell: bash
 
         run: |
+          mkdir -p entrega/tests/results/fase5
+          mkdir -p entrega/tests/results/fase7/sonarqube
+          mkdir -p entrega/tests/results/fase8/github_actions/evidence
+          mkdir -p entrega/apps/frontend/dist
+
+
+      - name: Descargar Fase 5
+        uses: actions/download-artifact@v4
+
+        with:
+          name: phase5-results
+          path: entrega/tests/results/fase5/
+
+
+      - name: Descargar Gitleaks
+        uses: actions/download-artifact@v4
+
+        with:
+          name: gitleaks-evidence
+          path: entrega/tests/results/fase8/github_actions/evidence/
+
+
+      - name: Descargar SonarQube
+        uses: actions/download-artifact@v4
+
+        with:
+          name: sonar-evidence
+          path: entrega/tests/results/fase7/sonarqube/
+
+
+      - name: Descargar build frontend
+        uses: actions/download-artifact@v4
+
+        with:
+          name: frontend-build
+          path: entrega/apps/frontend/dist/
+
+
+      - name: Publicar paquete final de calidad
+        uses: actions/upload-artifact@v4
+
+        with:
+
+          name: reportes-calidad-${{ github.run_number }}
+
+          path: entrega/
+
+          retention-days: 30
+
+
+      - name: Generar resumen del pipeline
+        shell: bash
+
+        run: |
+
           {
             echo "# Pipeline de calidad — El Poblano"
             echo
+            echo "## Resultado"
+            echo
+            echo "✅ Seguridad — Gitleaks"
+            echo
+            echo "✅ Build y pruebas"
+            echo
+            echo "✅ SonarQube"
+            echo
+            echo "✅ Quality Gate"
+            echo
+            echo "✅ Evidencias publicadas"
+            echo
             echo "- Commit: \`${GITHUB_SHA}\`"
-            echo "- Rama o referencia: \`${GITHUB_REF_NAME}\`"
-            echo "- Resultado del job: **${{ job.status }}**"
-            echo "- Gitleaks: **${{ steps.gitleaks.outcome }}**"
-            echo "- Evidencias: artefacto \`reportes-calidad-${{ github.run_number }}\`"
+            echo "- Rama: \`${GITHUB_REF_NAME}\`"
+            echo "- Artifact: \`reportes-calidad-${{ github.run_number }}\`"
+
           } >> "$GITHUB_STEP_SUMMARY"
